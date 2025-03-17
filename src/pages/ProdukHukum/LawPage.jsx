@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search, Filter,  ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import LawCard from "../../components/LawCard";
 import Kategori from "../../components/Kategori";
@@ -38,6 +39,8 @@ const LawPage = () => {
     year: "",
     searchQuery: "",
   });
+
+  const navigate = useNavigate(); // Inisialisasi useNavigate
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -145,9 +148,7 @@ const LawPage = () => {
                 year={law.year}
                 status={law.status}
                 regulationType={law.type}
-                onDetailClick={() =>
-                  console.log(`Detail clicked for: ${law.title}`)
-                }
+                onDetailClick={() => navigate(`/law/${law.number}/${law.year}`)}
               />
             ))}
           </div>
