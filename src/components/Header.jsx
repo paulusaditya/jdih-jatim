@@ -30,9 +30,9 @@ export default function Header() {
       <div className="bg-white py-4">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Logo src="./src/assets/nav-logo/image 11.png" alt="Logo 1" />
-            <Logo src="./src/assets/nav-logo/image 12.png" alt="Logo 2" />
-            <Logo src="./src/assets/nav-logo/FINAL.png" alt="Logo 3" />
+            <Logo src="./src/assets/nav-logo/logo1.png" alt="Logo 1" />
+            <Logo src="./src/assets/nav-logo/logo2.png" alt="Logo 2" />
+            <Logo src="./src/assets/nav-logo/logo3.png" alt="Logo 3" />
             <div>
               <div className="text-blue-900 sm">
                 Jaringan Dokumentasi dan Informasi Hukum
