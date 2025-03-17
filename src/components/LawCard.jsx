@@ -1,0 +1,40 @@
+import * as React from "react";
+
+function LawCard({ title, year, status, regulationType, onDetailClick }) {
+  return (
+    <div className="flex flex-wrap gap-10 items-center p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5 max-md:max-w-full">
+      <div className="flex flex-col flex-1 shrink self-stretch my-auto basis-8 min-w-[240px] max-md:max-w-full">
+        <div className="text-base font-bold leading-6 text-zinc-800 max-md:max-w-full">
+          {title}
+        </div>
+        <div className="flex gap-2 justify-center items-center self-start mt-3 text-sm text-center text-blue-950">
+          <div className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap bg-blue-900 bg-opacity-20 rounded-[999px]">
+            {status}
+          </div>
+          <div className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap bg-blue-900 bg-opacity-20 rounded-[999px]">
+            {year}
+          </div>
+          <div className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap bg-blue-900 bg-opacity-20 rounded-[999px]">
+            {status}
+          </div>
+          <div className="gap-2 self-stretch px-4 py-1 my-auto bg-blue-900 bg-opacity-20 rounded-[999px]">
+            {regulationType}
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px]"
+        onClick={onDetailClick}
+      >
+        <div className="self-stretch my-auto">Detail</div>
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/cb048e6e7e6dba6c030e69058b3e1833431794882502b07a7cb8f857d11ee174?placeholderIfAbsent=true&apiKey=770a91bd70474eb39d8c1896cfba8984"
+          className="object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+        />
+      </div>
+    </div>
+  );
+}
+
+export default LawCard;
