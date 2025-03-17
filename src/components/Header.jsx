@@ -18,12 +18,12 @@ export default function Header() {
         <div className="bg-white py-4">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Logo src="https://storage.googleapis.com/a1aa/image/RE7GcTKITnlepC3WZO5iSevky56tNDhdFRHcDTJjmjI.jpg" alt="Logo 1" />
-              <Logo src="https://storage.googleapis.com/a1aa/image/eT2XbON-a3BQIrBpCMTMEp4zFJAs6kn3W75S-B-lED4.jpg" alt="Logo 2" />
-              <Logo src="https://storage.googleapis.com/a1aa/image/OR5EvDkj2nY5QxdYDwKNeQx0jj9nToA6M-FMOeJeF5E.jpg" alt="Logo 3" />
+              <Logo src="./src/assets/nav-logo/image 11.png" alt="Logo 1" />
+              <Logo src="./src/assets/nav-logo/image 12.png" alt="Logo 2" />
+              <Logo src="./src/assets/nav-logo/FINAL.png" alt="Logo 3" />
               <div>
-                <div className="text-sm">Jaringan Dokumentasi dan Informasi Hukum</div>
-                <div className="text-2xl font-bold">PROVINSI JAWA TIMUR</div>
+                <div className="text-blue-900 sm">Jaringan Dokumentasi dan Informasi Hukum</div>
+                <div className="text-blue-900 font-bold text-3xl font-jakarta">PROVINSI JAWA TIMUR</div>
               </div>
             </div>
             <NavBar />
@@ -52,11 +52,12 @@ export default function Header() {
     return (
       <div className="flex space-x-10 text-blue-800">
         {navItems.map((item, index) => (
-          <a key={index} className="hover:underline" href="#">
+          <a key={index} className="hover-bold" href="#">
             {item}
           </a>
         ))}
       </div>
     );
   }
+
   
