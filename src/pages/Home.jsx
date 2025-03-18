@@ -1,7 +1,14 @@
 
 import Main from "../components/Main";
-import LegalStatsDashboard from "../components/legal-stats-dashboard";
-import LegalPortal from "../components/product-law-card";
+import LegalStatsDashboard from "../components/LegalStatsDashboard";
+import LegalPortal from "../components/ProductLawCard";
+import LegalDocumentsSection from "../components/DocumentLawOthers";
+import JDIHNetworkMembers from "../components/JdihMembers";
+import JDIHUniversityMembers from "../components/JdihUniversityMembers";
+import NewsSection from "../components/News";
+import LatestRegulations from "../components/LatestRegulations";
+import PromperdaRegulations from "../components/PromperdaRegulations";
+import Monographic from "../components/Monographic";
 
 export default function Home() {
   return (
@@ -9,11 +16,13 @@ export default function Home() {
       <Main />
       <LegalStatsDashboard/>
       <LegalPortal/>
-
-      <main className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold">Website Pemerintah</h1>
-        <p>Selamat datang di website resmi...</p>
-      </main>
+      <LegalDocumentsSection/>
+      <JDIHNetworkMembers/>
+      <JDIHUniversityMembers/>
+      <NewsSection/>
+      <LatestRegulations/>
+      <PromperdaRegulations/>
+      <Monographic/>
     </div>
   );
 }
