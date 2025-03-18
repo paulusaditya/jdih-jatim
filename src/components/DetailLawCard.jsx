@@ -1,5 +1,6 @@
-import * as React from "react";
-import DetailItem from "./DetailItem"; 
+import React, { useState } from "react";
+import { Eye, Download } from "lucide-react";
+import DetailItem from "./DetailItem";
 
 const detailData = [
   { label: "Jenis Peraturan", value: "Peraturan Gubernur" },
@@ -43,6 +44,22 @@ const detailData = [
 ];
 
 function DetailLawCard() {
+  const [selectedButton, setSelectedButton] = useState(null);
+  const [showPdf, setShowPdf] = useState(false);
+  const [lampiran, setLampiran] = useState("");
+
+  const handleButtonClick = (button) => {
+    setSelectedButton(button);
+    if (button === "Dokumen Lampiran") {
+      setShowPdf(true);
+      // Ambil nama lampiran dari detailData
+      const lampiranItem = detailData.find((item) => item.label === "Lampiran");
+      setLampiran(lampiranItem ? lampiranItem.value : "");
+    } else {
+      setShowPdf(false);
+    }
+  };
+
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
       <div className="mb-5 text-2xl font-semibold text-zinc-800">
@@ -52,39 +69,60 @@ function DetailLawCard() {
       <div className="flex justify-between items-center px-4 py-3 mb-5 rounded-lg bg-zinc-100 max-sm:flex-col max-sm:gap-3">
         <div className="flex gap-3 items-center text-base text-black">
           <div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: "<svg>...</svg>", 
-              }}
-            />
+            <Eye size={24} />
           </div>
           <div>Visits : 677</div>
         </div>
         <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
           <div>Download</div>
           <div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: "<svg>...</svg>", 
-              }}
-            />
+            <Download size={24} />
           </div>
         </div>
       </div>
       <div className="flex gap-3 mb-5 max-sm:flex-wrap">
-        <div className="px-4 py-1 text-base rounded-[999px]">Detail</div>
-        <div className="px-4 py-1 text-base rounded-[999px]">
+        <button
+          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 ${
+            selectedButton === "Detail" ? "bg-red-500 text-white" : ""
+          }`}
+          onClick={() => handleButtonClick("Detail")}
+        >
+          Detail
+        </button>
+        <button
+          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 ${
+            selectedButton === "Dokumen Lampiran" ? "bg-red-500 text-white" : ""
+          }`}
+          onClick={() => handleButtonClick("Dokumen Lampiran")}
+        >
           Dokumen Lampiran
-        </div>
-        <div className="px-4 py-1 text-base rounded-[999px]">
+        </button>
+        <button
+          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 ${
+            selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
+          }`}
+          onClick={() => handleButtonClick("Abstrak Lampiran")}
+        >
           Abstrak Lampiran
+        </button>
+      </div>
+      {showPdf ? (
+        <div className="mt-4">
+          <DetailItem label="Lampiran" value={lampiran} />
+          <iframe
+            src={lampiran}
+            width="100%"
+            height="500px"
+            title="Dokumen Lampiran"
+          />
         </div>
-      </div>
-      <div className="flex flex-col">
-        {detailData.map((item, index) => (
-          <DetailItem key={index} label={item.label} value={item.value} />
-        ))}
-      </div>
+      ) : (
+        <div className="flex flex-col">
+          {detailData.map((item, index) => (
+            <DetailItem key={index} label={item.label} value={item.value} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
