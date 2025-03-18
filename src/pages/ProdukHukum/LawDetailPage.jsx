@@ -1,17 +1,31 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import DetailLawCard from "../../components/DetailLawCard"; 
+import DetailLawCard from "../../components/DetailLawCard";
+import Breadcrumbs from "../../components/Breadcrumbs";
+import Kategori from "../../components/Kategori"; //
+
+const breadcrumbPaths = [
+  { label: "Beranda", path: "/" },
+  { label: "Produk Hukum", path: "/produk-hukum" },
+  { label: "Produk Hukum Provinsi Jatim", path: "/provinsijatim" },
+];
 
 const LawDetailPage = () => {
   const { number, year } = useParams();
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">
-        Detail Peraturan Gubernur Nomor {number} Tahun {year}
-      </h1>
-      <DetailLawCard />
-    </div>
-  );
+
+    return (
+      <>
+        <Breadcrumbs paths={breadcrumbPaths} />
+        <div className="p-6 flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <DetailLawCard />
+          </div>
+          <div className="w-full md:w-1/3">
+            <Kategori />
+          </div>
+        </div>
+      </>
+    );
 };
 
 export default LawDetailPage;

@@ -1,6 +1,6 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
 @layer base {
   :root {
@@ -48,7 +48,6 @@
     --ring: 224.3 76.3% 48%;
   }
 }
-
 
 body {
   font-family: 'Onest', sans-serif;

@@ -75,7 +75,7 @@ export default function LegalStatsDashboard() {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 max-w-4xl">
           <div className="flex-shrink-0">
             <img
-            src="./src/assets/nav-logo/FINAL.png"
+            src="./src/assets/nav-logo/logo3.png"
               alt="JDIH Jawa Timur Mascot"
               width={70}
               height={150}

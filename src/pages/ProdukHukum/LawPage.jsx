@@ -40,7 +40,7 @@ const LawPage = () => {
     searchQuery: "",
   });
 
-  const navigate = useNavigate(); // Inisialisasi useNavigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
