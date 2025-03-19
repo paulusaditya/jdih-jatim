@@ -4,6 +4,7 @@ import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
+import PopularDocument from "../../components/PopularDocument";
 
 const CustomSelect = ({ options, value, onChange, name }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,7 @@ const CustomSelect = ({ options, value, onChange, name }) => {
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-blue-50 rounded-lg border border-blue-300 cursor-pointer"
+        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-zinc-600">{value || name}</span>
@@ -89,7 +90,7 @@ const LawPage = ({ laws, breadcrumbPaths, title }) => {
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
 
-      <div className="p-6 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <div className="flex flex-col p-8 w-full text-base bg-blue-50 rounded-xl max-md:px-5 max-md:max-w-full">
             <h2 className="text-lg font-semibold mb-4">{title}</h2>
@@ -229,8 +230,12 @@ const LawPage = ({ laws, breadcrumbPaths, title }) => {
             </div>
           </div>
         </div>
-        <div>
+        <div className="w-full ">
           <Kategori />
+          <div className="mt-6">
+            {" "}
+            <PopularDocument />
+          </div>
         </div>
       </div>
     </>
