@@ -6,32 +6,32 @@ export default function Monographic() {
     {
       id: 1,
       title: "Hukum Acara Pengujian Undang-Undang",
-      image: "./src/assets/monographic/image 70.png",
+      image: "/assets/monographic/image 70.png",
     },
     {
       id: 2,
       title: "Teori Hukum Murni",
-      image: "./src/assets/monographic/image 71.png",
+      image: "/assets/monographic/image 71.png",
     },
     {
       id: 3,
       title: "Hukum Acara Peradilan Tata Usaha Negara Indonesia",
-      image: "./src/assets/monographic/image 72.png",
+      image: "/assets/monographic/image 72.png",
     },
     {
       id: 4,
       title: "Hukum Lingkungan",
-      image: "./src/assets/monographic/image 73.png",
+      image: "/assets/monographic/image 73.png",
     },
     {
       id: 5,
       title: "Hukum Pajak",
-      image: "./src/assets/monographic/image 74.png",
+      image: "/assets/monographic/image 74.png",
     },
   ];
 
   return (
-    <section className="py-8 px-4 md:px-6 mt-20 mb-80">
+    <section className="py-8 px-4 md:px-6 mt-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -43,7 +43,7 @@ export default function Monographic() {
           </div>
           <Link
             to="/monografi"
-            className="flex items-center bg-pink-100 text-pink-600 border-pink-300 hover:text-pink-800 font-medium text-sm border border-pink-600 rounded px-4 py-2 transition-colors"
+            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
           >
             LIHAT SEMUA <ArrowRight className="ml-1 h-4 w-4" />
           </Link>

@@ -15,7 +15,6 @@ function App() {
         <Header />
         <main className="flex-grow mb-80">
           {" "}
-          {/* Menambahkan margin bottom */}
           <Routes>
             <Route path="/" element={<Home />} />
             {productLawData.map(({ path, title, laws }) => (

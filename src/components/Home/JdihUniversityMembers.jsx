@@ -2,12 +2,12 @@
 
 export default function JDIHUniversityMembers() {
   const initialMembers = [
-    { name: "Universitas Airlangga", logo: "./src/assets/univ/image 65.png?height=80&width=80" },
-    { name: "UIN Sunan Ampel Surabaya", logo: "./src/assets/univ/image 66.png?height=80&width=80" },
-    { name: "Universitas Negeri Surabaya", logo: "./src/assets/univ/image 67.png?height=80&width=80" },
-    { name: "Universitas Negeri Jember", logo: "./src/assets/univ/image 68.png?height=80&width=80" },
-    { name: "Universitas Trunojoyo Madura", logo: "./src/assets/univ/image 79.png?height=80&width=80" },
-    { name: "Universitas Narotama", logo: "./src/assets/univ/image 78.png?height=80&width=80" },
+    { name: "Universitas Airlangga", logo: "/assets/univ/image 65.png?height=80&width=80" },
+    { name: "UIN Sunan Ampel Surabaya", logo: "/assets/univ/image 66.png?height=80&width=80" },
+    { name: "Universitas Negeri Surabaya", logo: "/assets/univ/image 67.png?height=80&width=80" },
+    { name: "Universitas Negeri Jember", logo: "/assets/univ/image 68.png?height=80&width=80" },
+    { name: "Universitas Trunojoyo Madura", logo: "/assets/univ/image 79.png?height=80&width=80" },
+    { name: "Universitas Narotama", logo: "/assets/univ/image 78.png?height=80&width=80" },
   ]
 
   return (

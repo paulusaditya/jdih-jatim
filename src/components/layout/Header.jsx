@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
+  const [isSidebarOpen, setSidebarOpen] = React.useState(false);
+
   return (
     <>
       {/* Top Bar */}
@@ -27,12 +30,12 @@ export default function Header() {
       </div>
 
       {/* Header */}
-      <div className="bg-white py-4">
+      <div className="bg-white py-6">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Logo src="./src/assets/nav-logo/logo1.png" alt="Logo 1" />
-            <Logo src="./src/assets/nav-logo/logo2.png" alt="Logo 2" />
-            <Logo src="./src/assets/nav-logo/logo3.png" alt="Logo 3" />
+            <Logo src="/assets/nav-logo/logo1.png" alt="Logo 1" />
+            <Logo src="/assets/nav-logo/logo2.png" alt="Logo 2" />
+            <Logo src="/assets/nav-logo/logo3.png" alt="Logo 3" />
             <div>
               <div className="text-blue-900 sm">
                 Jaringan Dokumentasi dan Informasi Hukum
@@ -42,7 +45,12 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <NavBar />
+          <div className="md:hidden">
+            <button onClick={() => setSidebarOpen(true)}>
+              <Menu size={32} className="text-blue-800" />
+            </button>
+          </div>
+          <NavBar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
         </div>
       </div>
     </>
@@ -59,10 +67,10 @@ function ContactInfo({ icon, text }) {
 }
 
 function Logo({ src, alt }) {
-  return <img className="h-12" src={src} alt={alt} width={50} height={50} />;
+  return <img className="w-auto h-12 max-w-none max-h-none" src={src} alt={alt} />;
 }
 
-function NavBar() {
+function NavBar({ isSidebarOpen, setSidebarOpen }) {
   const [activeDropdown, setActiveDropdown] = React.useState(null);
 
   const toggleDropdown = (index) => {
@@ -90,25 +98,66 @@ function NavBar() {
   ];
 
   return (
-    <div className="flex space-x-10 text-blue-800 relative">
-      {navItems.map((item, index) => (
-        <div key={index} className="relative dropdown-container">
-          {item.dropdown ? (
-            <span
-              onClick={() => toggleDropdown(index)}
-              className="hover:font-semibold cursor-pointer"
-            >
-              {item.label}
-            </span>
-          ) : (
-            <Link to={item.path} className="hover:font-semibold">
-              {item.label}
-            </Link>
-          )}
-          {item.dropdown && activeDropdown === index && <DropdownMenu />}
+    <>
+      {/* Desktop Navbar */}
+      <div className="hidden md:flex space-x-10 text-blue-800 relative">
+        {navItems.map((item, index) => (
+          <div key={index} className="relative dropdown-container">
+            {item.dropdown ? (
+              <span
+                onClick={() => toggleDropdown(index)}
+                className="hover:font-semibold cursor-pointer"
+              >
+                {item.label}
+              </span>
+            ) : (
+              <Link to={item.path} className="hover:font-semibold">
+                {item.label}
+              </Link>
+            )}
+            {item.dropdown && activeDropdown === index && <DropdownMenu />}
+          </div>
+        ))}
+      </div>
+      
+      {/* Mobile Sidebar */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50" onClick={() => setSidebarOpen(false)}></div>
+      )}
+      <div
+        className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out z-50 p-4`}
+      >
+        <div className="flex justify-between border-b pb-2">
+          <span className="text-blue-900 font-bold text-lg">Menu</span>
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} className="text-blue-800" />
+          </button>
         </div>
-      ))}
-    </div>
+        <div className="flex flex-col space-y-4 mt-4">
+          {navItems.map((item, index) => (
+            <div key={index} className="dropdown-container">
+              {item.dropdown ? (
+                <>
+                  <span
+                    onClick={() => toggleDropdown(index)}
+                    className="block text-blue-800 cursor-pointer font-semibold"
+                  >
+                    {item.label}
+                  </span>
+                  {activeDropdown === index && <DropdownMenu />}
+                </>
+              ) : (
+                <Link to={item.path} className="block text-blue-800">
+                  {item.label}
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -127,15 +176,9 @@ function DropdownMenu() {
   ];
 
   return (
-    <div className="absolute left-0 mt-2 bg-blue-50 shadow-lg rounded-xl w-[301px] max-md:w-full max-md:max-w-[301px] max-sm:px-0 max-sm:py-1 max-sm:w-full">
+    <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
       {dropdownItems.map((item, index) => (
-        <Link
-          key={index}
-          to={item.path}
-          className={`block gap-3 px-3 py-2 text-base leading-6 text-sky-900 max-sm:px-2.5 max-sm:py-1.5 max-sm:text-sm hover:bg-gray-100 ${
-            item.path === "#" ? "pointer-events-none" : ""
-          }`}
-        >
+        <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
           {item.label}
         </Link>
       ))}
