@@ -36,7 +36,7 @@ function Card({ title, description }) {
     return (
       <Link
         to="#"
-        className="block p-6 rounded-2xl border border-gray-400 hover:border-[#0065FF] hover:shadow-md transition-all"
+        className="block p-6 rounded-2xl border border-gray-200 hover:border-[#0065FF] hover:shadow-md transition-all"
       >
         <h2 className="font-bold mb-2 text-l">{title}</h2>
         <p className="text-gray-500 text-sm">{description}</p>

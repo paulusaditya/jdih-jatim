@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             {/* Column 1: Logo and Title */}
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 mb-1">
                 <img
                   src="/assets/nav-logo/logo1.png"
                   alt="JDIH Logo"
@@ -24,6 +24,11 @@ export default function Footer() {
                 />
                 <img
                   src="/assets/nav-logo/logo2.png"
+                  alt="East Java Logo"
+                  className="w-12 h-12 object-contain"
+                />
+                <img
+                  src="/assets/nav-logo/logo3.png"
                   alt="East Java Logo"
                   className="w-12 h-12 object-contain"
                 />
