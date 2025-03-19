@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="py-80">
       {/* Main Footer */}
       <div className="relative">
         <div className="absolute inset-x-0 -top-60 flex justify-center">

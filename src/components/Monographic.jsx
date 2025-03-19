@@ -31,7 +31,7 @@ export default function Monographic() {
   ];
 
   return (
-    <section className="py-8 px-4 md:px-6 mt-20 mb-80">
+    <section className="py-8 px-4 md:px-6 mt-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
