@@ -37,7 +37,7 @@ function PopularDocument() {
       </section>
       <div className="mt-6 flex justify-center">
         <img
-          src="/logo-biro-hukum.png" 
+          src="/assets/logo-biro-hukum.png" 
           alt="Logo Biro Hukum"
           className="w-80 h-auto"
         />

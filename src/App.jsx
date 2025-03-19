@@ -1,12 +1,13 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import Profil from "./pages/Profil"; // Pastikan Profil tetap ada
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import productLawData from "./data/productLawData";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound"; // Pastikan NotFound juga ada
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/profil" element={<Profil />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
@@ -35,7 +37,7 @@ function App() {
               />
             ))}
             <Route path="/law/:number/:year" element={<LawDetailPage />} />
-            <Route path="*" element={<NotFound />} />{" "}
+            <Route path="*" element={<NotFound />} /> {/* Pastikan NotFound tetap ada */}
           </Routes>
         </main>
         <Footer />
