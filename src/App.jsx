@@ -37,7 +37,7 @@ function App() {
               />
             ))}
             <Route path="/law/:number/:year" element={<LawDetailPage />} />
-            <Route path="*" element={<NotFound />} /> 
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
