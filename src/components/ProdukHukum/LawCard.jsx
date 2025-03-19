@@ -1,5 +1,21 @@
 import * as React from "react";
 
+function StatusBadge({ children }) {
+  return (
+    <div
+      className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap"
+      style={{
+        backgroundColor: "rgba(0, 62, 156, 0.16)",
+        color: "#003E9C",
+        border: "1px solid #003E9C", 
+        borderRadius: "9999px",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function LawCard({ title, year, status, regulationType, onDetailClick }) {
   return (
     <div className="flex flex-wrap gap-10 items-center p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5 max-md:max-w-full">
@@ -8,22 +24,13 @@ function LawCard({ title, year, status, regulationType, onDetailClick }) {
           {title}
         </div>
         <div className="flex gap-2 justify-center items-center self-start mt-3 text-sm text-center text-blue-950">
-          <div className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap bg-blue-900 bg-opacity-20 rounded-[999px]">
-            {status}
-          </div>
-          <div className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap bg-blue-900 bg-opacity-20 rounded-[999px]">
-            {year}
-          </div>
-          <div className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap bg-blue-900 bg-opacity-20 rounded-[999px]">
-            {status}
-          </div>
-          <div className="gap-2 self-stretch px-4 py-1 my-auto bg-blue-900 bg-opacity-20 rounded-[999px]">
-            {regulationType}
-          </div>
+          <StatusBadge>{status}</StatusBadge>
+          <StatusBadge>{year}</StatusBadge>
+          <StatusBadge>{regulationType}</StatusBadge>
         </div>
       </div>
       <div
-        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px]"
+        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
         onClick={onDetailClick}
       >
         <div className="self-stretch my-auto">Detail</div>

@@ -1,24 +1,45 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import ProvinsiJatim from "./pages/ProdukHukum/LawPage";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import LawPage from "./pages/ProdukHukum/LawPage";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import productLawData from "./data/productLawData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/produk-hukum/provinsijatim" element={<ProvinsiJatim />} />
-        <Route path="/law/:number/:year" element={<LawDetailPage />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <div className="flex flex-col min-h-screen bg-white">
+      <Router>
+        <Header />
+        <main className="flex-grow mb-80">
+          {" "}
+          {/* Menambahkan margin bottom */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            {productLawData.map(({ path, title, laws }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <LawPage
+                    laws={laws}
+                    breadcrumbPaths={[
+                      { label: "Beranda", path: "/" },
+                      { label: "Produk Hukum", path: "/produk-hukum" },
+                      { label: title, path: path },
+                    ]}
+                    title={title}
+                  />
+                }
+              />
+            ))}
+            <Route path="/law/:number/:year" element={<LawDetailPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
     </div>
   );
 }

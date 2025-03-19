@@ -43,7 +43,7 @@ const detailData = [
   { label: "Lampiran", value: "pergub_50_2010.pdf" },
 ];
 
-function DetailLawCard() {
+function DetailLawCard({ setShowKategori }) {
   const [selectedButton, setSelectedButton] = useState(null);
   const [showPdf, setShowPdf] = useState(false);
   const [lampiran, setLampiran] = useState("");
@@ -52,12 +52,24 @@ function DetailLawCard() {
     setSelectedButton(button);
     if (button === "Dokumen Lampiran") {
       setShowPdf(true);
-      // Ambil nama lampiran dari detailData
+      setShowKategori(false);
       const lampiranItem = detailData.find((item) => item.label === "Lampiran");
       setLampiran(lampiranItem ? lampiranItem.value : "");
     } else {
       setShowPdf(false);
+      setShowKategori(true);
     }
+  };
+
+  const handleDownload = () => {
+    const lampiranItem = detailData.find((item) => item.label === "Lampiran");
+    const fileUrl = lampiranItem ? lampiranItem.value : "";
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.setAttribute("download", fileUrl.split("/").pop());
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -74,10 +86,13 @@ function DetailLawCard() {
           <div>Visits : 677</div>
         </div>
         <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
-          <div>Download</div>
-          <div>
-            <Download size={24} />
-          </div>
+          <a
+            onClick={handleDownload}
+            className="flex items-center cursor-pointer"
+          >
+            <div className="mr-2">Download</div>
+            <Download size={24} className="text-green-500" />{" "}
+          </a>
         </div>
       </div>
       <div className="flex gap-3 mb-5 max-sm:flex-wrap">

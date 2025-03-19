@@ -1,5 +1,5 @@
 import React from "react";
-import logoBiroHukum from "../assets/logo-biro-hukum.png"; // Pastikan jalur ini benar
+import logoBiroHukum from "../assets/logo-biro-hukum.png";
 
 const documents = [
   {
@@ -23,7 +23,7 @@ function PopularDocument() {
   return (
     <div className="flex flex-col max-w-[395px] mx-auto">
       <section className="flex flex-col px-5 pt-6 pb-3 w-full text-base font-semibold rounded-lg bg-zinc-100 text-zinc-800 shadow-md">
-        <h2 className="text-xl font-bold text-green-700 mb-2">
+        <h2 className="text-xl font-bold text-sky-900 mb-2">
           Dokumen Terpopuler
         </h2>
         <ul className="flex flex-col mt-3 w-full leading-6">
@@ -36,11 +36,12 @@ function PopularDocument() {
           ))}
         </ul>
       </section>
-      <div className="mt-4">
+      <div className="mt-6 flex justify-center">
+        {" "}
         <img
           src={logoBiroHukum}
           alt="Logo Biro Hukum"
-          className="w-full h-auto" // Sesuaikan ukuran gambar sesuai kebutuhan
+          className="w-80 h-auto"
         />
       </div>
     </div>

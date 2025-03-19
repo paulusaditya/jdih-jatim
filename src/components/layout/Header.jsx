@@ -118,9 +118,12 @@ function DropdownMenu() {
       label: "Produk Hukum Provinsi Jawa Timur",
       path: "/produk-hukum/provinsijatim",
     },
-    { label: "Produk Hukum Kabupaten / Kota", path: "#" },
-    { label: "Produk Hukum Desa", path: "#" },
-    { label: "Peraturan Alih Bahasa", path: "#" },
+    {
+      label: "Produk Hukum Kabupaten / Kota",
+      path: "/produk-hukum/kabupaten-kota",
+    },
+    { label: "Produk Hukum Desa", path: "/produk-hukum/desa" },
+    { label: "Peraturan Alih Bahasa", path: "/produk-hukum/alih-bahasa" },
   ];
 
   return (

@@ -2,35 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import LawCard from "../../components/LawCard";
+import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
 
-const laws = [
-  {
-    number: 4,
-    year: 2025,
-    title: "Tambahan Penghasilan Pegawai",
-    type: "Gubernur",
-    status: "Berlaku",
-    category: "Keuangan",
-  },
-  {
-    number: 10,
-    year: 2023,
-    title: "Rencana Tata Ruang Wilayah",
-    type: "Daerah",
-    status: "Tidak Berlaku",
-    category: "Tata Ruang",
-  },
-];
-
-const breadcrumbPaths = [
-  { label: "Beranda", path: "/" },
-  { label: "Produk Hukum", path: "/produk-hukum" },
-  { label: "Produk Hukum Provinsi Jatim", path: "/provinsijatim" },
-];
-
-const LawPage = () => {
+const LawPage = ({ laws, breadcrumbPaths, title }) => {
   const [filters, setFilters] = useState({
     number: "",
     status: "",
@@ -66,25 +41,31 @@ const LawPage = () => {
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="p-6 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <div className="flex flex-col p-8 w-full text-base bg-blue-50 rounded-xl max-md:px-5 max-md:max-w-full">
-            <h2 className="text-lg font-semibold mb-4">Filter Pencarian</h2>
+            <h2 className="text-lg font-semibold mb-4">{title}</h2>
             <div className="flex flex-wrap gap-4 items-end w-full max-md:max-w-full">
               {[
                 { name: "number", placeholder: "Nomor Dokumen", type: "text" },
-                { name: "status", options: ["", "Berlaku", "Tidak Berlaku"] },
-                { name: "category", options: ["", "Keuangan", "Tata Ruang"] },
-                { name: "type", options: ["", "Gubernur", "Daerah"] },
-                { name: "year", options: ["", "2025", "2023"] },
+                {
+                  name: "Status Terbit",
+                  options: ["", "Berlaku", "Tidak Berlaku"],
+                },
+                { name: "Kategori", options: ["", "Keuangan", "Tata Ruang"] },
+                { name: "Jenis", options: ["", "Gubernur", "Daerah"] },
+                { name: "Tahun Terbit", options: ["", "2025", "2023"] },
               ].map((field, index) =>
                 field.options ? (
-                  <div className="flex flex-col grow shrink w-32" key={index}>
+                  <div
+                    className="relative flex flex-col grow shrink w-32"
+                    key={index}
+                  >
                     <select
                       name={field.name}
                       value={filters[field.name]}
                       onChange={handleChange}
-                      className="flex overflow-hidden gap-2.5 items-center px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 border-solid text-stone-300"
+                      className="flex overflow-hidden gap-2.5 items-center px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 border-solid text-zinc-600"
                     >
                       {field.options.map((option, i) => (
                         <option key={i} value={option}>
@@ -92,6 +73,7 @@ const LawPage = () => {
                         </option>
                       ))}
                     </select>
+                    <div className="absolute left-0 mt-2 bg-blue-50 shadow-lg rounded-xl"></div>
                   </div>
                 ) : (
                   <div className="flex flex-col grow shrink w-44" key={index}>
@@ -110,7 +92,7 @@ const LawPage = () => {
 
             <div className="flex flex-col mt-6 w-full text-stone-300 max-md:max-w-full">
               <div className="flex items-center w-full bg-white rounded-lg border border-blue-300 border-solid max-md:max-w-full">
-                <Search size={20} className="text-zinc-600 px-4" />
+                <Search size={20} className="text-zinc-700 px-4 " />
                 <input
                   type="text"
                   name="searchQuery"
@@ -144,7 +126,7 @@ const LawPage = () => {
             {currentLaws.map((law, index) => (
               <LawCard
                 key={index}
-                title={`Peraturan Gubernur Jawa Timur Nomor ${law.number} Tahun ${law.year} tentang ${law.title}`}
+                title={`Peraturan ${law.type} Nomor ${law.number} Tahun ${law.year} tentang ${law.title}`}
                 year={law.year}
                 status={law.status}
                 regulationType={law.type}

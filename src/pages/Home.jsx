@@ -1,18 +1,18 @@
 
-import Main from "../components/Main";
-import LegalStatsDashboard from "../components/LegalStatsDashboard";
-import LegalPortal from "../components/ProductLawCard";
-import LegalDocumentsSection from "../components/DocumentLawOthers";
-import JDIHNetworkMembers from "../components/JdihMembers";
-import JDIHUniversityMembers from "../components/JdihUniversityMembers";
-import NewsSection from "../components/News";
-import LatestRegulations from "../components/LatestRegulations";
-import PromperdaRegulations from "../components/PromperdaRegulations";
-import Monographic from "../components/Monographic";
+import Main from "../components/Home/Main";
+import LegalStatsDashboard from "../components/Home/LegalStatsDashboard";
+import LegalPortal from "../components/Home/ProductLawCard";
+import LegalDocumentsSection from "../components/Home/DocumentLawOthers";
+import JDIHNetworkMembers from "../components/Home/JdihMembers";
+import JDIHUniversityMembers from "../components/Home/JdihUniversityMembers";
+import NewsSection from "../components/Home/News";
+import LatestRegulations from "../components/Home/LatestRegulations";
+import PromperdaRegulations from "../components/Home/PromperdaRegulations";
+import Monographic from "../components/Home/Monographic";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       <Main />
       <LegalStatsDashboard/>
       <LegalPortal/>
