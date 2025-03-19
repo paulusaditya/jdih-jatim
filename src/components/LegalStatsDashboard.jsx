@@ -102,7 +102,7 @@ export default function LegalStatsDashboard() {
         </div>
       </div>
 
-      <div className="w-full bg-blue-50 p-6 md:p-8 flex justify-center mt-10">
+      <div className="w-full bg-blue-50 p-6 md:p-20 flex justify-center">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 max-w-4xl">
           <div className="flex-shrink-0">
             <img

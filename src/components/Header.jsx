@@ -27,7 +27,7 @@ export default function Header() {
       </div>
 
       {/* Header */}
-      <div className="bg-white py-4">
+      <div className="bg-white py-6">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Logo src="/assets/nav-logo/logo1.png" alt="Logo 1" />
@@ -59,7 +59,7 @@ function ContactInfo({ icon, text }) {
 }
 
 function Logo({ src, alt }) {
-  return <img className="h-12" src={src} alt={alt} width={50} height={50} />;
+  return <img className="w-auto h-12 max-w-none max-h-none" src={src} alt={alt} />;
 }
 
 function NavBar() {

@@ -9,7 +9,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
     <Router>
       <Header />
       <Routes>

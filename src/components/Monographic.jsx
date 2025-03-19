@@ -43,7 +43,7 @@ export default function Monographic() {
           </div>
           <Link
             to="/monografi"
-            className="flex items-center bg-pink-100 text-pink-600 border-pink-300 hover:text-pink-800 font-medium text-sm border border-pink-600 rounded px-4 py-2 transition-colors"
+            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
           >
             LIHAT SEMUA <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
