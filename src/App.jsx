@@ -6,6 +6,7 @@ import LawPage from "./pages/ProdukHukum/LawPage";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import productLawData from "./data/productLawData";
+import NotFound from "./pages/NotFound";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
@@ -14,7 +15,6 @@ function App() {
       <Router>
         <Header />
         <main className="flex-grow">
-          {" "}
           <Routes>
             <Route path="/" element={<Home />} />
             {productLawData.map(({ path, title, laws }) => (
@@ -35,6 +35,7 @@ function App() {
               />
             ))}
             <Route path="/law/:number/:year" element={<LawDetailPage />} />
+            <Route path="*" element={<NotFound />} />{" "}
           </Routes>
         </main>
         <Footer />
