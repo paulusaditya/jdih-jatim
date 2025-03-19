@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="py-80">
+    <footer className="pt-80">
       {/* Main Footer */}
       <div className="relative">
         <div className="absolute inset-x-0 -top-60 flex justify-center">
-          <img src="./src/assets/Group 380.png" alt="" />
+          <img src="/assets/Group 380.png" alt="" />
         </div>
       </div>
       <div className="bg-blue-950 text-white py-15 px-4 md:px-8 pt-65">
@@ -18,12 +18,12 @@ export default function Footer() {
             <div>
               <div className="flex items-center space-x-2">
                 <img
-                  src="./src/assets/nav-logo/logo1.png"
+                  src="/assets/nav-logo/logo1.png"
                   alt="JDIH Logo"
                   className="w-12 h-12 object-contain"
                 />
                 <img
-                  src="./src/assets/nav-logo/logo2.png"
+                  src="/assets/nav-logo/logo2.png"
                   alt="East Java Logo"
                   className="w-12 h-12 object-contain"
                 />

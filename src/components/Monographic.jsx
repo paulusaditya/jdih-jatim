@@ -6,27 +6,27 @@ export default function Monographic() {
     {
       id: 1,
       title: "Hukum Acara Pengujian Undang-Undang",
-      image: "./src/assets/monographic/image 70.png",
+      image: "/assets/monographic/image 70.png",
     },
     {
       id: 2,
       title: "Teori Hukum Murni",
-      image: "./src/assets/monographic/image 71.png",
+      image: "/assets/monographic/image 71.png",
     },
     {
       id: 3,
       title: "Hukum Acara Peradilan Tata Usaha Negara Indonesia",
-      image: "./src/assets/monographic/image 72.png",
+      image: "/assets/monographic/image 72.png",
     },
     {
       id: 4,
       title: "Hukum Lingkungan",
-      image: "./src/assets/monographic/image 73.png",
+      image: "/assets/monographic/image 73.png",
     },
     {
       id: 5,
       title: "Hukum Pajak",
-      image: "./src/assets/monographic/image 74.png",
+      image: "/assets/monographic/image 74.png",
     },
   ];
 

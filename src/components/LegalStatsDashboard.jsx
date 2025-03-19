@@ -64,7 +64,7 @@ export default function LegalStatsDashboard() {
       <div
         className="text-white w-full relative"
         style={{
-          backgroundImage: "url('./src/assets/image 48.jpeg')",
+          backgroundImage: "url('/assets/image 48.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
@@ -106,7 +106,7 @@ export default function LegalStatsDashboard() {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 max-w-4xl">
           <div className="flex-shrink-0">
             <img
-              src="./src/assets/nav-logo/logo3.png"
+              src="/assets/nav-logo/logo3.png"
               alt="JDIH Jawa Timur Mascot"
               width={70}
               height={150}

@@ -16,7 +16,7 @@ export default function NewsSection() {
         'Talkshow "Bincang Hukum" di TVRI Jawa Timur Kupas Tuntas Peraturan Daerah Provinsi Jawa Timur Nomor 8 Tahun 2022 tentang Kerja Sama Daerah',
       content:
         'Surabaya, Senin (24/2) - Biro Hukum Sekretariat Daerah Provinsi Jawa Timur dan Stasiun Televisi Republik Indonesia (TVRI) Jawa Timur mengelar program talkshow "Bincang Hukum" yang membahas Peraturan Daerah Provinsi Jawa Timur Nomor 8 Tahun 2022 tentang Kerja Sama Daerah. Acara ini...',
-      image: "./src/assets/berita/image 69.png?height=300&width=500",
+      image: "/assets/berita/image 69.png?height=300&width=500",
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ export default function NewsSection() {
       title: "Sosialisasi Peraturan Gubernur Jawa Timur Nomor 12 Tahun 2025 tentang Pengelolaan Aset Daerah",
       content:
         "Surabaya, Selasa (18/2) - Biro Hukum Sekretariat Daerah Provinsi Jawa Timur mengadakan sosialisasi Peraturan Gubernur Jawa Timur Nomor 12 Tahun 2025 tentang Pengelolaan Aset Daerah. Kegiatan ini dihadiri oleh perwakilan dari seluruh Organisasi Perangkat Daerah (OPD) di lingkungan Pemerintah Provinsi Jawa Timur...",
-      image: "./src/assets/berita/imagedoe.jpg?height=300&width=500",
+      image: "/assets/berita/imagedoe.jpg?height=300&width=500",
     },
   ]
 

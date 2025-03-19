@@ -1,5 +1,5 @@
 import React from "react";
-import logoBiroHukum from "../assets/logo-biro-hukum.png"; // Pastikan jalur ini benar
+import logoBiroHukum from "/assets/logo-biro-hukum.png"; // Pastikan jalur ini benar
 
 const documents = [
   {
