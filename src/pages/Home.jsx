@@ -1,4 +1,3 @@
-
 import Main from "../components/Home/Main";
 import LegalStatsDashboard from "../components/Home/LegalStatsDashboard";
 import LegalPortal from "../components/Home/ProductLawCard";
