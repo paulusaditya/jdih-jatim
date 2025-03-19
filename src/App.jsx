@@ -13,7 +13,7 @@ function App() {
     <div className="flex flex-col min-h-screen bg-white">
       <Router>
         <Header />
-        <main className="flex-grow mb-80">
+        <main className="flex-grow">
           {" "}
           <Routes>
             <Route path="/" element={<Home />} />
