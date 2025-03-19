@@ -1,5 +1,4 @@
 import React from "react";
-import logoBiroHukum from "../assets/logo-biro-hukum.png";
 
 const documents = [
   {
@@ -37,9 +36,8 @@ function PopularDocument() {
         </ul>
       </section>
       <div className="mt-6 flex justify-center">
-        {" "}
         <img
-          src={logoBiroHukum}
+          src="/logo-biro-hukum.png" 
           alt="Logo Biro Hukum"
           className="w-80 h-auto"
         />
