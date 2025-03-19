@@ -1,6 +1,6 @@
-import { Twitter, Instagram, Youtube } from "lucide-react";
-import { SiTiktok } from "react-icons/si";
-import { Link } from "react-router-dom";
+import { Twitter, Instagram, Youtube } from "lucide-react"
+import { SiTiktok } from "react-icons/si"
+import { Link } from "react-router-dom"
 
 export default function Footer() {
   return (
@@ -17,46 +17,27 @@ export default function Footer() {
             {/* Column 1: Logo and Title */}
             <div>
               <div className="flex items-center space-x-2 mb-1">
-                <img
-                  src="/assets/nav-logo/logo1.png"
-                  alt="JDIH Logo"
-                  className="w-12 h-12 object-contain"
-                />
-                <img
-                  src="/assets/nav-logo/logo2.png"
-                  alt="East Java Logo"
-                  className="w-12 h-12 object-contain"
-                />
-                <img
-                  src="/assets/nav-logo/logo3.png"
-                  alt="East Java Logo"
-                  className="w-12 h-12 object-contain"
-                />
+                <img src="/assets/nav-logo/logo1.png" alt="JDIH Logo" className="w-12 h-12 object-contain" />
+                <img src="/assets/nav-logo/logo2.png" alt="East Java Logo" className="w-12 h-12 object-contain" />
+                <img src="/assets/nav-logo/logo3.png" alt="East Java Logo" className="w-12 h-12 object-contain" />
               </div>
 
-              <p className="text-sm mb-2">
-                Jaringan Dokumentasi dan Informasi Hukum
-              </p>
+              <p className="text-sm mb-2">Jaringan Dokumentasi dan Informasi Hukum</p>
               <h3 className="text-xl font-bold">PROVINSI JAWA TIMUR</h3>
             </div>
 
             {/* Column 2: Office Address */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">
-                Kantor Biro Hukum Jawa Timur
-              </h3>
+              <h3 className="text-lg font-semibold mb-4">Kantor Biro Hukum Jawa Timur</h3>
               <p className="text-sm mb-4">
-                Jl. Pahlawan No.110, Alun-alun Contong, Bubutan, Surabaya 60174,
-                Jawa Timur – Indonesia.
+                Jl. Pahlawan No.110, Alun-alun Contong, Bubutan, Surabaya 60174, Jawa Timur – Indonesia.
               </p>
             </div>
 
             {/* Column 3: Customer Support */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Customer Support</h3>
-              <p className="text-sm mb-2">
-                031-3520881 031-3524001 (Psw. 1118)
-              </p>
+              <p className="text-sm mb-2">031-3520881 031-3524001 (Psw. 1118)</p>
               <p className="text-sm">support@jdih.jatimprov.go.id</p>
             </div>
 
@@ -116,9 +97,7 @@ export default function Footer() {
                   <Link href="/produk-hukum">Produk Hukum</Link>
                 </li>
                 <li>
-                  <Link href="/dokumen-hukum-lainnya">
-                    Dokumen Hukum Lainnya
-                  </Link>
+                  <Link href="/dokumen-hukum-lainnya">Dokumen Hukum Lainnya</Link>
                 </li>
                 <li>
                   <Link href="/berita">Berita</Link>
@@ -138,8 +117,16 @@ export default function Footer() {
               </ul>
             </div>
           </div>
+
+          {/* Copyright Section */}
+          <div className="border-t border-blue-900 pt-6 ">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-sm">© 2025 Provinsi Jawa Timur. All Rights Reserved.</p>
+              <p className="text-sm">Biro Hukum Sekretariat Daerah Jawa Timur · JDIH Jatim</p>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
-  );
+  )
 }
