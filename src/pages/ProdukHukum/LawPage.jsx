@@ -1,9 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
+
+const CustomSelect = ({ options, value, onChange, name }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleSelect = (option) => {
+    onChange({ target: { name, value: option } });
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <div
+        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-blue-50 rounded-lg border border-blue-300 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="text-zinc-600">{value || name}</span>
+        <span className="text-zinc-600">▼</span>
+      </div>
+      {isOpen && (
+        <div className="absolute z-10 w-full bg-blue-50 border text-blue-800 border-blue-300 rounded-lg mt-1">
+          {options.map((option, index) => (
+            <div
+              key={index}
+              className="px-4 py-3 hover:bg-blue-100 hover:rounded-lg cursor-pointer hover:font-semibold"
+              onClick={() => handleSelect(option)}
+            >
+              {option}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const LawPage = ({ laws, breadcrumbPaths, title }) => {
   const [filters, setFilters] = useState({
@@ -49,31 +97,33 @@ const LawPage = ({ laws, breadcrumbPaths, title }) => {
               {[
                 { name: "number", placeholder: "Nomor Dokumen", type: "text" },
                 {
-                  name: "Status Terbit",
+                  name: "Status",
                   options: ["", "Berlaku", "Tidak Berlaku"],
                 },
                 { name: "Kategori", options: ["", "Keuangan", "Tata Ruang"] },
-                { name: "Jenis", options: ["", "Gubernur", "Daerah"] },
-                { name: "Tahun Terbit", options: ["", "2025", "2023"] },
+                {
+                  name: "Jenis",
+                  options: [
+                    "",
+                    "Peraturan Daerah",
+                    "Peraturan Gubernur",
+                    "Keputusan Gubernur",
+                    "Surat Keputusan Gubernur",
+                    "Instruksi Gubernur",
+                    "Keputusan Bersama Gubernur",
+                    "Keputusan Atas Nama Gubernur",
+                  ],
+                },
+                { name: "Tahun", options: ["", "2025", "2023"] },
               ].map((field, index) =>
                 field.options ? (
-                  <div
-                    className="relative flex flex-col grow shrink w-32"
-                    key={index}
-                  >
-                    <select
-                      name={field.name}
+                  <div className="flex flex-col grow shrink w-32" key={index}>
+                    <CustomSelect
+                      options={field.options}
                       value={filters[field.name]}
                       onChange={handleChange}
-                      className="flex overflow-hidden gap-2.5 items-center px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 border-solid text-zinc-600"
-                    >
-                      {field.options.map((option, i) => (
-                        <option key={i} value={option}>
-                          {option || field.name}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute left-0 mt-2 bg-blue-50 shadow-lg rounded-xl"></div>
+                      name={field.name}
+                    />
                   </div>
                 ) : (
                   <div className="flex flex-col grow shrink w-44" key={index}>
@@ -92,7 +142,7 @@ const LawPage = ({ laws, breadcrumbPaths, title }) => {
 
             <div className="flex flex-col mt-6 w-full text-stone-300 max-md:max-w-full">
               <div className="flex items-center w-full bg-white rounded-lg border border-blue-300 border-solid max-md:max-w-full">
-                <Search size={20} className="text-zinc-700 px-4 " />
+                <Search size={20} />
                 <input
                   type="text"
                   name="searchQuery"
@@ -107,7 +157,7 @@ const LawPage = ({ laws, breadcrumbPaths, title }) => {
             <div className="flex flex-wrap gap-2 justify-center items-center px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-blue-600 rounded-xl max-md:max-w-full">
               <button
                 onClick={handleSearch}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer"
               >
                 <Search size={20} /> Cari Sekarang
               </button>
