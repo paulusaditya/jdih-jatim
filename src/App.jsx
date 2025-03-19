@@ -1,14 +1,14 @@
-import "./App.css"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import Profil from "./pages/Profil"
-import LawDetailPage from "./pages/ProdukHukum/LawDetailPage"
-import LawPage from "./pages/ProdukHukum/LawPage"
-import Header from "./components/layout/Header"
-import Footer from "./components/layout/Footer"
-import productLawData from "./data/productLawData"
-import NotFound from "./pages/NotFound"
-import "@fortawesome/fontawesome-free/css/all.min.css"
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Profil from "./pages/Profil"; 
+import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
+import LawPage from "./pages/ProdukHukum/LawPage";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import productLawData from "./data/productLawData";
+import NotFound from "./pages/NotFound"; 
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   return (
@@ -43,7 +43,7 @@ function App() {
         <Footer />
       </Router>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
