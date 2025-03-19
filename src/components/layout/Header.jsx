@@ -90,9 +90,9 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
 
   const navItems = [
     { label: "Beranda", path: "/" },
-    { label: "Profil", path: "/profil" },
+    { label: "Profil", path: "#", dropdown: true },
     { label: "Produk Hukum", path: "#", dropdown: true },
-    { label: "Dokumentasi Hukum Lainnya", path: "/dokumentasi" },
+    { label: "Dokumentasi Hukum Lainnya", path: "#", dropdown: true },
     { label: "Berita", path: "/berita" },
     { label: "Survey", path: "/survey" },
   ];
@@ -115,7 +115,10 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
                 {item.label}
               </Link>
             )}
-            {item.dropdown && activeDropdown === index && <DropdownMenu />}
+            {item.dropdown && activeDropdown === index && (
+              item.label === "Dokumentasi Hukum Lainnya" ? <DocumentationDropdown /> :
+              item.label === "Profil" ? <ProfileDropdown /> : <DropdownMenu />
+            )}
           </div>
         ))}
       </div>
@@ -146,12 +149,14 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
                   >
                     {item.label}
                   </span>
-                  {activeDropdown === index && <DropdownMenu />}
+                  {activeDropdown === index && (
+                    item.label === "Dokumentasi Hukum Lainnya" ? <DocumentationDropdown /> :
+                    item.label === "Profil" ? <ProfileDropdown /> : <DropdownMenu />
+                  )}
                 </>
               ) : (
                 <Link to={item.path} className="block text-blue-800">
-                  {item.label}
-                </Link>
+                  {item.label}</Link>
               )}
             </div>
           ))}
@@ -178,6 +183,49 @@ function DropdownMenu() {
   return (
     <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
       {dropdownItems.map((item, index) => (
+        <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function DocumentationDropdown() {
+  const documentationItems = [
+    { label: "Staatsblad", path: "/dokumentasi/staatsblad" },
+    { label: "Monografi", path: "/dokumentasi/monografi" },
+    { label: "Artikel", path: "/dokumentasi/artikel" },
+    { label: "Propemperda", path: "/dokumentasi/propemperda" },
+    { label: "Putusan Pengadilan", path: "/dokumentasi/putusan-pengadilan" },
+    { label: "Dokumen Langka", path: "/dokumentasi/dokumen-langka" },
+    { label: "Dokumen Kerja Sama Jawa Timur", path: "/dokumentasi/dokumen-kerja-sama" },
+    { label: "Surat Edaran", path: "/dokumentasi/surat-edaran" },
+    { label: "Rancangan Peraturan Daerah", path: "/dokumentasi/rancangan-peraturan-daerah" },
+  ];
+
+  return (
+    <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
+      {documentationItems.map((item, index) => (
+        <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function ProfileDropdown() {
+  const profileItems = [
+    { label: "Tentang Kami", path: "/profil/tentang-kami" },
+    { label: "Kontak", path: "/profil/kontak" },
+    { label: "Struktur Organisasi JDIH Provinsi Jawa Timur", path: "/profil/struktur-organisasi" },
+    { label: "Struktur Organisasi Tim Pengolaan JDIH Provinsi Jawa Timur", path: "/profil/struktur-tim" },
+  ];
+
+  return (
+    <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
+      {profileItems.map((item, index) => (
         <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
           {item.label}
         </Link>
