@@ -1,28 +1,32 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+"use client"
+
+import * as React from "react"
+import { Link } from "react-router-dom"
+import { Menu, X, Mail, Phone } from "lucide-react"
 
 export default function Header() {
-  const [isSidebarOpen, setSidebarOpen] = React.useState(false);
+  const [isSidebarOpen, setSidebarOpen] = React.useState(false)
 
   return (
     <>
       {/* Top Bar */}
       <div className="bg-blue-600 text-white text-sm py-2">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-4">
-            <ContactInfo
-              icon="fas fa-phone-alt"
-              text="031-3520881 031-3524001 (Psw. 1118)"
-            />
-            <ContactInfo
-              icon="fas fa-envelope"
-              text="support@jdih.jatimprov.go.id"
-            />
+            <div className="flex items-center space-x-1">
+              <Phone size={16} />
+              <span>031-3520881 031-3524001 (Psw. 1118)</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Mail size={16} />
+              <span>support@jdih.jatimprov.go.id</span>
+            </div>
           </div>
           <a
             className="bg-blue-800 px-2 py-1 rounded"
-            href="mailto:majadigi.jatimprov.go.id"
+            href="https://majadigi.jatimprov.go.id"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             majadigi.jatimprov.go.id
           </a>
@@ -31,18 +35,14 @@ export default function Header() {
 
       {/* Header */}
       <div className="bg-white py-6">
-        <div className="container mx-auto flex items-center justify-between">
+        <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center space-x-4">
-            <Logo src="/assets/nav-logo/logo1.png" alt="Logo 1" />
-            <Logo src="/assets/nav-logo/logo2.png" alt="Logo 2" />
-            <Logo src="/assets/nav-logo/logo3.png" alt="Logo 3" />
+            <img className="w-auto h-12" src="/assets/nav-logo/logo1.png" alt="Logo 1" />
+            <img className="w-auto h-12" src="/assets/nav-logo/logo2.png" alt="Logo 2" />
+            <img className="w-auto h-12" src="/assets/nav-logo/logo3.png" alt="Logo 3" />
             <div>
-              <div className="text-blue-900 sm">
-                Jaringan Dokumentasi dan Informasi Hukum
-              </div>
-              <div className="text-blue-900 font-bold text-3xl font-jakarta">
-                PROVINSI JAWA TIMUR
-              </div>
+              <div className="text-blue-900 text-sm">Jaringan Dokumentasi dan Informasi Hukum</div>
+              <div className="text-blue-900 font-bold text-xl md:text-3xl font-jakarta">PROVINSI JAWA TIMUR</div>
             </div>
           </div>
           <div className="md:hidden">
@@ -54,39 +54,26 @@ export default function Header() {
         </div>
       </div>
     </>
-  );
-}
-
-function ContactInfo({ icon, text }) {
-  return (
-    <div className="flex items-center space-x-1">
-      <i className={icon}></i>
-      <span>{text}</span>
-    </div>
-  );
-}
-
-function Logo({ src, alt }) {
-  return <img className="w-auto h-12 max-w-none max-h-none" src={src} alt={alt} />;
+  )
 }
 
 function NavBar({ isSidebarOpen, setSidebarOpen }) {
-  const [activeDropdown, setActiveDropdown] = React.useState(null);
+  const [activeDropdown, setActiveDropdown] = React.useState(null)
 
   const toggleDropdown = (index) => {
-    setActiveDropdown(activeDropdown === index ? null : index);
-  };
+    setActiveDropdown(activeDropdown === index ? null : index)
+  }
 
   const closeDropdown = (e) => {
     if (!e.target.closest(".dropdown-container")) {
-      setActiveDropdown(null);
+      setActiveDropdown(null)
     }
-  };
+  }
 
   React.useEffect(() => {
-    document.addEventListener("click", closeDropdown);
-    return () => document.removeEventListener("click", closeDropdown);
-  }, []);
+    document.addEventListener("click", closeDropdown)
+    return () => document.removeEventListener("click", closeDropdown)
+  }, [])
 
   const navItems = [
     { label: "Beranda", path: "/" },
@@ -95,19 +82,16 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
     { label: "Dokumentasi Hukum Lainnya", path: "#", dropdown: true },
     { label: "Berita", path: "/berita" },
     { label: "Survey", path: "/survey" },
-  ];
+  ]
 
   return (
     <>
       {/* Desktop Navbar */}
-      <div className="hidden md:flex space-x-10 text-blue-800 relative">
+      <div className="hidden md:flex space-x-10 text-blue-800">
         {navItems.map((item, index) => (
           <div key={index} className="relative dropdown-container">
             {item.dropdown ? (
-              <span
-                onClick={() => toggleDropdown(index)}
-                className="hover:font-semibold cursor-pointer"
-              >
+              <span onClick={() => toggleDropdown(index)} className="hover:font-semibold cursor-pointer">
                 {item.label}
               </span>
             ) : (
@@ -116,21 +100,30 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
               </Link>
             )}
             {item.dropdown && activeDropdown === index && (
-              item.label === "Dokumentasi Hukum Lainnya" ? <DocumentationDropdown /> :
-              item.label === "Profil" ? <ProfileDropdown /> : <DropdownMenu />
+              <div className="absolute left-0 top-full mt-1 z-50 w-max min-w-[250px] shadow-lg rounded-md bg-white">
+                {item.label === "Dokumentasi Hukum Lainnya" ? (
+                  <DocumentationDropdown />
+                ) : item.label === "Profil" ? (
+                  <ProfileDropdown />
+                ) : (
+                  <DropdownMenu />
+                )}
+              </div>
             )}
           </div>
         ))}
       </div>
-      
-      {/* Mobile Sidebar */}
+
+      {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50" onClick={() => setSidebarOpen(false)}></div>
       )}
+
+      {/* Mobile Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 p-4`}
+        } transition-transform duration-300 ease-in-out z-50 p-4 overflow-y-auto`}
       >
         <div className="flex justify-between border-b pb-2">
           <span className="text-blue-900 font-bold text-lg">Menu</span>
@@ -150,20 +143,28 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
                     {item.label}
                   </span>
                   {activeDropdown === index && (
-                    item.label === "Dokumentasi Hukum Lainnya" ? <DocumentationDropdown /> :
-                    item.label === "Profil" ? <ProfileDropdown /> : <DropdownMenu />
+                    <div className="mt-2 ml-4">
+                      {item.label === "Dokumentasi Hukum Lainnya" ? (
+                        <DocumentationDropdown />
+                      ) : item.label === "Profil" ? (
+                        <ProfileDropdown />
+                      ) : (
+                        <DropdownMenu />
+                      )}
+                    </div>
                   )}
                 </>
               ) : (
                 <Link to={item.path} className="block text-blue-800">
-                  {item.label}</Link>
+                  {item.label}
+                </Link>
               )}
             </div>
           ))}
         </div>
       </div>
     </>
-  );
+  )
 }
 
 function DropdownMenu() {
@@ -178,17 +179,21 @@ function DropdownMenu() {
     },
     { label: "Produk Hukum Desa", path: "/produk-hukum/desa" },
     { label: "Peraturan Alih Bahasa", path: "/produk-hukum/alih-bahasa" },
-  ];
+  ]
 
   return (
-    <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
+    <div className="bg-white rounded-lg p-2 w-full">
       {dropdownItems.map((item, index) => (
-        <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
+        <Link
+          key={index}
+          to={item.path}
+          className="block text-blue-800 py-2 px-3 hover:bg-gray-100 rounded whitespace-nowrap"
+        >
           {item.label}
         </Link>
       ))}
     </div>
-  );
+  )
 }
 
 function DocumentationDropdown() {
@@ -202,17 +207,21 @@ function DocumentationDropdown() {
     { label: "Dokumen Kerja Sama Jawa Timur", path: "/dokumentasi/dokumen-kerja-sama" },
     { label: "Surat Edaran", path: "/dokumentasi/surat-edaran" },
     { label: "Rancangan Peraturan Daerah", path: "/dokumentasi/rancangan-peraturan-daerah" },
-  ];
+  ]
 
   return (
-    <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
+    <div className="bg-white rounded-lg p-2 w-full">
       {documentationItems.map((item, index) => (
-        <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
+        <Link
+          key={index}
+          to={item.path}
+          className="block text-blue-800 py-2 px-3 hover:bg-gray-100 rounded whitespace-nowrap"
+        >
           {item.label}
         </Link>
       ))}
     </div>
-  );
+  )
 }
 
 function ProfileDropdown() {
@@ -221,15 +230,20 @@ function ProfileDropdown() {
     { label: "Kontak", path: "/profil/kontak" },
     { label: "Struktur Organisasi JDIH Provinsi Jawa Timur", path: "/profil/struktur-organisasi" },
     { label: "Struktur Organisasi Tim Pengolaan JDIH Provinsi Jawa Timur", path: "/profil/struktur-tim" },
-  ];
+  ]
 
   return (
-    <div className="ml-4 mt-2 bg-gray-100 rounded-lg p-2">
+    <div className="bg-white rounded-lg p-2 w-full">
       {profileItems.map((item, index) => (
-        <Link key={index} to={item.path} className="block text-blue-800 py-1 px-2 hover:bg-gray-200 rounded">
+        <Link
+          key={index}
+          to={item.path}
+          className="block text-blue-800 py-2 px-3 hover:bg-gray-100 rounded whitespace-nowrap"
+        >
           {item.label}
         </Link>
       ))}
     </div>
-  );
+  )
 }
+

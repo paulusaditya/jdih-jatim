@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Profil from "./pages/Profil"; 
+import Profil from "./pages/Profil/Profil"; 
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import Header from "./components/layout/Header";
@@ -18,7 +18,7 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/profil" element={<Profil />} />
+            <Route path="/profil/tentang-kami" element={<Profil />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
