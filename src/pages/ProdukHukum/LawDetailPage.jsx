@@ -18,7 +18,7 @@ const LawDetailPage = () => {
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="p-6 bg-white flex flex-col md:flex-row gap-6">
+      <div className="p-16 bg-white flex flex-col md:flex-row gap-6">
         <div className="flex-1">
           <DetailLawCard setShowKategori={setShowKategori} />{" "}
         </div>

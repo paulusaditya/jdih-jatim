@@ -2,7 +2,7 @@ import { ChevronRight, Home } from "lucide-react";
 
 const Breadcrumbs = ({ paths }) => {
   return (
-    <nav className="flex gap-4 items-center p-10 bg-blue-50 text-base text-blue-600">
+    <nav className="flex gap-4 items-center px-16 py-10 bg-blue-50 text-base text-blue-600">
       {paths.map((path, index) => (
         <div key={index} className="flex gap-3 items-center">
           {index === 0 && <Home size={16} className="text-blue-600" />}
