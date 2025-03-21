@@ -59,7 +59,8 @@ export default function LegalDocumentsSection() {
             onClick={() => setShowAll(!showAll)}
             className={`flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors ${showAll ? "bg-pink-100 text-pink-600 border-pink-300" : "text-blue-600 border-blue-600 hover:text-blue-800"}`}
           >
-            LIHAT SEMUA <ArrowRight className="ml-1 h-4 w-4" />
+            <span className="hidden md:inline">LIHAT SEMUA</span>
+            <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
           </button>
         </div>
 
