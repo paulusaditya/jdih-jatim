@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-blue-600 text-white text-sm py-2">
+      <div className="bg-blue-600 text-white text-sm py-2 hidden sm:block">
         <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1">
@@ -36,7 +36,12 @@ export default function Header() {
       {/* Header */}
       <div className="bg-white py-6">
         <div className="container mx-auto flex items-center justify-between px-4">
-          <div className="flex items-center space-x-4">
+          <div className="md:hidden">
+            <button onClick={() => setSidebarOpen(true)}>
+              <Menu size={32} className="text-blue-800" />
+            </button>
+          </div>
+          <div className="flex items-center space-x-4 mx-auto md:mx-0">
             <img className="w-auto h-12" src="/assets/nav-logo/logo1.png" alt="Logo 1" />
             <img className="w-auto h-12" src="/assets/nav-logo/logo2.png" alt="Logo 2" />
             <img className="w-auto h-12" src="/assets/nav-logo/logo3.png" alt="Logo 3" />
@@ -44,11 +49,6 @@ export default function Header() {
               <div className="text-blue-900 text-sm">Jaringan Dokumentasi dan Informasi Hukum</div>
               <div className="text-blue-900 font-bold text-xl md:text-3xl font-jakarta">PROVINSI JAWA TIMUR</div>
             </div>
-          </div>
-          <div className="md:hidden">
-            <button onClick={() => setSidebarOpen(true)}>
-              <Menu size={32} className="text-blue-800" />
-            </button>
           </div>
           <NavBar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
         </div>
@@ -123,7 +123,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen }) {
       <div
         className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 p-4 overflow-y-auto`}
+        } transition-transform duration-300 ease-in-out z-50 p-4 overflow-y-auto md:hidden`}
       >
         <div className="flex justify-between border-b pb-2">
           <span className="text-blue-900 font-bold text-lg">Menu</span>

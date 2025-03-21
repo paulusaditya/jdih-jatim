@@ -67,7 +67,7 @@ export default function LegalDocumentsSection() {
           Akses dokumen-dokumen lain yang dimiliki oleh Biro Hukum Provinsi Jawa Timur.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500 ease-in-out">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500 ease-in-out">
           {allDocuments.map((doc, index) => {
             const isLastCard = index === allDocuments.length - 1
             const isLastRowWithOneCard = isLastCard && allDocuments.length % 4 === 1

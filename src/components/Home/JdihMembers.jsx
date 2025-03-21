@@ -68,8 +68,8 @@ export default function JDIHNetworkMembers() {
         <div
           className={`grid gap-6 justify-items-center transition-all duration-500 ease-in-out ${
             showAll
-              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6"
-              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
+              ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6"
+              : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
           }`}
         >
           {allMembers.map((member, index) => (

@@ -48,9 +48,10 @@ export default function LatestRegulations() {
           </div>
           <Link
             to="/peraturan"
-            className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-600 rounded px-4 py-2 transition-colors"
+            className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-600 rounded px-4 py-2 transition-colors md:px-4 md:py-2"
           >
-            LIHAT SEMUA <ArrowRight className="ml-1 h-4 w-4" />
+            <span className="hidden md:inline">LIHAT SEMUA</span>
+            <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
           </Link>
         </div>
 

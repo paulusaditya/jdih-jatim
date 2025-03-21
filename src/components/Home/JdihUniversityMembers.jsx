@@ -15,7 +15,7 @@ export default function JDIHUniversityMembers() {
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-8 text-center mt-10">Anggota Jaringan JDIH Provinsi Jawa Timur Perguruan Tinggi</h2>
 
-        <div className="grid gap-6 justify-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid gap-6 justify-items-center grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {initialMembers.map((member, index) => (
             <MemberCard
               key={index}
