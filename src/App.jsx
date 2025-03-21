@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil/Profil"; 
 import ContactPage from "./pages/Profil/Contact";
+import OrganizationalChart from "./pages/Profil/OrganizationalChart";
+import TeamChart from "./pages/Profil/TeamChart";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import Header from "./components/layout/Header";
@@ -21,6 +23,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/profil/tentang-kami" element={<Profil />} />
             <Route path="/profil/kontak" element={<ContactPage />} />
+            <Route path="/profil/struktur-organisasi" element={<OrganizationalChart />} />
+            <Route path="/profil/struktur-tim" element={<TeamChart />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}

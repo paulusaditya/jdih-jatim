@@ -229,7 +229,7 @@ function ProfileDropdown() {
     { label: "Tentang Kami", path: "/profil/tentang-kami" },
     { label: "Kontak", path: "/profil/kontak" },
     { label: "Struktur Organisasi JDIH Provinsi Jawa Timur", path: "/profil/struktur-organisasi" },
-    { label: "Struktur Organisasi Tim Pengolaan JDIH Provinsi Jawa Timur", path: "/profil/struktur-tim" },
+    { label: "Struktur Organisasi Tim Pengelolaan JDIH Provinsi Jawa Timur", path: "/profil/struktur-tim" },
   ]
 
   return (
