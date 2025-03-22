@@ -7,6 +7,7 @@ import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
+import Berita from "./pages/Berita/Berita";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import productLawData from "./data/productLawData";
@@ -25,6 +26,7 @@ function App() {
             <Route path="/profil/kontak" element={<ContactPage />} />
             <Route path="/profil/struktur-organisasi" element={<OrganizationalChart />} />
             <Route path="/profil/struktur-tim" element={<TeamChart />} />
+            <Route path="/berita" element={<Berita />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
