@@ -1,18 +1,20 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Profil from "./pages/Profil/Profil"; 
+import Profil from "./pages/Profil/Profil";
 import ContactPage from "./pages/Profil/Contact";
 import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
+import DocPage from "./pages/DokumenHukum/DocPage";
 import Berita from "./pages/Berita/Berita";
 import DetailBerita from "./pages/Berita/DetailBerita";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import productLawData from "./data/productLawData";
-import NotFound from "./pages/NotFound"; 
+import docData from "./data/docData";
+import NotFound from "./pages/NotFound";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
@@ -25,7 +27,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/profil/tentang-kami" element={<Profil />} />
             <Route path="/profil/kontak" element={<ContactPage />} />
-            <Route path="/profil/struktur-organisasi" element={<OrganizationalChart />} />
+            <Route
+              path="/profil/struktur-organisasi"
+              element={<OrganizationalChart />}
+            />
             <Route path="/profil/struktur-tim" element={<TeamChart />} />
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:id" element={<DetailBerita />} />
@@ -47,6 +52,23 @@ function App() {
               />
             ))}
             <Route path="/law/:number/:year" element={<LawDetailPage />} />
+            {docData.map(({ path, title, documents }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <DocPage
+                    documents={documents}
+                    breadcrumbPaths={[
+                      { label: "Beranda", path: "/" },
+                      { label: title, path: path },
+                    ]}
+                    title={title}
+                  />
+                }
+              />
+            ))}
+            <Route path="/dokumen/:number/:year" element={<LawDetailPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
