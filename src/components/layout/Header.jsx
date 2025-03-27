@@ -10,20 +10,20 @@ export default function Header() {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-blue-600 text-white text-sm py-2 hidden sm:block">
+      <div className="bg-blue-600 text-white text-xs py-2 hidden sm:block">
         <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1">
-              <Phone size={16} />
+              <Phone size={14} />
               <span>031-3520881 031-3524001 (Psw. 1118)</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Mail size={16} />
+              <Mail size={14} />
               <span>support@jdih.jatimprov.go.id</span>
             </div>
           </div>
           <a
-            className="bg-blue-800 px-2 py-1 rounded"
+            className="bg-blue-800 px-2 py-1 rounded text-xs"
             href="https://majadigi.jatimprov.go.id"
             target="_blank"
             rel="noopener noreferrer"
@@ -34,21 +34,21 @@ export default function Header() {
       </div>
 
       {/* Header */}
-      <div className="bg-white py-6">
+      <div className="bg-white py-4">
         <div className="container mx-auto flex items-center justify-between px-4">
+          <div className="flex items-center space-x-4">
+            <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo1.png" alt="Logo 1" />
+            <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo2.png" alt="Logo 2" />
+            <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo3.png" alt="Logo 3" />
+            <div>
+              <div className="text-blue-900 text-[10px] sm:text-xs">Jaringan Dokumentasi dan Informasi Hukum</div>
+              <div className="text-blue-900 font-bold text-base sm:text-lg md:text-2xl font-jakarta">PROVINSI JAWA TIMUR</div>
+            </div>
+          </div>
           <div className="md:hidden">
             <button onClick={() => setSidebarOpen(true)}>
-              <Menu size={32} className="text-blue-800" />
+              <Menu size={28} className="text-blue-800" />
             </button>
-          </div>
-          <div className="flex items-center space-x-4 mx-auto md:mx-0">
-            <img className="w-auto h-12" src="/assets/nav-logo/logo1.png" alt="Logo 1" />
-            <img className="w-auto h-12" src="/assets/nav-logo/logo2.png" alt="Logo 2" />
-            <img className="w-auto h-12" src="/assets/nav-logo/logo3.png" alt="Logo 3" />
-            <div>
-              <div className="text-blue-900 text-sm">Jaringan Dokumentasi dan Informasi Hukum</div>
-              <div className="text-blue-900 font-bold text-xl md:text-3xl font-jakarta">PROVINSI JAWA TIMUR</div>
-            </div>
           </div>
           <NavBar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
         </div>
