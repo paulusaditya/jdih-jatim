@@ -1,65 +1,77 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
-import { motion, useAnimation } from "framer-motion"
-import { FileText, Scale, FileSpreadsheet, Book } from "lucide-react"
+import { useEffect, useState, useRef } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { FileText, Scale, FileSpreadsheet, Book } from "lucide-react";
 
 export default function LegalStatsDashboard() {
-  const controls = useAnimation()
-  const ref = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({
     1: 0,
     2: 0,
     3: 0,
     4: 0,
-  })
+  });
+
+  useEffect(() => {
+    // Fetch API hanya jika perlu, tetapi tidak digunakan di card
+    fetch("http://54.169.231.19/api/v2/home")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data dari API:", data);
+      })
+      .catch((error) => {
+        console.error("Error fetching home data:", error);
+      });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          controls.start("visible")
+          setIsVisible(true);
+          controls.start("visible");
         }
       },
-      { threshold: 0.5 },
-    )
+      { threshold: 0.5 }
+    );
 
-    if (ref.current) observer.observe(ref.current)
+    if (ref.current) observer.observe(ref.current);
 
-    return () => observer.disconnect()
-  }, [controls])
+    return () => observer.disconnect();
+  }, [controls]);
 
   useEffect(() => {
     if (isVisible) {
       const animateNumbers = (id, targetValue) => {
-        const start = 0
-        const duration = 1500 // 1.5 seconds
+        const start = 0;
+        const duration = 1500;
         const step = (timestamp, startTime) => {
-          const progress = Math.min((timestamp - startTime) / duration, 1)
-          setCounts((prev) => ({ ...prev, [id]: Math.floor(progress * targetValue) }))
+          const progress = Math.min((timestamp - startTime) / duration, 1);
+          setCounts((prev) => ({ ...prev, [id]: Math.floor(progress * targetValue) }));
 
           if (progress < 1) {
-            requestAnimationFrame((ts) => step(ts, startTime))
+            requestAnimationFrame((ts) => step(ts, startTime));
           }
-        }
-        requestAnimationFrame((ts) => step(ts, ts))
-      }
+        };
+        requestAnimationFrame((ts) => step(ts, ts));
+      };
 
-      animateNumbers(1, 7000)
-      animateNumbers(2, 1800)
-      animateNumbers(3, 100)
-      animateNumbers(4, 80)
+      animateNumbers(1, 7000);
+      animateNumbers(2, 1800);
+      animateNumbers(3, 100);
+      animateNumbers(4, 80);
     }
-  }, [isVisible])
+  }, [isVisible]);
 
   const stats = [
     { id: 1, icon: <FileText className="h-10 w-10 text-white" />, label: "Dokumen Peraturan", value: 7000 },
     { id: 2, icon: <Scale className="h-10 w-10 text-white" />, label: "Monografi Hukum", value: 1800 },
     { id: 3, icon: <FileSpreadsheet className="h-10 w-10 text-white" />, label: "Artikel Hukum", value: 100 },
     { id: 4, icon: <Book className="h-10 w-10 text-white" />, label: "Staatsblad", value: 80 },
-  ]
+  ];
 
   return (
     <div className="w-full">
@@ -70,9 +82,8 @@ export default function LegalStatsDashboard() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
-          height: "auto", // Changed from fixed height to auto
-          minHeight: "348px", // Added min-height instead
-          padding: "24px", // Reduced default padding
+          minHeight: "348px",
+          padding: "24px",
         }}
       >
         <div className="absolute inset-0 bg-blue-900/80" />
@@ -125,6 +136,5 @@ export default function LegalStatsDashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

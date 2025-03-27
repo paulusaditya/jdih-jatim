@@ -6,7 +6,7 @@ import JDIHNetworkMembers from "../components/Home/JdihMembers";
 import JDIHUniversityMembers from "../components/Home/JdihUniversityMembers";
 import NewsSection from "../components/Home/News";
 import LatestRegulations from "../components/Home/LatestRegulations";
-import PromperdaRegulations from "../components/Home/PromperdaRegulations";
+import PropemperdaRegulations from "../components/Home/PropemperdaRegulations";
 import Monographic from "../components/Home/Monographic";
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
       <JDIHUniversityMembers/>
       <NewsSection/>
       <LatestRegulations/>
-      <PromperdaRegulations/>
+      <PropemperdaRegulations/>
       <Monographic/>
     </div>
   );
