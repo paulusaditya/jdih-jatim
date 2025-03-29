@@ -7,6 +7,7 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import DocCard from "../../components/DokumenHukum/DocCard";
 import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/SearchFilter";
+import Pagination from "../../components/Pagination";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -17,7 +18,6 @@ const MonographyPage = () => {
   const [documents, setDocuments] = useState([]);
   const [title, setTitle] = useState("Dokumen Monografi");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,7 +57,6 @@ const MonographyPage = () => {
 
       setDocuments(data.data || []);
       setTitle(data.title || "Dokumen Monografi");
-      setTotalPages(data.pagination.last_page || 1);
       setTotalItems(data.pagination.total || 0);
     } catch (error) {
       console.error("Error fetching monography data:", error);
@@ -95,9 +94,6 @@ const MonographyPage = () => {
     "Lainnya",
   ];
 
-  const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
-  const indexOfLastItem = indexOfFirstItem + itemsPerPage;
-
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
@@ -109,8 +105,8 @@ const MonographyPage = () => {
             onSearch={handleSearch}
             years={years}
             documentTypes={documentTypes}
-            includeStatus={false} 
-            includeCategory={false} 
+            includeStatus={false}
+            includeCategory={false}
           />
 
           {/* Data count display */}
@@ -152,67 +148,12 @@ const MonographyPage = () => {
           </div>
 
           {/* Pagination */}
-          {documents.length > 0 && (
-            <div className="flex flex-wrap gap-10 justify-between items-center p-3 mt-5 w-full text-center rounded-lg bg-zinc-100 max-md:max-w-full">
-              <div className="flex gap-4 justify-center items-center self-stretch my-auto text-sm font-medium leading-6 whitespace-nowrap min-w-[240px] text-zinc-800">
-                <button
-                  className={`cursor-pointer ${
-                    currentPage === 1 ? "text-gray-400" : "text-blue-600"
-                  }`}
-                  onClick={() =>
-                    currentPage > 1 && handlePageChange(currentPage - 1)
-                  }
-                  disabled={currentPage === 1}
-                >
-                  &lt; Prev
-                </button>
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
-                    <div
-                      key={i}
-                      className={`self-stretch my-auto w-[31px] text-center cursor-pointer ${
-                        currentPage === pageNum
-                          ? "font-bold text-blue-600"
-                          : "text-zinc-800"
-                      }`}
-                      onClick={() => handlePageChange(pageNum)}
-                    >
-                      {pageNum}
-                    </div>
-                  );
-                })}
-                <button
-                  className={`cursor-pointer ${
-                    currentPage === totalPages
-                      ? "text-gray-400"
-                      : "text-blue-600"
-                  }`}
-                  onClick={() =>
-                    currentPage < totalPages &&
-                    handlePageChange(currentPage + 1)
-                  }
-                  disabled={currentPage === totalPages}
-                >
-                  Next &gt;
-                </button>
-              </div>
-              <div className="self-stretch my-auto text-xs text-zinc-800">
-                {indexOfFirstItem + 1} - {Math.min(indexOfLastItem, totalItems)}{" "}
-                dari {totalItems} record
-              </div>
-            </div>
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
         </div>
         <div className="w-full mt-6">
           <PopularDocument />

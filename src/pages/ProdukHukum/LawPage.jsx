@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Filter, ChevronLeft, ChevronRight } from "lucide-react"; 
+import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
 import PopularDocument from "../../components/PopularDocument";
-import SearchFilter from "../../components/SearchFilter"; 
-import productLawData from "../../data/productLawData"; 
+import SearchFilter from "../../components/SearchFilter";
+import Pagination from "../../components/Pagination"; 
+import productLawData from "../../data/productLawData";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -19,9 +20,6 @@ const breadcrumbPaths = [
 const LawPage = () => {
   const [documents, setDocuments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Search and filter states
   const [filters, setFilters] = useState({
     number: "",
     status: "",
@@ -76,7 +74,7 @@ const LawPage = () => {
       );
     });
 
-  const totalItems = filteredLaws.length; 
+  const totalItems = filteredLaws.length;
   const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
   const indexOfLastItem = indexOfFirstItem + itemsPerPage;
   const currentLaws = filteredLaws.slice(indexOfFirstItem, indexOfLastItem);
@@ -116,13 +114,9 @@ const LawPage = () => {
             <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
               Semua Data ({totalItems})
             </div>
-            {isLoading ? (
-              <span className="text-sm text-gray-500">Loading...</span>
-            ) : (
-              <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
-                <Filter className="text-emerald-600 w-6 h-6" />
-              </div>
-            )}
+            <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
+              <Filter className="text-emerald-600 w-6 h-6" />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 mt-4">
@@ -141,59 +135,18 @@ const LawPage = () => {
               ))
             ) : (
               <div className="text-center py-8 text-gray-500">
-                {isLoading
-                  ? "Memuat data..."
-                  : "Tidak ada dokumen yang ditemukan"}
+                Tidak ada dokumen yang ditemukan
               </div>
             )}
           </div>
 
           {/* Pagination */}
-          {currentLaws.length > 0 && (
-            <div className="flex flex-wrap gap-10 justify-between items-center p-3 mt-5 w-full text-center rounded-lg bg-zinc-100 max-md:max-w-full">
-              <div className="flex gap-4 justify-center items-center self-stretch my-auto text-sm font-medium leading-6 whitespace-nowrap min-w-[240px] text-zinc-800">
-                <ChevronLeft
-                  className={`cursor-pointer ${
-                    currentPage === 1 ? "text-gray-400" : "text-blue-600"
-                  }`}
-                  onClick={() =>
-                    currentPage > 1 && handlePageChange(currentPage - 1)
-                  }
-                />
-                {Array.from(
-                  { length: Math.ceil(totalItems / itemsPerPage) },
-                  (_, i) => (
-                    <div
-                      key={i}
-                      className={`self-stretch my-auto w-[31px] text-center cursor-pointer ${
-                        currentPage === i + 1
-                          ? "font-bold text-blue-600"
-                          : "text-zinc-800"
-                      }`}
-                      onClick={() => handlePageChange(i + 1)}
-                    >
-                      {i + 1}
-                    </div>
-                  )
-                )}
-                <ChevronRight
-                  className={`cursor-pointer ${
-                    currentPage === Math.ceil(totalItems / itemsPerPage)
-                      ? "text-gray-400"
-                      : "text-blue-600"
-                  }`}
-                  onClick={() =>
-                    currentPage < Math.ceil(totalItems / itemsPerPage) &&
-                    handlePageChange(currentPage + 1)
-                  }
-                />
-              </div>
-              <div className="self-stretch my-auto text-xs text-zinc-800">
-                {indexOfFirstItem + 1} - {Math.min(indexOfLastItem, totalItems)}{" "}
-                dari {totalItems} record
-              </div>
-            </div>
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
         </div>
         <div className="w-full ">
           <Kategori />
