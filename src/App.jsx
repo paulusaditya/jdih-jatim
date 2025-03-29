@@ -8,6 +8,9 @@ import TeamChart from "./pages/Profil/TeamChart";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
+import MonographyPage from "./pages/DokumenHukum/MonographyPage";
+import MonographyDetailPage from "./pages/DokumenHukum/MonographyDetailPage";
+import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
 import Berita from "./pages/Berita/Berita";
 import DetailBerita from "./pages/Berita/DetailBerita";
 import Header from "./components/layout/Header";
@@ -34,6 +37,9 @@ function App() {
             <Route path="/profil/struktur-tim" element={<TeamChart />} />
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:id" element={<DetailBerita />} />
+            <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
+            <Route path="/dokumentasi/monografi/:docId" element={<MonographyDetailPage />} />
+            <Route path="/dokumentasi/propemperda" element={<PropemperdaPage />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
