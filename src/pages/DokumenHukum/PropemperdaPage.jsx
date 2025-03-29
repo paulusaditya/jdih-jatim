@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import DocCard from "../../components/DokumenHukum/DocCard";
 import PopularDocument from "../../components/PopularDocument";
-import SearchFilter from "../../components/SearchFilter";
-import Pagination from "../../components/Pagination"; 
+import SearchFilter from "../../components/common/SearchFilter";
+import Pagination from "../../components/common/Pagination";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },

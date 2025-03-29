@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import DocCard from "../../components/DokumenHukum/DocCard";
 import PopularDocument from "../../components/PopularDocument";
 

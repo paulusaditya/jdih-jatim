@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
 import PopularDocument from "../../components/PopularDocument";
-import SearchFilter from "../../components/SearchFilter";
-import Pagination from "../../components/Pagination"; 
+import SearchFilter from "../../components/common/SearchFilter";
+import Pagination from "../../components/common/Pagination";
 import productLawData from "../../data/productLawData";
 
 const breadcrumbPaths = [

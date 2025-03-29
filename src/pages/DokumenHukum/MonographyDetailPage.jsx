@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import DetailDocCard from "../../components/DokumenHukum/DetailDocCard";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
 const MonographyDetailPage = () => {

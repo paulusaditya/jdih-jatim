@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import DetailDocCard from "../../components/Document/DetailDocCard";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
 const breadcrumbPaths = [

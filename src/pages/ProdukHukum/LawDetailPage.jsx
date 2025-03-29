@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DetailLawCard from "../../components/ProdukHukum/DetailLawCard";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import Kategori from "../../components/Kategori";
 import PopularDocument from "../../components/PopularDocument";
 
