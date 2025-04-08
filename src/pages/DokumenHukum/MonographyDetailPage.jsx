@@ -12,7 +12,7 @@ const MonographyDetailPage = () => {
     const fetchDocument = async () => {
       try {
         const response = await fetch(
-          `http://54.169.231.19/api/v2/home/monography/${docId}`
+          `https://jdih.pisdev.my.id/api/v2/home/monography/${docId}`
         );
         const data = await response.json();
         setDocument(data);

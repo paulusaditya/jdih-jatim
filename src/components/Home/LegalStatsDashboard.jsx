@@ -17,7 +17,7 @@ export default function LegalStatsDashboard() {
 
   useEffect(() => {
     // Fetch API hanya jika perlu, tetapi tidak digunakan di card
-    fetch("http://54.169.231.19/api/v2/home")
+    fetch("https://jdih.pisdev.my.id/api/v2/home")
       .then((response) => response.json())
       .then((data) => {
         console.log("Data dari API:", data);

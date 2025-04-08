@@ -51,7 +51,7 @@ const MonographyPage = () => {
       if (filters.year) params.append("year", filters.year);
 
       const response = await fetch(
-        `http://54.169.231.19/api/v2/home/monography?${params.toString()}`
+        `https://jdih.pisdev.my.id/api/v2/home/monography?${params.toString()}`
       );
       const data = await response.json();
 

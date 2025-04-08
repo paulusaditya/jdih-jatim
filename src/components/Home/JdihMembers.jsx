@@ -13,12 +13,12 @@ export default function JDIHNetworkMembers() {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await fetch("http://54.169.231.19/api/v2/home/partner-affiliates");
+        const response = await fetch("https://jdih.pisdev.my.id/api/v2/home/partner-affiliates");
         if (!response.ok) {
           throw new Error("Gagal mengambil data anggota JDIH");
         }
         const data = await response.json();
-        setMembers(data.data); // Sesuaikan dengan struktur API yang diterima
+        setMembers(data.data); 
       } catch (error) {
         setError(error.message);
       } finally {

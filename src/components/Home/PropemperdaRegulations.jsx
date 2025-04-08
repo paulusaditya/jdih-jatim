@@ -9,7 +9,7 @@ export default function PropemperdaRegulations() {
 
   useEffect(() => {
     axios
-      .get("http://54.169.231.19/api/v2/home/propemperda")
+      .get("https://jdih.pisdev.my.id/api/v2/home/propemperda")
       .then((response) => {
         const shuffledData = shuffleArray(response.data.data || []); // Acak data
         setRegulations(shuffledData.slice(0, 3)); // Ambil 3 data acak

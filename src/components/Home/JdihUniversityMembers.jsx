@@ -9,7 +9,7 @@ export default function JDIHUniversityMembers() {
 
   useEffect(() => {
     axios
-      .get("http://54.169.231.19/api/v2/home/partner-universities")
+      .get("https://jdih.pisdev.my.id/api/v2/home/partner-universities")
       .then((response) => {
         setMembers(response.data.data || []);
       })

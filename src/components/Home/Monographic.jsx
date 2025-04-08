@@ -8,7 +8,7 @@ export default function Monographic() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://54.169.231.19/api/v2/home/monography")
+    fetch("https://jdih.pisdev.my.id/api/v2/home/monography")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -55,7 +55,7 @@ export default function Monographic() {
             {books.map((book) => (
               <div key={book.id} className="w-full min-h-[200px] flex flex-col items-center text-center">
                 <img
-                  src={book.image || "http://54.169.231.19/uploads/default_document_image.png"}
+                  src={book.image || "https://jdih.pisdev.my.id/uploads/default_document_image.png"}
                   alt={book.title}
                   className="w-40 md:w-48 lg:w-56 h-56 object-cover rounded-lg shadow-md"
                 />
