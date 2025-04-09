@@ -20,26 +20,27 @@ const documents = [
 
 function PopularDocument() {
   return (
-    <div className="flex flex-col max-w-[395px] mx-auto">
-      <section className="flex flex-col px-5 pt-6 pb-3 w-full text-base font-semibold rounded-lg bg-zinc-100 text-zinc-800 shadow-md">
-        <h2 className="text-xl font-bold text-sky-900 mb-2">
+    <div className="flex flex-col w-full max-w-[395px] mx-auto">
+      <section className="flex flex-col px-5 pt-6 pb-3 w-full text-sm md:text-base font-semibold rounded-lg bg-zinc-100 text-zinc-800 shadow-md">
+        <h2 className="text-lg md:text-xl font-bold text-sky-900 mb-2">
           Dokumen Terpopuler
         </h2>
         <ul className="flex flex-col mt-3 w-full leading-6">
           {documents.map((doc) => (
-            <li key={doc.id} className="flex gap-2 items-start py-3 w-full">
-              <div className="flex-1 shrink gap-2 self-stretch w-full basis-0 min-w-[240px]">
-                {doc.title}
-              </div>
+            <li
+              key={doc.id}
+              className="flex gap-2 items-start py-3 w-full text-left"
+            >
+              <div className="flex-1 min-w-0 break-words">{doc.title}</div>
             </li>
           ))}
         </ul>
       </section>
-      <div className="mt-6 flex justify-center">
+      <div className="mt-6 flex justify-center px-5">
         <img
-          src="/assets/logo-biro-hukum.png" 
+          src="/assets/logo-biro-hukum.png"
           alt="Logo Biro Hukum"
-          className="w-80 h-auto"
+          className="w-full max-w-xs h-auto"
         />
       </div>
     </div>
