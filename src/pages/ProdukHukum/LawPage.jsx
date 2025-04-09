@@ -82,7 +82,7 @@ const LawPage = () => {
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="p-8 mx-0 md:mx-8 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <SearchFilter
             filters={filters}
@@ -109,7 +109,6 @@ const LawPage = () => {
             includeStatus={true}
           />
 
-          {/* Data count display */}
           <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
             <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
               Semua Data ({totalItems})
@@ -140,7 +139,6 @@ const LawPage = () => {
             )}
           </div>
 
-          {/* Pagination */}
           <Pagination
             currentPage={currentPage}
             totalItems={totalItems}
@@ -148,7 +146,8 @@ const LawPage = () => {
             onPageChange={handlePageChange}
           />
         </div>
-        <div className="w-full ">
+
+        <div className="w-full">
           <Kategori />
           <div className="mt-6">
             <PopularDocument />
