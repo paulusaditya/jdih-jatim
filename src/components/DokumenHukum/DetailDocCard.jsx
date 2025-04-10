@@ -1,119 +1,110 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
 
-const detailData = [
-  { label: "Jenis Peraturan", value: "Peraturan Gubernur" },
-  {
-    label: "Judul Peraturan",
-    value:
-      "Peraturan Gubernur Jawa Timur Nomor 4 Tahun 2025 tentang Tambahan Penghasilan Pegawai",
-  },
-  { label: "Nomor", value: "4" },
-  { label: "Tahun Terbit", value: "2025" },
-  { label: "Singkatan Jenis", value: "PERGUB" },
-  { label: "Tanggal Penetapan", value: "14-01-2025" },
-  { label: "Tanggal Pengundangan", value: "14-01-2025" },
-  { label: "T.E.U Badan", value: "Jawa Timur (Provinsi)" },
-  { label: "Sumber", value: "-" },
-  { label: "Tempat Terbit", value: "Surabaya" },
-  { label: "Bidang Hukum", value: "Moneter dan Fiskal Nasional" },
-  {
-    label: "Subjek",
-    value: "PROVINSI JAWA TIMUR - TAMBAHAN PENGHASILAN PEGAWAI",
-  },
-  { label: "Bahasa", value: "Indonesia" },
-  { label: "Lokasi", value: "Biro Hukum Provinsi Jawa Timur" },
-  { label: "Urusan Pemerintahan", value: "Urusan Pemerintahan Absolut" },
-  { label: "Penandatangan", value: "ADHY KARYONO" },
-  {
-    label: "Pemrakarsa",
-    value: "Badan Pengelola Keuangan dan Aset Daerah Provinsi Jawa Timur",
-  },
-  { label: "Peraturan Terkait", value: "-" },
-  { label: "Dokumen Terkait", value: "-" },
-  { label: "Keterangan Status", value: "BERLAKU" },
-  { label: "Mengubah", value: "-" },
-  { label: "Diubah", value: "-" },
-  { label: "Mencabut", value: "-" },
-  { label: "Mencabut Sebagian", value: "-" },
-  { label: "Dicabut", value: "-" },
-  { label: "Dicabut Sebagian", value: "-" },
-  { label: "Abstrak", value: "-" },
-  { label: "Lampiran", value: "pergub_50_2010.pdf" },
-];
-
-function DetailDocCard({ setShowKategori }) {
-  const [selectedButton, setSelectedButton] = useState(null);
+function DetailDocCard({ docId }) {
+  const [selectedButton, setSelectedButton] = useState("Detail");
   const [showPdf, setShowPdf] = useState(false);
-  const [lampiran, setLampiran] = useState("");
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://jdih.pisdev.my.id/api/v2/topics/by-slug/${docId}`
+        );
+        const result = await response.json();
+        console.log("📦 Response API by-slug:", result);
+
+        if (result.status === "success") {
+          setData(result.data);
+        }
+      } catch (error) {
+        console.error("❌ Error :", error);
+      }
+    };
+
+    if (docId) fetchData();
+  }, [docId]);
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
-    if (button === "Dokumen Lampiran") {
-      setShowPdf(true);
-      setShowKategori(false);
-      const lampiranItem = detailData.find((item) => item.label === "Lampiran");
-      setLampiran(lampiranItem ? lampiranItem.value : "");
-    } else {
-      setShowPdf(false);
-      setShowKategori(true);
-    }
+    setShowPdf(button === "Dokumen Lampiran");
   };
 
   const handleDownload = () => {
-    const lampiranItem = detailData.find((item) => item.label === "Lampiran");
-    const fileUrl = lampiranItem ? lampiranItem.value : "";
+    const lampiranField = data?.fields?.find(
+      (field) => field.title.toLowerCase() === "lampiran"
+    );
+    const filename = lampiranField?.details;
+    if (!filename) return;
+
+    const url = `https://jdih.pisdev.my.id/storage/${filename}`;
     const link = document.createElement("a");
-    link.href = fileUrl;
-    link.setAttribute("download", fileUrl.split("/").pop());
+    link.href = url;
+    link.setAttribute("download", filename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  const fields = data?.fields || [];
+  const visits = data?.visits || 0;
+  const judul =
+    fields.find((f) => f.title === "Judul")?.details || "Judul Tidak Tersedia";
+  const lampiranField = fields.find((f) => f.title === "Lampiran");
+  const lampiranUrl = lampiranField
+    ? `https://jdih.pisdev.my.id/storage/${lampiranField.details}`
+    : "";
+
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
-      <div className="mb-5 text-2xl font-semibold text-zinc-800">
-        Peraturan Gubernur Jawa Timur Nomor 4 Tahun 2025 tentang Tambahan
-        Penghasilan Pegawai
+      <div className="mb-2 text-2xl font-semibold text-zinc-800">{judul}</div>
+      <div className="mb-4 text-sm text-gray-600">
+        Tanggal: {data?.date || "-"}
       </div>
+
       <div className="flex justify-between items-center px-4 py-3 mb-5 rounded-lg bg-zinc-100 max-sm:flex-col max-sm:gap-3">
         <div className="flex gap-3 items-center text-base text-black">
-          <div>
-            <Eye size={24} />
+          <Eye size={24} />
+          <div>Visits : {visits}</div>
+        </div>
+        {lampiranField && (
+          <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
+            <a
+              onClick={handleDownload}
+              className="flex items-center cursor-pointer"
+            >
+              <div className="mr-2">Download</div>
+              <Download size={24} className="text-green-500" />
+            </a>
           </div>
-          <div>Visits : 677</div>
-        </div>
-        <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
-          <a
-            onClick={handleDownload}
-            className="flex items-center cursor-pointer"
-          >
-            <div className="mr-2">Download</div>
-            <Download size={24} className="text-green-500" />{" "}
-          </a>
-        </div>
+        )}
       </div>
+
       <div className="flex gap-3 mb-5 max-sm:flex-wrap">
         <button
-          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 ${
+          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
             selectedButton === "Detail" ? "bg-red-500 text-white" : ""
           }`}
           onClick={() => handleButtonClick("Detail")}
         >
           Detail
         </button>
+        {lampiranField && (
+          <button
+            className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
+              selectedButton === "Dokumen Lampiran"
+                ? "bg-red-500 text-white"
+                : ""
+            }`}
+            onClick={() => handleButtonClick("Dokumen Lampiran")}
+          >
+            Dokumen Lampiran
+          </button>
+        )}
         <button
-          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 ${
-            selectedButton === "Dokumen Lampiran" ? "bg-red-500 text-white" : ""
-          }`}
-          onClick={() => handleButtonClick("Dokumen Lampiran")}
-        >
-          Dokumen Lampiran
-        </button>
-        <button
-          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 ${
+          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
             selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
           }`}
           onClick={() => handleButtonClick("Abstrak Lampiran")}
@@ -121,11 +112,11 @@ function DetailDocCard({ setShowKategori }) {
           Abstrak Lampiran
         </button>
       </div>
-      {showPdf ? (
+
+      {showPdf && lampiranUrl ? (
         <div className="mt-4">
-          <DetailItem label="Lampiran" value={lampiran} />
           <iframe
-            src={lampiran}
+            src={lampiranUrl}
             width="100%"
             height="500px"
             title="Dokumen Lampiran"
@@ -133,8 +124,8 @@ function DetailDocCard({ setShowKategori }) {
         </div>
       ) : (
         <div className="flex flex-col">
-          {detailData.map((item, index) => (
-            <DetailItem key={index} label={item.label} value={item.value} />
+          {fields.map((item, index) => (
+            <DetailItem key={index} label={item.title} value={item.details} />
           ))}
         </div>
       )}

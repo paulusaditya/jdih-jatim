@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function NewsSection() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 1
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1;
 
   const newsItems = [
     {
@@ -21,23 +21,24 @@ export default function NewsSection() {
     {
       id: 2,
       date: "18 - 02 - 2025",
-      title: "Sosialisasi Peraturan Gubernur Jawa Timur Nomor 12 Tahun 2025 tentang Pengelolaan Aset Daerah",
+      title:
+        "Sosialisasi Peraturan Gubernur Jawa Timur Nomor 12 Tahun 2025 tentang Pengelolaan Aset Daerah",
       content:
         "Surabaya, Selasa (18/2) - Biro Hukum Sekretariat Daerah Provinsi Jawa Timur mengadakan sosialisasi Peraturan Gubernur Jawa Timur Nomor 12 Tahun 2025 tentang Pengelolaan Aset Daerah. Kegiatan ini dihadiri oleh perwakilan dari seluruh Organisasi Perangkat Daerah (OPD) di lingkungan Pemerintah Provinsi Jawa Timur...",
       image: "/assets/berita/imagedoe.jpg?height=300&width=500",
     },
-  ]
+  ];
 
-  const totalPages = Math.ceil(newsItems.length / itemsPerPage)
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = newsItems.slice(indexOfFirstItem, indexOfLastItem)
+  const totalPages = Math.ceil(newsItems.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = newsItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber)
+      setCurrentPage(pageNumber);
     }
-  }
+  };
 
   return (
     <section className="py-8 px-4 md:px-6">
@@ -57,14 +58,19 @@ export default function NewsSection() {
 
         <div className="mb-6">
           {currentItems.map((news) => (
-            <div key={news.id} className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+            <div
+              key={news.id}
+              className="border border-gray-200 rounded-lg overflow-hidden bg-white"
+            >
               <div className="p-6 md:p-8 md:flex gap-6">
                 <div className="md:w-7/12 space-y-4">
                   <div className="flex items-center text-green-600 mb-2">
                     <Calendar className="h-4 w-4 mr-2" />
                     <span className="text-sm">{news.date}</span>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{news.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
+                    {news.title}
+                  </h3>
                   <p className="text-gray-600">{news.content}</p>
                   <button className="text-green-600 border border-green-600 rounded-md px-4 py-2 inline-flex items-center text-sm font-medium hover:bg-green-50 transition-colors">
                     Baca Selengkapnya
@@ -72,7 +78,11 @@ export default function NewsSection() {
                 </div>
                 <div className="md:w-5/12 mt-6 md:mt-0">
                   <div className="relative h-64 md:h-full w-full rounded-lg overflow-hidden">
-                    <img src={news.image || "/placeholder.svg"} alt={news.title} fill className="object-cover" />
+                    <img
+                      src={news.image || "/placeholder.svg"}
+                      alt={news.title}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
                 </div>
               </div>
@@ -81,15 +91,27 @@ export default function NewsSection() {
         </div>
 
         <div className="flex justify-center items-center gap-2">
-          <button onClick={() => paginate(currentPage - 1)} className="p-2 rounded-md hover:bg-gray-100 transition-colors" disabled={currentPage === 1}>
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            disabled={currentPage === 1}
+          >
             <ChevronLeft className="h-5 w-5 text-gray-500" />
           </button>
-          <span className="text-gray-600">{currentPage} dari {totalPages}</span>
-          <button onClick={() => paginate(currentPage + 1)} className="p-2 rounded-md hover:bg-gray-100 transition-colors" disabled={currentPage === totalPages}>
+          <span className="text-gray-600">
+            {currentPage} dari {totalPages}
+          </span>
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            disabled={currentPage === totalPages}
+          >
             <ChevronRight className="h-5 w-5 text-gray-500" />
           </button>
         </div>
       </div>
     </section>
-  )
+  );
 }
+
+
