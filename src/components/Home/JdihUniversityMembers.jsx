@@ -63,7 +63,6 @@ function MemberCard({ name, logo, link }) {
           className="object-contain w-full h-full"
         />
       </div>
-      <p className="text-center text-l font-semibold text-blue-950 mb-3">{name}</p>
     </a>
   );
 }
