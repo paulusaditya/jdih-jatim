@@ -8,22 +8,21 @@ export default function Monographic() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/home/monography");
+    fetch("https://jdih.pisdev.my.id/api/v2/home/monography")
+      .then((response) => {
         if (!response.ok) {
-          throw new Error("Gagal memuat data");
+          throw new Error("Network response was not ok");
         }
-        const data = await response.json();
+        return response.json();
+      })
+      .then((data) => {
         setBooks(data.data || []);
-      } catch (err) {
-        setError(err.message || "Terjadi kesalahan");
-      } finally {
         setLoading(false);
-      }
-    };
-
-    fetchBooks();
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -32,12 +31,9 @@ export default function Monographic() {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-blue-900">
-              Dokumen Monografi
-            </h2>
+            <h2 className="text-2xl font-bold text-blue-900">Dokumen Monografi</h2>
             <p className="text-gray-600">
-              Koleksi dokumen Monografi terbaru milik Biro Hukum Provinsi Jawa
-              Timur
+              Koleksi dokumen Monografi terbaru milik Biro Hukum Provinsi Jawa Timur
             </p>
           </div>
           <Link
@@ -49,31 +45,23 @@ export default function Monographic() {
           </Link>
         </div>
 
-        {/* Konten */}
-        {loading ? (
-          <p className="text-center text-gray-600">Loading...</p>
-        ) : error ? (
-          <p className="text-center text-red-600">Error: {error}</p>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Handle loading & error */}
+        {loading && <p className="text-center text-gray-600">Loading...</p>}
+        {error && <p className="text-center text-red-600">Error: {error}</p>}
+
+        {/* Grid Buku */}
+        {!loading && !error && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center items-start">
             {books.map((book) => (
-              <div
-                key={book.id}
-                className="w-full min-h-[200px] flex flex-col items-center text-center"
-              >
+              <div key={book.id} className="w-full min-h-[200px] flex flex-col items-center text-center">
                 <img
-                  src={
-                    book.image ||
-                    "https://jdih.pisdev.my.id/uploads/default_document_image.png"
-                  }
-                  alt={book.title || "Gambar dokumen"}
+                  src={book.image || "https://jdih.pisdev.my.id/uploads/default_document_image.png"}
+                  alt={book.title}
                   className="w-40 md:w-48 lg:w-56 h-56 object-cover rounded-lg shadow-md"
                 />
-                <p className="text-sm mt-2 px-2 break-words line-clamp-2">
-                  {book.title}
-                </p>
+                <p className="text-sm text-center mt-2 w-full px-2 break-words">{book.title}</p>
                 <Link
-                  to={`/dokumen/monografi/${book.id}`}
+                  to={book.link}
                   className="text-blue-600 text-sm mt-1 hover:underline"
                 >
                   Baca Selengkapnya
