@@ -48,19 +48,24 @@ export default function JDIHUniversityMembers() {
 }
 
 function MemberCard({ name, logo, link }) {
+  const proxiedLogo = logo?.startsWith("http://")
+    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+    : logo;
+
   return (
     <a
-      href={link !== "#" ? link : undefined} // Hanya tambahkan link jika bukan "#"
+      href={link !== "#" ? link : undefined}
       target={link !== "#" ? "_blank" : "_self"}
       rel="noopener noreferrer"
       className="border border-gray-200 rounded-2xl p-5 flex flex-col items-center justify-center hover:border-blue-600 hover:bg-[#F0F6FF] transition-all cursor-pointer bg-white"
       style={{ width: "182px", height: "212px", padding: "15px" }}
     >
-      <div className="text-xl mb-3">
+      <div className="text-xl mb-3 w-full h-full">
         <img
-          src={logo || "/placeholder.svg"}
+          src={proxiedLogo || "/placeholder.svg"}
           alt={`Logo ${name}`}
           className="object-contain w-full h-full"
+          onError={(e) => (e.target.src = "/placeholder.svg")}
         />
       </div>
     </a>
