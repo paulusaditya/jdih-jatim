@@ -9,24 +9,42 @@ export default function JDIHNetworkMembers() {
   const [error, setError] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/home/partner-affiliates");
+useEffect(() => {
+  const fetchAllMembers = async () => {
+    setLoading(true);
+    setError(null);
+
+    let allData = [];
+    let currentPage = 1;
+    let lastPage = 1;
+
+    try {
+      while (currentPage <= lastPage) {
+        const response = await fetch(`https://jdih.pisdev.my.id/api/v2/home/partner-affiliates?page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Gagal mengambil data anggota JDIH");
         }
-        const data = await response.json();
-        setMembers(data.data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchMembers();
-  }, []);
+        const result = await response.json();
+        const { data, pagination } = result;
+
+        allData = [...allData, ...data];
+        lastPage = pagination?.last_page || 1;
+        currentPage++;
+      }
+
+      setMembers(allData);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchAllMembers();
+}, []);
+
+
 
   if (loading) return <p className="text-center text-gray-600">Memuat...</p>;
   if (error) return <p className="text-center text-red-600">Error: {error}</p>;

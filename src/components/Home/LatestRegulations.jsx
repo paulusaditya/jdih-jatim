@@ -1,53 +1,44 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
+// Fungsi untuk mengacak array
+function shuffleArray(array) {
+  return array
+    .map((item) => ({ item, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item);
+}
+
 export default function LatestRegulations() {
-  const regulations = [
-    {
-      id: 1,
-      title: "PEMBENTUKAN ORGANISASI DAN TATA KERJA DEWAN RISET DAERAH PROVINSI JAWA TIMUR",
-      type: "Peraturan Gubernur",
-      number: "50",
-      year: "2010",
-      abbreviation: "PERGUB",
-      stipulationDate: "01-01-1970",
-      promulgationDate: "01-01-1970",
-      place: "Surabaya",
-    },
-    {
-      id: 2,
-      title: "PEMBENTUKAN ORGANISASI DAN TATA KERJA DEWAN RISET DAERAH PROVINSI JAWA TIMUR",
-      type: "Peraturan Gubernur",
-      number: "50",
-      year: "2010",
-      abbreviation: "PERGUB",
-      stipulationDate: "01-01-1970",
-      promulgationDate: "01-01-1970",
-      place: "Surabaya",
-    },
-    {
-      id: 3,
-      title: "PEMBENTUKAN ORGANISASI DAN TATA KERJA DEWAN RISET DAERAH PROVINSI JAWA TIMUR",
-      type: "Peraturan Gubernur",
-      number: "50",
-      year: "2010",
-      abbreviation: "PERGUB",
-      stipulationDate: "01-01-1970",
-      promulgationDate: "01-01-1970",
-      place: "Surabaya",
-    },
-  ];
+  const [regulations, setRegulations] = useState([]);
+  const [sectionTitle, setSectionTitle] = useState("");
+  const [sectionDesc, setSectionDesc] = useState("");
+
+  useEffect(() => {
+    fetch("https://jdih.pisdev.my.id/api/v2/home/latest-policy")
+      .then((res) => res.json())
+      .then((data) => {
+        setSectionTitle(data.title);
+        setSectionDesc(data.description);
+
+        const shuffled = shuffleArray(data.data || []);
+        const sliced = shuffled.slice(0, 3); // Ambil 3 item acak
+        setRegulations(sliced);
+      })
+      .catch((err) => console.error("Gagal fetch data:", err));
+  }, []);
 
   return (
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-blue-900">Dokumen Peraturan Terbaru</h2>
-            <p className="text-gray-600">Dokumen peraturan terbaru di Jawa Timur</p>
+            <h2 className="text-2xl font-bold text-blue-900">{sectionTitle}</h2>
+            <p className="text-gray-600">{sectionDesc}</p>
           </div>
           <Link
-            to="/peraturan"
+            to="/peraturan-terbaru"
             className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-600 rounded px-4 py-2 transition-colors md:px-4 md:py-2"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>
@@ -66,22 +57,27 @@ export default function LatestRegulations() {
 }
 
 function RegulationCard({ regulation }) {
+  const getField = (title) => {
+    const field = regulation.fields.find((f) => f.title === title);
+    return field ? field.details : "-";
+  };
+
   return (
     <div className="border border-gray-200 rounded-lg p-6 bg-white">
       <h3 className="text-lg font-bold text-gray-900 mb-4">{regulation.title}</h3>
 
       <div className="space-y-2 mb-6">
-        <RegulationDetail label="Jenis Peraturan" value={regulation.type} />
-        <RegulationDetail label="Nomor" value={regulation.number} />
-        <RegulationDetail label="Tahun Terbit" value={regulation.year} />
-        <RegulationDetail label="Singkatan Jenis" value={regulation.abbreviation} />
-        <RegulationDetail label="Tanggal Penetapan" value={regulation.stipulationDate} />
-        <RegulationDetail label="Tanggal Pengundangan" value={regulation.promulgationDate} />
-        <RegulationDetail label="Tempat Terbit" value={regulation.place} />
+        <RegulationDetail label="Jenis Peraturan" value={getField("Jenis Peraturan")} />
+        <RegulationDetail label="Nomor" value={getField("Nomor")} />
+        <RegulationDetail label="Tahun Terbit" value={getField("Tahun Terbit")} />
+        <RegulationDetail label="Singkatan Jenis" value={getField("Singkatan Jenis")} />
+        <RegulationDetail label="Tanggal Penetapan" value={getField("Tanggal Penetapan")} />
+        <RegulationDetail label="Tanggal Pengundangan" value={getField("Tanggal Pengundangan")} />
+        <RegulationDetail label="Tempat Terbit" value={getField("Tempat Terbit")} />
       </div>
 
       <Link
-        to={`/peraturan/${regulation.id}`}
+        to={`/peraturan-terbaru/${regulation.id}`}
         className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
       >
         Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />

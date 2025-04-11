@@ -20,6 +20,7 @@ import Footer from "./components/layout/Footer";
 import productLawData from "./data/productLawData";
 import docData from "./data/docData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:id" element={<DetailBerita />} />
             <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
+            <Route path="/peraturan-terbaru" element={<LatestRegulationPage />} />
             <Route
               path="/dokumentasi/monografi/:docId"
               element={<MonographyDetailPage />}
