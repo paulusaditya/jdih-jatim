@@ -9,7 +9,6 @@ export default function JDIHNetworkMembers() {
   const [error, setError] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-  // Fetch data dari API
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -18,7 +17,7 @@ export default function JDIHNetworkMembers() {
           throw new Error("Gagal mengambil data anggota JDIH");
         }
         const data = await response.json();
-        setMembers(data.data); 
+        setMembers(data.data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -32,7 +31,6 @@ export default function JDIHNetworkMembers() {
   if (loading) return <p className="text-center text-gray-600">Memuat...</p>;
   if (error) return <p className="text-center text-red-600">Error: {error}</p>;
 
-  // Bagi data untuk "Lihat Semua"
   const initialMembers = members.slice(0, 12);
   const allMembers = showAll ? members : initialMembers;
 
@@ -87,6 +85,11 @@ export default function JDIHNetworkMembers() {
 }
 
 function MemberCard({ logo, link, className = "", style = {} }) {
+  // Gunakan proxy untuk gambar HTTP agar tidak diblokir di environment HTTPS
+  const proxiedLogo = logo?.startsWith("http://")
+    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+    : logo;
+
   return (
     <a
       href={link}
@@ -96,9 +99,10 @@ function MemberCard({ logo, link, className = "", style = {} }) {
       style={style}
     >
       <img
-        src={logo || "/placeholder.svg"}
+        src={proxiedLogo || "/placeholder.svg"}
         alt="Logo Kabupaten"
         className="object-contain w-full h-full"
+        onError={(e) => (e.target.src = "/placeholder.svg")}
       />
     </a>
   );
