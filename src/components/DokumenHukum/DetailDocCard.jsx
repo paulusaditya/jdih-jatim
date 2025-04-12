@@ -33,8 +33,8 @@ function DetailDocCard({ docId }) {
   };
 
   const handleDownload = () => {
-    const lampiranField = data?.fields?.find(
-      (field) => field.title.toLowerCase() === "lampiran"
+    const lampiranField = data?.fields?.find((field) =>
+      field.title?.toLowerCase().includes("lampiran")
     );
     const url = lampiranField?.details;
     if (!url) return;
@@ -50,10 +50,16 @@ function DetailDocCard({ docId }) {
 
   const fields = data?.fields || [];
   const visits = data?.visits || 0;
-  const judul =
-    fields.find((f) => f.title === "Judul")?.details || "Judul Tidak Tersedia";
-  const lampiranField = fields.find((f) => f.title === "Lampiran");
-  const lampiranUrl = lampiranField ? lampiranField.details : "";
+
+  const judulField = fields.find((f) =>
+    f.title?.toLowerCase().includes("judul")
+  );
+  const judul = judulField?.details || "Judul Tidak Tersedia";
+
+  const lampiranField = fields.find((f) =>
+    f.title?.toLowerCase().includes("lampiran")
+  );
+  const lampiranUrl = lampiranField?.details || "";
 
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
@@ -127,7 +133,8 @@ function DetailDocCard({ docId }) {
           <DetailItem
             label="Abstrak Lampiran"
             value={
-              fields.find((f) => f.title === "Abstrak Lampiran")?.details || "-"
+              fields.find((f) => f.title?.toLowerCase().includes("abstrak"))
+                ?.details || "-"
             }
           />
         </div>
