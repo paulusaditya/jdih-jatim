@@ -36,13 +36,13 @@ function DetailDocCard({ docId }) {
     const lampiranField = data?.fields?.find(
       (field) => field.title.toLowerCase() === "lampiran"
     );
-    const filename = lampiranField?.details;
-    if (!filename) return;
+    const url = lampiranField?.details;
+    if (!url) return;
 
-    const url = `https://jdih.pisdev.my.id/storage/${filename}`;
+    const decodedFilename = decodeURIComponent(url.split("/").pop());
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", filename);
+    link.setAttribute("download", decodedFilename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -53,9 +53,7 @@ function DetailDocCard({ docId }) {
   const judul =
     fields.find((f) => f.title === "Judul")?.details || "Judul Tidak Tersedia";
   const lampiranField = fields.find((f) => f.title === "Lampiran");
-  const lampiranUrl = lampiranField
-    ? `https://jdih.pisdev.my.id/storage/${lampiranField.details}`
-    : "";
+  const lampiranUrl = lampiranField ? lampiranField.details : "";
 
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
@@ -116,7 +114,9 @@ function DetailDocCard({ docId }) {
       {showPdf && lampiranUrl ? (
         <div className="mt-4">
           <iframe
-            src={lampiranUrl}
+            src={`https://docs.google.com/gview?url=${encodeURIComponent(
+              lampiranUrl
+            )}&embedded=true`}
             width="100%"
             height="500px"
             title="Dokumen Lampiran"
@@ -124,9 +124,13 @@ function DetailDocCard({ docId }) {
         </div>
       ) : (
         <div className="flex flex-col">
-          {fields.map((item, index) => (
-            <DetailItem key={index} label={item.title} value={item.details} />
-          ))}
+          {fields.map((item, index) => {
+            const value = item.details.includes("http")
+              ? decodeURIComponent(item.details.split("/").pop())
+              : item.details;
+
+            return <DetailItem key={index} label={item.title} value={value} />;
+          })}
         </div>
       )}
     </div>
