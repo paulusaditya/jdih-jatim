@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-// Fungsi untuk mengacak array
+
 function shuffleArray(array) {
   return array
     .map((item) => ({ item, sort: Math.random() }))
@@ -18,15 +18,32 @@ export default function LatestRegulations() {
   useEffect(() => {
     fetch("https://jdih.pisdev.my.id/api/v2/home/latest-policy")
       .then((res) => res.json())
-      .then((data) => {
+      .then(async (data) => {
         setSectionTitle(data.title);
         setSectionDesc(data.description);
 
-        const shuffled = shuffleArray(data.data || []);
-        const sliced = shuffled.slice(0, 3); // Ambil 3 item acak
-        setRegulations(sliced);
+        const shuffled = shuffleArray(data.data || []).slice(0, 3);
+
+
+        const regulationsWithSlugs = await Promise.all(
+          shuffled.map(async (reg) => {
+            try {
+              const res = await fetch(
+                `https://jdih.pisdev.my.id/api/v2/topics/${reg.id}`
+              );
+              const topicData = await res.json();
+              const slug = topicData?.data?.seo_url_slug_id || "default-slug";
+              return { ...reg, slug };
+            } catch (error) {
+              console.error("Failed to fetch slug for id:", reg.id);
+              return { ...reg, slug: "default-slug" };
+            }
+          })
+        );
+
+        setRegulations(regulationsWithSlugs);
       })
-      .catch((err) => console.error("Gagal fetch data:", err));
+      .catch((err) => console.error("Failed to fetch data:", err));
   }, []);
 
   return (
@@ -64,21 +81,43 @@ function RegulationCard({ regulation }) {
 
   return (
     <div className="border border-gray-200 rounded-lg p-6 bg-white">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">{regulation.title}</h3>
+      <h3 className="text-lg font-bold text-gray-900 mb-4">
+        {regulation.title}
+      </h3>
 
       <div className="space-y-2 mb-6">
-        <RegulationDetail label="Jenis Peraturan" value={getField("Jenis Peraturan")} />
+        <RegulationDetail
+          label="Jenis Peraturan"
+          value={getField("Jenis Peraturan")}
+        />
         <RegulationDetail label="Nomor" value={getField("Nomor")} />
-        <RegulationDetail label="Tahun Terbit" value={getField("Tahun Terbit")} />
-        <RegulationDetail label="Singkatan Jenis" value={getField("Singkatan Jenis")} />
-        <RegulationDetail label="Tanggal Penetapan" value={getField("Tanggal Penetapan")} />
-        <RegulationDetail label="Tanggal Pengundangan" value={getField("Tanggal Pengundangan")} />
-        <RegulationDetail label="Tempat Terbit" value={getField("Tempat Terbit")} />
+        <RegulationDetail
+          label="Tahun Terbit"
+          value={getField("Tahun Terbit")}
+        />
+        <RegulationDetail
+          label="Singkatan Jenis"
+          value={getField("Singkatan Jenis")}
+        />
+        <RegulationDetail
+          label="Tanggal Penetapan"
+          value={getField("Tanggal Penetapan")}
+        />
+        <RegulationDetail
+          label="Tanggal Pengundangan"
+          value={getField("Tanggal Pengundangan")}
+        />
+        <RegulationDetail
+          label="Tempat Terbit"
+          value={getField("Tempat Terbit")}
+        />
       </div>
 
       <Link
-        to={`/peraturan-terbaru/${regulation.id}`}
-        className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
+        to={regulation.slug ? `/${regulation.slug}` : "#"}
+        className={`flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm ${
+          !regulation.slug && "pointer-events-none opacity-50"
+        }`}
       >
         Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />
       </Link>

@@ -40,7 +40,10 @@ function App() {
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:id" element={<DetailBerita />} />
             <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
-            <Route path="/peraturan-terbaru" element={<LatestRegulationPage />} />
+            <Route
+              path="/peraturan-terbaru"
+              element={<LatestRegulationPage />}
+            />
             <Route
               path="/dokumentasi/monografi/:docId"
               element={<MonographyDetailPage />}
@@ -82,7 +85,7 @@ function App() {
                 }
               />
             ))}
-            <Route path="/law/:number/:year" element={<LawDetailPage />} />
+            <Route path="/:slug" element={<LawDetailPage />} />
             <Route path="/:slug" element={<DocDetailPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
