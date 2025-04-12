@@ -111,7 +111,7 @@ function DetailDocCard({ docId }) {
         </button>
       </div>
 
-      {showPdf && lampiranUrl ? (
+      {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
         <div className="mt-4">
           <iframe
             src={`https://docs.google.com/gview?url=${encodeURIComponent(
@@ -120,6 +120,15 @@ function DetailDocCard({ docId }) {
             width="100%"
             height="500px"
             title="Dokumen Lampiran"
+          />
+        </div>
+      ) : selectedButton === "Abstrak Lampiran" ? (
+        <div className="text-base text-gray-700">
+          <DetailItem
+            label="Abstrak Lampiran"
+            value={
+              fields.find((f) => f.title === "Abstrak Lampiran")?.details || "-"
+            }
           />
         </div>
       ) : (
