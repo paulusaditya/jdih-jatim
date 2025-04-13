@@ -43,11 +43,11 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
 
         return {
           id: item.id,
-          title: item.title,
+          title: fields["Judul Peraturan"] || "Unknown",
           year: fields["Tahun Terbit"] || "Unknown",
           number: fields["Nomor"] || "Unknown",
-          type: fields["Jenis Peraturan"] || "Unknown",
-          status: fields["Status"] || "Unknown",
+          type: fields["Singkatan Jenis"] || "Unknown",
+          status: fields["Keterangan Status"] || "-",
           category: fields["Kategori"] || "",
           image: item.image,
           slug: item.seo_url_slug_id,
@@ -151,9 +151,11 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
                   key={law.id}
                   title={`Peraturan ${law.type} Nomor ${law.number} Tahun ${law.year} tentang ${law.title}`}
                   year={law.year}
-                  status={law.status}
                   regulationType={law.type}
                   onDetailClick={() => navigate(`/law/${law.slug}`)}
+                  number={law.number}
+                  status={law.status}
+                  type={law.type}
                 />
               ))
             ) : (
