@@ -85,7 +85,7 @@ function App() {
                 }
               />
             ))}
-            <Route path="/:slug" element={<LawDetailPage />} />
+            <Route path="/law/:slug" element={<LawDetailPage />} />
             <Route path="/:slug" element={<DocDetailPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
