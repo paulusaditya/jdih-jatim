@@ -39,18 +39,29 @@ function App() {
             <Route path="/profil/struktur-tim" element={<TeamChart />} />
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:id" element={<DetailBerita />} />
-            <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
             <Route
               path="/peraturan-terbaru"
               element={<LatestRegulationPage />}
             />
+            <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
             <Route
               path="/dokumentasi/monografi/:docId"
               element={<MonographyDetailPage />}
             />
             <Route
               path="/dokumentasi/propemperda"
-              element={<PropemperdaPage />}
+              element={
+                <LawPage
+                  breadcrumbPaths={[
+                    { label: "Beranda", path: "/" },
+                    {
+                      label: "Dokumentasi Hukum Lainnya",
+                      path: "/dokumentasi",
+                    },
+                    { label: "Propemperda", path: "/dokumentasi/propemperda" },
+                  ]}
+                />
+              }
             />
             {productLawData.map(({ path, title, laws }) => (
               <Route

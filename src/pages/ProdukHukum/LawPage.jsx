@@ -11,13 +11,7 @@ import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 
-const breadcrumbPaths = [
-  { label: "Beranda", path: "/" },
-  { label: "Dokumentasi Hukum Lainnya", path: "/dokumentasi" },
-  { label: "Propemperda", path: "/propemperda" },
-];
-
-const LawPage = () => {
+const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   const [documents, setDocuments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -113,7 +107,7 @@ const LawPage = () => {
 
   return (
     <>
-      <Breadcrumbs paths={breadcrumbPaths} />
+      <Breadcrumbs paths={customBreadcrumbs} />
       <div className="p-8 mx-0 md:mx-8 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <SearchFilter
