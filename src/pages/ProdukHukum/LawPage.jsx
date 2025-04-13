@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
+import axios from "axios";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
 import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
-import productLawData from "../../data/productLawData";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -20,6 +20,9 @@ const breadcrumbPaths = [
 const LawPage = () => {
   const [documents, setDocuments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [lastPage, setLastPage] = useState(1);
+
   const [filters, setFilters] = useState({
     number: "",
     status: "",
@@ -29,8 +32,45 @@ const LawPage = () => {
     searchQuery: "",
   });
 
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
   const navigate = useNavigate();
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        `https://jdih.pisdev.my.id/api/v2/topics?page=${currentPage}&per_page=${itemsPerPage}&webmaster_id=10`
+      );
+      const topics = res.data.data.data;
+
+      const mapped = topics.map((item) => {
+        const fields = Object.fromEntries(
+          item.fields.map((field) => [field.title, field.details])
+        );
+
+        return {
+          id: item.id,
+          title: item.title,
+          year: fields["Tahun Terbit"] || "Unknown",
+          number: fields["Nomor"] || "Unknown",
+          type: fields["Jenis Peraturan"] || "Unknown",
+          status: fields["Status"] || "Unknown",
+          category: fields["Kategori"] || "",
+          image: item.image,
+          slug: item.seo_url_slug_id,
+        };
+      });
+
+      setDocuments(mapped);
+      setTotalItems(res.data.data.pagination.total);
+      setLastPage(res.data.data.pagination.last_page);
+    } catch (err) {
+      console.error("Failed to fetch:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -42,42 +82,34 @@ const LawPage = () => {
 
   const handleSearch = () => {
     setCurrentPage(1);
+    fetchData();
   };
 
-  const filteredLaws = productLawData
-    .flatMap((item) => item.laws)
-    .filter((law) => {
-      const matchesNumber = filters.number
-        ? law.number.toString().includes(filters.number)
-        : true;
-      const matchesStatus = filters.status
-        ? law.status === filters.status
-        : true;
-      const matchesCategory = filters.category
-        ? law.category === filters.category
-        : true;
-      const matchesType = filters.type ? law.type === filters.type : true;
-      const matchesYear = filters.year
-        ? law.year.toString() === filters.year
-        : true;
-      const matchesSearchQuery = filters.searchQuery
-        ? law.title.toLowerCase().includes(filters.searchQuery.toLowerCase())
-        : true;
+  const filteredLaws = documents.filter((law) => {
+    const matchesNumber = filters.number
+      ? law.number.toString().includes(filters.number)
+      : true;
+    const matchesStatus = filters.status ? law.status === filters.status : true;
+    const matchesCategory = filters.category
+      ? law.category === filters.category
+      : true;
+    const matchesType = filters.type ? law.type === filters.type : true;
+    const matchesYear = filters.year
+      ? law.year.toString() === filters.year
+      : true;
+    const matchesSearchQuery = filters.searchQuery
+      ? law.title.toLowerCase().includes(filters.searchQuery.toLowerCase())
+      : true;
 
-      return (
-        matchesNumber &&
-        matchesStatus &&
-        matchesCategory &&
-        matchesType &&
-        matchesYear &&
-        matchesSearchQuery
-      );
-    });
-
-  const totalItems = filteredLaws.length;
-  const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
-  const indexOfLastItem = indexOfFirstItem + itemsPerPage;
-  const currentLaws = filteredLaws.slice(indexOfFirstItem, indexOfLastItem);
+    return (
+      matchesNumber &&
+      matchesStatus &&
+      matchesCategory &&
+      matchesType &&
+      matchesYear &&
+      matchesSearchQuery
+    );
+  });
 
   return (
     <>
@@ -119,17 +151,15 @@ const LawPage = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-4 mt-4">
-            {currentLaws.length > 0 ? (
-              currentLaws.map((law, index) => (
+            {filteredLaws.length > 0 ? (
+              filteredLaws.map((law) => (
                 <LawCard
-                  key={index}
+                  key={law.id}
                   title={`Peraturan ${law.type} Nomor ${law.number} Tahun ${law.year} tentang ${law.title}`}
                   year={law.year}
                   status={law.status}
                   regulationType={law.type}
-                  onDetailClick={() =>
-                    navigate(`/law/${law.number}/${law.year}`)
-                  }
+                  onDetailClick={() => navigate(`/law/${law.slug}`)}
                 />
               ))
             ) : (
