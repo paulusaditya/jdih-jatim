@@ -9,9 +9,6 @@ import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
 import MonographyPage from "./pages/DokumenHukum/MonographyPage";
-import MonographyDetailPage from "./pages/DokumenHukum/MonographyDetailPage";
-import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
-import PrompemperdaDetailPage from "./pages/DokumenHukum/PropemperdaDetailPage"
 import DocDetailPage from "./pages/DokumenHukum/DocDetailPage";
 import Berita from "./pages/Berita/Berita";
 import DetailBerita from "./pages/Berita/DetailBerita";
@@ -47,7 +44,7 @@ function App() {
             <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
             <Route
               path="/dokumentasi/monografi/:slug"
-              element={<MonographyDetailPage />}
+              element={<DocDetailPage />}
             />
             <Route
               path="/dokumentasi/propemperda"

@@ -43,33 +43,50 @@ const MonographyPage = () => {
       const params = new URLSearchParams();
       params.append("page", currentPage);
       params.append("webmaster_id", "11");
-
+  
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
       if (filters.year) params.append("year", filters.year);
-
+  
       const response = await fetch(
         `https://jdih.pisdev.my.id/api/v2/home/monography?${params.toString()}`
       );
       const result = await response.json();
-
-      const mappedDocs = (result.data || []).map((item) => {
-        const fields = item.fields || [];
-        const getField = (fieldName) =>
-          fields.find((f) => f.title === fieldName)?.details || "-";
-
-        return {
-          id: item.id,
-          title: item.title || "Tanpa Judul",
-          year: getField("Tahun Terbit"),
-          status: getField("Keterangan Status"),
-          category: getField("Kategori"),
-          image: item.image_url || "http://via.placeholder.com/100x150",
-          link: item.link || "",  
-        };
-      });
-
+  
+      const rawDocs = result.data || [];
+  
+      const mappedDocs = await Promise.all(
+        rawDocs.map(async (item) => {
+          const fields = item.fields || [];
+          const getField = (fieldName) =>
+            fields.find((f) => f.title === fieldName)?.details || "-";
+  
+          // Fetch slug per dokumen
+          let slug = null;
+          try {
+            const detailRes = await fetch(
+              `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
+            );
+            const detailData = await detailRes.json();
+            slug = detailData.data?.seo_url_slug_id || null;
+          } catch (err) {
+            console.warn("Gagal mengambil slug untuk ID:", item.id);
+          }
+  
+          return {
+            id: item.id,
+            slug, // tambahkan slug
+            title: item.title || "Tanpa Judul",
+            year: getField("Tahun Terbit"),
+            status: getField("Keterangan Status"),
+            category: getField("Kategori"),
+            image: item.image_url || "http://via.placeholder.com/100x150",
+            link: item.link || "",
+          };
+        })
+      );
+  
       setDocuments(mappedDocs);
       setTitle(result.title || "Dokumen Monografi");
       setTotalItems(result.pagination?.total || 0);
@@ -79,6 +96,7 @@ const MonographyPage = () => {
       setIsLoading(false);
     }
   };
+  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -149,7 +167,7 @@ const MonographyPage = () => {
                   category={doc.category}
                   image={doc.image}
                   onDetailClick={() =>
-                    navigate(`/dokumentasi/monografi/${doc.link.replace("./", "")}`)
+                    navigate(`/dokumentasi/monografi/${doc.slug}`)
                   }
                 />
               ))

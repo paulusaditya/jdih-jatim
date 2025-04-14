@@ -5,11 +5,11 @@ import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
 const DocDetailPage = () => {
-  const { slug, type } = useParams();
+  const { slug, type, } = useParams();
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: "Dokumen", path: "/dokumen" },
+    { label: "Dokumentasi", path: "/dokumentasi" },
     { label: "Detail Dokumen", path: `/dokumen/${type}/${slug}` },
   ];
 
