@@ -45,18 +45,38 @@ const PropemperdaPage = () => {
     try {
       const params = new URLSearchParams();
       params.append("page", currentPage);
-
+  
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
       if (filters.year) params.append("year", filters.year);
-
+  
       const response = await fetch(
         `https://jdih.pisdev.my.id/api/v2/home/propemperda?${params.toString()}`
       );
       const data = await response.json();
-
-      setDocuments(data.data || []);
+  
+      const documentsWithSlugs = await Promise.all(
+        (data.data || []).map(async (doc) => {
+          try {
+            const detailRes = await fetch(
+              `https://jdih.pisdev.my.id/api/v2/topics/${doc.id}`
+            );
+            const detailData = await detailRes.json();
+            return {
+              ...doc,
+              slug: detailData.data?.seo_url_slug_id || null,
+            };
+          } catch {
+            return {
+              ...doc,
+              slug: null,
+            };
+          }
+        })
+      );
+  
+      setDocuments(documentsWithSlugs);
       setTitle(data.title || "Dokumen Propemperda");
       setTotalPages(data.pagination.last_page || 1);
       setTotalItems(data.pagination.total || 0);
@@ -66,6 +86,7 @@ const PropemperdaPage = () => {
       setIsLoading(false);
     }
   };
+  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -134,7 +155,7 @@ const PropemperdaPage = () => {
                   category={"Propemperda"}
                   image={doc.image}
                   onDetailClick={() =>
-                    navigate(`/dokumentasi/propemperda/${doc.id}`)
+                    navigate(`/dokumentasi/propemperda/${doc.slug}`)
                   }
                 />
               ))

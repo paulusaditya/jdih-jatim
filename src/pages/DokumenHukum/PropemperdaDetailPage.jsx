@@ -1,38 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import DetailDocCard from "../../components/DokumenHukum/DetailDocCard";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import DetailLawCard from "../../components/ProdukHukum/DetailLawCard";
+import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
-const PropemperdaDetailPage = () => {
-  const { docId } = useParams();
-  const [document, setDocument] = useState(null);
-
-  useEffect(() => {
-    const fetchDocument = async () => {
-      try {
-        const response = await fetch(
-          `https://jdih.pisdev.my.id/api/v2/home/propemperda/${docId}`
-        );
-        const data = await response.json();
-        setDocument(data);
-      } catch (error) {
-        console.error("Error fetching propemperda detail:", error);
-      }
-    };
-
-    fetchDocument();
-  }, [docId]);
-
-  if (!document) {
-    return <div className="p-16 text-center">Loading...</div>;
-  }
+const LawDetailPage = () => {
+  const { slug } = useParams();
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: "Dokumentasi Hukum Lainnya", path: "/dokumentasi" },
-    { label: "Propemperda", path: "/propemperda" },
-    { label: document.title, path: `/dokumentasi/propemperda/${docId}` },
+    { label: "Propemperda", path: "/prompemperda" },
+    { label: "Detail Propemperda", path: `/dokumentasi/propemperda/${slug}` },
   ];
 
   return (
@@ -40,16 +18,11 @@ const PropemperdaDetailPage = () => {
       <Breadcrumbs paths={breadcrumbPaths} />
       <div className="p-16 bg-white flex flex-col md:flex-row gap-6">
         <div className="flex-1">
-          <DetailDocCard
-            title={document.title}
-            description={document.description}
-            image={document.image}
-            link={document.link}
-          />
+          <DetailLawCard lawId={slug} />{" "}
         </div>
         <div className="w-full md:w-1/3">
           <div className="mt-6">
-            <PopularDocument />
+            <PopularDocument /> 
           </div>
         </div>
       </div>
@@ -57,4 +30,4 @@ const PropemperdaDetailPage = () => {
   );
 };
 
-export default PropemperdaDetailPage;
+export default LawDetailPage;
