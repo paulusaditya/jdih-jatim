@@ -20,7 +20,7 @@ function DocCard({ title, year, status, category, onDetailClick, imageUrl }) {
   return (
     <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5 max-md:max-w-full">
       <img
-        src="/assets/doc.png"
+        src={imageUrl}
         alt={title}
         className="w-[100px] h-[151px] rounded-lg object-cover md:mr-4"
       />

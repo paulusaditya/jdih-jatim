@@ -46,7 +46,7 @@ function App() {
             />
             <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
             <Route
-              path="/dokumentasi/monografi/:docId"
+              path="/dokumentasi/monografi/:slug"
               element={<MonographyDetailPage />}
             />
             <Route

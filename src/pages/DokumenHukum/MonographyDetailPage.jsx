@@ -5,24 +5,25 @@ import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
 const MonographyDetailPage = () => {
-  const { docId } = useParams();
+  const { slug } = useParams();
   const [document, setDocument] = useState(null);
 
   useEffect(() => {
     const fetchDocument = async () => {
       try {
+        const fullLink = `https://jdih.pisdev.my.id/monografi/${slug}`;
         const response = await fetch(
-          `https://jdih.pisdev.my.id/api/v2/home/monography/${docId}`
+          `https://jdih.pisdev.my.id/api/v2/home/monography/show?link=${encodeURIComponent(fullLink)}&webmaster_id=11`
         );
         const data = await response.json();
-        setDocument(data);
+        setDocument(data?.data);
       } catch (error) {
         console.error("Error fetching monography detail:", error);
       }
     };
 
     fetchDocument();
-  }, [docId]);
+  }, [slug]);
 
   if (!document) {
     return <div className="p-16 text-center">Loading...</div>;
@@ -32,7 +33,7 @@ const MonographyDetailPage = () => {
     { label: "Beranda", path: "/" },
     { label: "Dokumentasi Hukum Lainnya", path: "/dokumentasi" },
     { label: "Monografi", path: "/monografi" },
-    { label: document.title, path: `/dokumentasi/monografi/${docId}` },
+    { label: document.title, path: `/dokumentasi/monografi/${slug}` },
   ];
 
   return (

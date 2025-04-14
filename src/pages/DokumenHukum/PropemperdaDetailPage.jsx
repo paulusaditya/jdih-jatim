@@ -4,7 +4,7 @@ import DetailLawCard from "../../components/ProdukHukum/DetailLawCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
-const LawDetailPage = () => {
+const PropemperdaDetailPage = () => {
   const { slug } = useParams();
 
   const breadcrumbPaths = [
@@ -30,4 +30,4 @@ const LawDetailPage = () => {
   );
 };
 
-export default LawDetailPage;
+export default PropemperdaDetailPage;

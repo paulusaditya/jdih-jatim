@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
@@ -11,7 +9,7 @@ import Pagination from "../../components/common/Pagination";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
-  { label: "Monografi", path: "/monografi" },
+  { label: "Monografi", path: "/dokumentasi/monografi" },
 ];
 
 const MonographyPage = () => {
@@ -44,6 +42,7 @@ const MonographyPage = () => {
     try {
       const params = new URLSearchParams();
       params.append("page", currentPage);
+      params.append("webmaster_id", "11");
 
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
@@ -53,11 +52,27 @@ const MonographyPage = () => {
       const response = await fetch(
         `https://jdih.pisdev.my.id/api/v2/home/monography?${params.toString()}`
       );
-      const data = await response.json();
+      const result = await response.json();
 
-      setDocuments(data.data || []);
-      setTitle(data.title || "Dokumen Monografi");
-      setTotalItems(data.pagination.total || 0);
+      const mappedDocs = (result.data || []).map((item) => {
+        const fields = item.fields || [];
+        const getField = (fieldName) =>
+          fields.find((f) => f.title === fieldName)?.details || "-";
+
+        return {
+          id: item.id,
+          title: item.title || "Tanpa Judul",
+          year: getField("Tahun Terbit"),
+          status: getField("Keterangan Status"),
+          category: getField("Kategori"),
+          image: item.image_url || "http://via.placeholder.com/100x150",
+          link: item.link || "",  
+        };
+      });
+
+      setDocuments(mappedDocs);
+      setTitle(result.title || "Dokumen Monografi");
+      setTotalItems(result.pagination?.total || 0);
     } catch (error) {
       console.error("Error fetching monography data:", error);
     } finally {
@@ -129,12 +144,12 @@ const MonographyPage = () => {
                 <DocCard
                   key={doc.id}
                   title={doc.title}
-                  year={doc.year || "-"}
-                  status={"-"}
-                  category={"Monografi"}
+                  year={doc.year}
+                  status={doc.status}
+                  category={doc.category}
                   image={doc.image}
                   onDetailClick={() =>
-                    navigate(`/dokumentasi/monografi/${doc.id}`)
+                    navigate(`/dokumentasi/monografi/${doc.link.replace("./", "")}`)
                   }
                 />
               ))
