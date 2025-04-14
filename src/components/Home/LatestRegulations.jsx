@@ -114,7 +114,7 @@ function RegulationCard({ regulation }) {
       </div>
 
       <Link
-        to={regulation.slug ? `/${regulation.slug}` : "#"}
+        to={regulation.slug ? `/peraturan-terbaru/${regulation.slug}` : "#"}
         className={`flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm ${
           !regulation.slug && "pointer-events-none opacity-50"
         }`}

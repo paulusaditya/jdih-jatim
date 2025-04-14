@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
-import DocCard from "../../components/DokumenHukum/DocCard";
+import LawCard from "../../components/ProdukHukum/LawCard";
 import SearchFilter from "../../components/common/SearchFilter";
 import PopularDocument from "../../components/PopularDocument";
 
@@ -39,18 +39,40 @@ const LatestRegulationPage = () => {
     try {
       const params = new URLSearchParams();
       params.append("page", currentPage);
-
+  
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
       if (filters.year) params.append("year", filters.year);
-
+  
       const response = await fetch(
         `https://jdih.pisdev.my.id/api/v2/home/latest-policy?${params.toString()}`
       );
+      if (!response.ok) throw new Error("Gagal fetch peraturan");
+  
       const data = await response.json();
-
-      setRegulations(data.data || []);
+  
+      const regulationsWithSlugs = await Promise.all(
+        data.data.map(async (regulation) => {
+          try {
+            const detailRes = await fetch(
+              `https://jdih.pisdev.my.id/api/v2/topics/${regulation.id}`
+            );
+            const detailData = await detailRes.json();
+            return {
+              ...regulation,
+              slug: detailData.data?.seo_url_slug_id || null,
+            };
+          } catch {
+            return {
+              ...regulation,
+              slug: null,
+            };
+          }
+        })
+      );
+  
+      setRegulations(regulationsWithSlugs);
       setTitle(data.title || "Peraturan Terbaru");
       setTotalItems(data.pagination?.total || 0);
     } catch (error) {
@@ -59,6 +81,7 @@ const LatestRegulationPage = () => {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchRegulations();
@@ -115,14 +138,14 @@ const LatestRegulationPage = () => {
                   : reg.logo || null;
 
                 return (
-                  <DocCard
+                  <LawCard
                     key={reg.id}
                     title={reg.title}
                     year={getField(reg, "Tahun Terbit")}
                     status="-"
                     category={getField(reg, "Jenis Peraturan")}
                     image={imageUrl}
-                    onDetailClick={() => navigate(`/peraturan/${reg.id}`)}
+                    onDetailClick={() => navigate(`/peraturan-terbaru/${reg.slug}`)}
                   />
                 );
               })
