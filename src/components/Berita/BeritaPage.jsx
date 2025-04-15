@@ -8,11 +8,12 @@ import { Link } from "react-router-dom"
 export default function BeritaPage() {
   const navigate = useNavigate()
 
-  const [currentPage, setCurrentPage] = useState(1)
   const [beritaList, setBeritaList] = useState([])
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalRecords, setTotalRecords] = useState(0)
-  const [recordsPerPage, setRecordsPerPage] = useState(10)
+  const [filteredBeritaList, setFilteredBeritaList] = useState([])
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [recordsPerPage] = useState(9)
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -20,30 +21,32 @@ export default function BeritaPage() {
   const [selectedDate, setSelectedDate] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
 
-  // Proxy logic for image URLs
   const proxiedLogo = (logo) =>
     logo?.startsWith("http://")
       ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
       : logo
 
   useEffect(() => {
-    fetchBerita(currentPage)
-  }, [currentPage])
+    fetchAllBerita()
+  }, [])
 
-  const fetchBerita = async (page) => {
+  useEffect(() => {
+    filterBerita()
+    setCurrentPage(1) // reset ke page 1 saat filter berubah
+  }, [searchQuery, selectedDate, beritaList])
+
+  const fetchAllBerita = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`https://jdih.pisdev.my.id/api/v2/topics?webmaster_id=3&page=${page}&per_page=9`)
+      const response = await fetch(
+        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_id=3&per_page=9999`
+      )
       if (!response.ok) {
         throw new Error("Network response was not ok")
       }
       const data = await response.json()
-
       if (data.status === "success") {
         setBeritaList(data.data.data)
-        setTotalPages(data.data.pagination.last_page)
-        setTotalRecords(data.data.pagination.total)
-        setRecordsPerPage(data.data.pagination.per_page)
       } else {
         throw new Error("Failed to fetch data")
       }
@@ -54,14 +57,38 @@ export default function BeritaPage() {
     }
   }
 
+  const filterBerita = () => {
+    let filtered = beritaList
+
+    if (searchQuery) {
+      filtered = filtered.filter((berita) =>
+        berita.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    if (selectedDate) {
+      filtered = filtered.filter(
+        (berita) => berita.date && berita.date.startsWith(selectedDate)
+      )
+    }
+
+    setFilteredBeritaList(filtered)
+  }
+
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "long", year: "numeric" }
     const date = new Date(dateString)
     return date.toLocaleDateString("id-ID", options)
   }
 
-  const startRecord = (currentPage - 1) * recordsPerPage + 1
-  const endRecord = Math.min(currentPage * recordsPerPage, totalRecords)
+  const totalRecords = filteredBeritaList.length
+  const totalPages = Math.ceil(totalRecords / recordsPerPage)
+  const startIndex = (currentPage - 1) * recordsPerPage
+  const endIndex = startIndex + recordsPerPage
+  const currentBeritaList = filteredBeritaList.slice(startIndex, endIndex)
+
+  const startRecord = startIndex + 1
+  const endRecord = Math.min(endIndex, totalRecords)
 
   const getPageNumbers = () => {
     const pages = []
@@ -88,12 +115,6 @@ export default function BeritaPage() {
     navigate(`/news/detail-berita/${slug}`)
   }
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    console.log("Searching for:", searchQuery)
-    console.log("Date filter:", selectedDate)
-  }
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <div className="text-center mb-6">
@@ -102,42 +123,40 @@ export default function BeritaPage() {
 
       <div className="bg-blue-50 p-4 rounded-lg mb-8">
         <h2 className="text-sm font-semibold text-blue-800 px-1 mb-3">Pencarian</h2>
-        <form onSubmit={handleSearch}>
-          <div className="flex items-center gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Cari berita disini.."
-                className="w-full pl-10 pr-4 py-2 border border-blue-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-800"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="relative">
-              {!showDateInput ? (
-                <button
-                  type="button"
-                  className="bg-white px-4 py-2 border rounded-md flex items-center justify-center gap-2"
-                  onClick={() => setShowDateInput(true)}
-                >
-                  <span>Tanggal</span>
-                  <Calendar className="h-4 w-4" />
-                </button>
-              ) : (
-                <input
-                  type="date"
-                  className="px-3 py-2 border rounded-md"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  onBlur={() => setShowDateInput(false)}
-                  autoFocus
-                />
-              )}
-            </div>
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <input
+              type="text"
+              placeholder="Cari berita disini.."
+              className="w-full pl-10 pr-4 py-2 border border-blue-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-800"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-        </form>
+
+          <div className="relative">
+            {!showDateInput ? (
+              <button
+                type="button"
+                className="bg-white px-4 py-2 border rounded-md flex items-center justify-center gap-2"
+                onClick={() => setShowDateInput(true)}
+              >
+                <span>Tanggal</span>
+                <Calendar className="h-4 w-4" />
+              </button>
+            ) : (
+              <input
+                type="date"
+                className="px-3 py-2 border rounded-md"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                onBlur={() => setShowDateInput(false)}
+                autoFocus
+              />
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="mb-8">
@@ -151,9 +170,13 @@ export default function BeritaPage() {
           <div className="text-center py-8 text-red-500">
             <p>Error: {error}</p>
           </div>
+        ) : currentBeritaList.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <p>Tidak ada data ditemukan.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {beritaList.map((berita) => (
+            {currentBeritaList.map((berita) => (
               <div
                 key={berita.id}
                 className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-blue-600 hover:shadow-md transition duration-300 cursor-pointer"
@@ -164,7 +187,7 @@ export default function BeritaPage() {
                   alt={berita.title}
                   className="w-full h-48 object-cover"
                   onError={(e) => {
-                    e.target.src = "/assets/berita/image113.png" // Fallback image
+                    e.target.src = "/assets/berita/image113.png"
                   }}
                 />
                 <div className="p-4">
@@ -214,7 +237,7 @@ export default function BeritaPage() {
               >
                 {page}
               </button>
-            ),
+            )
           )}
           <button
             onClick={() => changePage(currentPage + 1)}
