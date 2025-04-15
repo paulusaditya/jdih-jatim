@@ -9,8 +9,8 @@ const LawDetailPage = () => {
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: "Produk Hukum", path: "/produk-hukum" },
-    { label: "Detail Produk Hukum", path: `/produk-hukum/${slug}` },
+    { label: "Produk Hukum", path: "/peraturan" },
+    { label: "Detail Produk Hukum", path: `/peraturan/${slug}` },
   ];
 
   return (

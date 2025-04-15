@@ -5,22 +5,22 @@ const cards = [
   {
     title: "Produk Hukum Provinsi Jawa Timur",
     description: "Monografi hukum JDIH Jatim: referensi mendalam tentang peraturan dan kebijakan.",
-    path: "/produk-hukum/provinsijatim",
+    path: "/peraturan/produk-hukum-jatim",
   },
   {
     title: "Produk Hukum Kabupaten / Kota",
     description: "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
-    path: "/produk-hukum/kabupaten-kota",
+    path: "/peraturan/produk-hukum-kabupatenkota",
   },
   {
     title: "Produk Hukum Desa",
     description: "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
-    path: "/produk-hukum/desa",
+    path: "/peraturan/produk-hukum-desa",
   },
   {
     title: "Peraturan Alih Bahasa",
     description: "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
-    path: "/produk-hukum/alih-bahasa",
+    path: "/peraturan/peraturan-alih-bahasa",
   },
 ];
 

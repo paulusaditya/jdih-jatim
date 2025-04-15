@@ -114,16 +114,16 @@ export default function Footer() {
                   <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <Link to="/profil">Profil</Link>
+                  <Link to="/site-pages">Profil</Link>
                 </li>
                 <li>
-                  <Link to="/produk-hukum">Produk Hukum</Link>
+                  <Link to="/peraturan">Produk Hukum</Link>
                 </li>
                 <li>
-                  <Link to="/dokumen-hukum-lainnya">Dokumen Hukum Lainnya</Link>
+                  <Link to="/site-pages">Dokumen Hukum Lainnya</Link>
                 </li>
                 <li>
-                  <Link to="/berita">Berita</Link>
+                  <Link to="/news">Berita</Link>
                 </li>
                 <li>
                   <Link to="/survey">Survey</Link>

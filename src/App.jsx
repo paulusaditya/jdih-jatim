@@ -13,7 +13,7 @@ import TeamChart from "./pages/Profil/TeamChart";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
-import DocDetailPage from "./pages/DokumenHukum/DocDetailPage"; 
+import DocDetailPage from "./pages/DokumenHukum/DocDetailPage";
 import MonographyPage from "./pages/DokumenHukum/MonographyPage";
 import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
 import ArticlePage from "./pages/DokumenHukum/ArticlePage";
@@ -27,6 +27,7 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 import productLawData from "./data/productLawData";
+import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage"
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
@@ -105,6 +106,12 @@ function App() {
                 ))}
               </React.Fragment>
             ))}
+
+            <Route
+              path="/peraturan-terbaru"
+              element={<LatestRegulationPage />}
+            />
+            <Route path="/peraturan-terbaru/:slug" element={<LawDetailPage />} />
 
             <Route
               path="/peraturan/:slug"
