@@ -1,56 +1,44 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
 
-const kategoriList = [
-  { name: "Produk Hukum Provinsi Jawa Timur", count: 81018, isMain: true },
-  { name: "Peraturan Daerah", count: 516, isMain: false },
-  { name: "Peraturan Gubernur", count: 1730, isMain: false },
-  { name: "Keputusan Gubernur", count: 3395, isMain: false },
-  { name: "Surat Keputusan Gubernur", count: 2390, isMain: false },
-  { name: "Instruksi Gubernur", count: 28, isMain: false },
-  { name: "Keputusan Bersama Gubernur", count: 2, isMain: false },
-  { name: "Keputusan Atas Nama Gubernur", count: 2, isMain: false },
-  { name: "Produk Hukum Kabupaten/Kota", count: 0, isMain: true },
-  { name: "Peraturan Daerah Kabupaten/Kota", count: 0, isMain: false },
-  { name: "Peraturan Walikota/Bupati", count: 0, isMain: false },
-  { name: "Keputusan Walikota/Bupati", count: 0, isMain: false },
-  { name: "Instruksi Walikota/Bupati", count: 0, isMain: false },
-  { name: "Produk Hukum Desa", count: 0, isMain: true },
-  { name: "Peraturan Desa", count: 0, isMain: false },
-  { name: "Keputusan Desa", count: 0, isMain: false },
-  { name: "Peraturan Ahli Bahasa", count: 3, isMain: true },
-];
-
 function Kategori() {
+  const [kategoriList, setKategoriList] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jdih.pisdev.my.id/api/v2/overview-by-id/10")
+      .then((res) => res.json())
+      .then((data) => setKategoriList(data))
+      .catch((err) => console.error("Failed to fetch kategori:", err));
+  }, []);
+
   return (
     <div className="px-5 pt-6 pb-3 rounded-lg border border-solid border-zinc-100">
       <div className="mb-3 text-xl font-bold text-sky-900">Kategori</div>
       <div>
-        {kategoriList.map((item, index) => (
-          <div
-            key={index}
-            className={`flex justify-between items-center py-2 ${
-              item.isMain ? "mt-4" : "ml-6"
-            }`}
-          >
-            <div className="flex gap-2 items-center">
-              {item.isMain && <Bookmark className="w-5 h-5 text-green-600" />}
-              <div
-                className={`text-base ${
-                  item.isMain ? "font-bold text-zinc-800" : "text-zinc-700"
-                }`}
-              >
-                {item.name}
+        {kategoriList.map((mainItem, index) => (
+          <React.Fragment key={index}>
+            <div className="flex justify-between items-center py-2 mt-4">
+              <div className="flex gap-2 items-center">
+                <Bookmark className="w-5 h-5 text-green-600" />
+                <div className="text-base font-bold text-zinc-800">
+                  {mainItem.title_id}
+                </div>
+              </div>
+              <div className="text-sm font-bold text-zinc-800">
+                ({mainItem.jml})
               </div>
             </div>
-            <div
-              className={`text-sm ${
-                item.isMain ? "font-bold text-zinc-800" : "text-zinc-600"
-              }`}
-            >
-              {`(${item.count})`}
-            </div>
-          </div>
+            {mainItem.children?.map((child, idx) => (
+              <div
+                key={`${index}-${idx}`}
+                className="flex justify-between items-center py-2 ml-6"
+              >
+                <div className="text-base text-zinc-700">{child.title_id}</div>
+                <div className="text-sm text-zinc-600">({child.jml})</div>
+              </div>
+            ))}
+          </React.Fragment>
         ))}
       </div>
     </div>
