@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-
 function shuffleArray(array) {
   return array
     .map((item) => ({ item, sort: Math.random() }))
@@ -23,7 +22,6 @@ export default function LatestRegulations() {
         setSectionDesc(data.description);
 
         const shuffled = shuffleArray(data.data || []).slice(0, 3);
-
 
         const regulationsWithSlugs = await Promise.all(
           shuffled.map(async (reg) => {
@@ -80,47 +78,51 @@ function RegulationCard({ regulation }) {
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg p-6 bg-white">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">
-        {regulation.title}
-      </h3>
+    <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+      <div>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">
+          {regulation.title}
+        </h3>
 
-      <div className="space-y-2 mb-6">
-        <RegulationDetail
-          label="Jenis Peraturan"
-          value={getField("Jenis Peraturan")}
-        />
-        <RegulationDetail label="Nomor" value={getField("Nomor")} />
-        <RegulationDetail
-          label="Tahun Terbit"
-          value={getField("Tahun Terbit")}
-        />
-        <RegulationDetail
-          label="Singkatan Jenis"
-          value={getField("Singkatan Jenis")}
-        />
-        <RegulationDetail
-          label="Tanggal Penetapan"
-          value={getField("Tanggal Penetapan")}
-        />
-        <RegulationDetail
-          label="Tanggal Pengundangan"
-          value={getField("Tanggal Pengundangan")}
-        />
-        <RegulationDetail
-          label="Tempat Terbit"
-          value={getField("Tempat Terbit")}
-        />
+        <div className="space-y-2 mb-6">
+          <RegulationDetail
+            label="Jenis Peraturan"
+            value={getField("Jenis Peraturan")}
+          />
+          <RegulationDetail label="Nomor" value={getField("Nomor")} />
+          <RegulationDetail
+            label="Tahun Terbit"
+            value={getField("Tahun Terbit")}
+          />
+          <RegulationDetail
+            label="Singkatan Jenis"
+            value={getField("Singkatan Jenis")}
+          />
+          <RegulationDetail
+            label="Tanggal Penetapan"
+            value={getField("Tanggal Penetapan")}
+          />
+          <RegulationDetail
+            label="Tanggal Pengundangan"
+            value={getField("Tanggal Pengundangan")}
+          />
+          <RegulationDetail
+            label="Tempat Terbit"
+            value={getField("Tempat Terbit")}
+          />
+        </div>
       </div>
 
-      <Link
-        to={regulation.slug ? `/peraturan-terbaru/${regulation.slug}` : "#"}
-        className={`flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm ${
-          !regulation.slug && "pointer-events-none opacity-50"
-        }`}
-      >
-        Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />
-      </Link>
+      <div className="mt-auto pt-2">
+        <Link
+          to={regulation.slug ? `/peraturan-terbaru/${regulation.slug}` : "#"}
+          className={`flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm ${
+            !regulation.slug && "pointer-events-none opacity-50"
+          }`}
+        >
+          Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />
+        </Link>
+      </div>
     </div>
   );
 }

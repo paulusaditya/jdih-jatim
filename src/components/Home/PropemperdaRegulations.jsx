@@ -27,9 +27,12 @@ export default function PropemperdaRegulations() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-blue-900">Dokumen Propemperda</h2>
+            <h2 className="text-2xl font-bold text-blue-900">
+              Dokumen Propemperda
+            </h2>
             <p className="text-gray-600">
-              Koleksi Dokumen Propemperda terbaru milik Biro Hukum Provinsi Jawa Timur
+              Koleksi Dokumen Propemperda terbaru milik Biro Hukum Provinsi Jawa
+              Timur
             </p>
           </div>
           <Link
@@ -58,31 +61,61 @@ export default function PropemperdaRegulations() {
 // Fungsi untuk mengacak urutan array
 function shuffleArray(array) {
   return array
-    .map((item) => ({ item, sort: Math.random() })) // Tambahkan nilai random
-    .sort((a, b) => a.sort - b.sort) // Urutkan berdasarkan nilai random
-    .map(({ item }) => item); // Kembalikan array dalam urutan acak
+    .map((item) => ({ item, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item);
 }
 
 function RegulationCard({ regulation }) {
   return (
-    <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm hover:shadow-md transition-shadow">
-      <h3 className="text-lg font-semibold text-gray-900 leading-tight mb-3">
-        {regulation.title}
-      </h3>
+    <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 leading-tight mb-3">
+          {regulation.title}
+        </h3>
 
-      <div className="text-sm text-gray-600 space-y-6 mb-4">
-        <RegulationDetail label="Tahun Promperda" value={regulation.fields?.find(f => f.title.includes("Tahun"))?.details || "-"} />
-        <RegulationDetail label="Tanggal Rapat Pembahasan" value={regulation.fields?.find(f => f.title.includes("Tanggal Rapat Pembahasan"))?.details || "-"} />
-        <RegulationDetail label="Keterangan Rapat Pembahasan" value={regulation.fields?.find(f => f.title.includes("Keterangan Rapat Pembahasan"))?.details || "-"} />
-        <RegulationDetail label="Tahapan" value={regulation.fields?.find(f => f.title.includes("Tahapan"))?.details || "-"} />
+        <div className="text-sm text-gray-600 space-y-6 mb-4">
+          <RegulationDetail
+            label="Tahun Promperda"
+            value={
+              regulation.fields?.find((f) => f.title.includes("Tahun"))
+                ?.details || "-"
+            }
+          />
+          <RegulationDetail
+            label="Tanggal Rapat Pembahasan"
+            value={
+              regulation.fields?.find((f) =>
+                f.title.includes("Tanggal Rapat Pembahasan")
+              )?.details || "-"
+            }
+          />
+          <RegulationDetail
+            label="Keterangan Rapat Pembahasan"
+            value={
+              regulation.fields?.find((f) =>
+                f.title.includes("Keterangan Rapat Pembahasan")
+              )?.details || "-"
+            }
+          />
+          <RegulationDetail
+            label="Tahapan"
+            value={
+              regulation.fields?.find((f) => f.title.includes("Tahapan"))
+                ?.details || "-"
+            }
+          />
+        </div>
       </div>
 
-      <Link
-        to={regulation.link}
-        className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
-      >
-        Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />
-      </Link>
+      <div className="mt-auto pt-2">
+        <Link
+          to={regulation.link}
+          className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
+        >
+          Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />
+        </Link>
+      </div>
     </div>
   );
 }
