@@ -2,13 +2,12 @@ import DocPage from "./DocPage";
 
 const MonographyPage = () => (
   <DocPage
-    apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+    apiUrl="https://jdih.pisdev.my.id/api/v2/home/monography"
     title="Dokumen Monografi"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
       { label: "Monografi", path: "/site-pages/monografi" },
     ]}
-    webmasterId="11"
     years={[
       "",
       "2025",
@@ -31,6 +30,7 @@ const MonographyPage = () => (
     includeStatus={false}
     includeCategory={false}
     detailPath="/site-pages/monografi"
+    dataKey="data"
   />
 );
 
