@@ -23,6 +23,7 @@ import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
 import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
 import ArticlePage from "./pages/DokumenHukum/ArticlePage";
 import PutusanPengadilanPage from "./pages/DokumenHukum/PutusanPengadilanPage";
+import DokumenLangkaPage from "./pages/DokumenHukum/DokumenLangkaPage";
 
 function App() {
   return (
@@ -70,6 +71,11 @@ function App() {
               element={<PutusanPengadilanPage />}
             />
             <Route path="/dokumentasi/putusan-pengadilan/:slug" element={<DocDetailPage />} />
+            <Route
+              path="/dokumentasi/dokumen-langka"
+              element={<DokumenLangkaPage />}
+            />
+            <Route path="/dokumentasi/dokumen-langka/:slug" element={<DocDetailPage />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
