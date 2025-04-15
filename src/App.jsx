@@ -24,6 +24,7 @@ import DetailBerita from "./pages/Berita/DetailBerita";
 import NotFound from "./pages/NotFound";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import ScrollToTop from "./components/common/ScrollToTop";
 import productLawData from "./data/productLawData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -44,6 +45,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Router>
+        <ScrollToTop />
         <Header />
         <main className="flex-grow">
           <Routes>
@@ -103,12 +105,14 @@ function App() {
               </React.Fragment>
             ))}
 
-
             <Route
               path="/peraturan/:slug"
               element={<LawPage data={productLawData} />}
             />
-            <Route path="peraturan/:typelaw/:slug" element={<LawDetailPage />} />
+            <Route
+              path="peraturan/:typelaw/:slug"
+              element={<LawDetailPage />}
+            />
 
             <Route
               path="/news/detail-berita/:slug"
