@@ -149,7 +149,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
               filteredLaws.map((law) => (
                 <LawCard
                   key={law.id}
-                  title={`Peraturan ${law.type} Nomor ${law.number} Tahun ${law.year} tentang ${law.title}`}
+                  title={law.title}
                   year={law.year}
                   regulationType={law.type}
                   onDetailClick={() => navigate(`/law/${law.slug}`)}
