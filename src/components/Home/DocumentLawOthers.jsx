@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom"; // Import Link dari react-router-dom
 
 export default function LegalDocumentsSection() {
   const [showAll, setShowAll] = useState(false);
@@ -55,7 +56,7 @@ export default function LegalDocumentsSection() {
     {
       title: "Dokumen Langka",
       description: "Beberapa Dokumen Langka Jawa Timur ada disini.",
-      url: " /dokumentasi/dokumen-langka",
+      url: "/dokumentasi/dokumen-langka",
     },
     {
       title: "Kerja Sama Daerah",
@@ -139,15 +140,16 @@ export default function LegalDocumentsSection() {
 function DocumentCard({ title, description, url, className = "" }) {
   return (
     <motion.div
-      onClick={() => (window.location.href = url)}
       className={`border border-gray-200 rounded-lg p-6 hover:border-blue-600 hover:shadow-md transition-all ease-in-out cursor-pointer ${className}`}
       whileHover={{ scale: 1.05 }}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h3 className="text-xl font-semibold text-gray-900 mb-3">{title}</h3>
-      <p className="text-gray-600 text-sm">{description}</p>
+      <Link to={url} className="block">
+        <h3 className="text-xl font-semibold text-gray-900 mb-3">{title}</h3>
+        <p className="text-gray-600 text-sm">{description}</p>
+      </Link>
     </motion.div>
   );
 }
