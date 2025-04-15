@@ -19,6 +19,7 @@ import productLawData from "./data/productLawData";
 import docData from "./data/docData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
+import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
 
 function App() {
   return (
@@ -48,19 +49,14 @@ function App() {
             />
             <Route
               path="/dokumentasi/propemperda"
-              element={
-                <LawPage
-                  breadcrumbPaths={[
-                    { label: "Beranda", path: "/" },
-                    {
-                      label: "Dokumentasi Hukum Lainnya",
-                      path: "/dokumentasi",
-                    },
-                    { label: "Propemperda", path: "/dokumentasi/propemperda" },
-                  ]}
-                />
-              }
+              element={<PropemperdaPage />}
             />
+            <Route path="/dokumentasi/propemperda/:slug" element={<DocDetailPage />} />
+            <Route
+              path="/dokumentasi/statsblads"
+              element={<PropemperdaPage />}
+            />
+            <Route path="/dokumentasi/statsblads/:slug" element={<DocDetailPage />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
@@ -96,7 +92,6 @@ function App() {
             ))}
             <Route path="/law/:slug" element={<LawDetailPage />} />
             <Route path="/peraturan-terbaru/:slug" element={<DocDetailPage />} />
-            <Route path="/dokumentasi/prompemperda/:slug" element={<DocDetailPage />} />
             <Route path="/:slug" element={<DocDetailPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

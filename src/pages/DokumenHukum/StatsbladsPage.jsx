@@ -9,12 +9,12 @@ import Pagination from "../../components/common/Pagination";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
-  { label: "Propemperda", path: "/dokumentasi/propemperda" },
+  { label: "Statsblads", path: "/dokumentasi/statsblads" },
 ];
 
-const PropemperdaPage = () => {
+const StatsbladsPage = () => {
   const [documents, setDocuments] = useState([]);
-  const [title, setTitle] = useState("Dokumen Propemperda");
+  const [title, setTitle] = useState("Dokumen Statsblads");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ const PropemperdaPage = () => {
     try {
       const params = new URLSearchParams();
       params.append("page", currentPage);
-      params.append("webmaster_id", "16");
+      params.append("webmaster_id", "17");
 
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
@@ -50,49 +50,34 @@ const PropemperdaPage = () => {
       if (filters.year) params.append("year", filters.year);
 
       const response = await fetch(
-        `https://jdih.pisdev.my.id/api/v2/home/propemperda?${params.toString()}`
+        `https://jdih.pisdev.my.id/api/v2/topics?${params.toString()}`
       );
       const result = await response.json();
 
-      const rawDocs = result.data || [];
+      const rawDocs = result.data?.data || [];
 
-      const mappedDocs = await Promise.all(
-        rawDocs.map(async (item) => {
-          const fields = item.fields || [];
-          const getField = (fieldName) =>
-            fields.find((f) => f.title === fieldName)?.details || "-";
+      const mappedDocs = rawDocs.map((item) => {
+        const fields = item.fields || [];
+        const getField = (fieldName) =>
+          fields.find((f) => f.title === fieldName)?.details || "-";
 
-          // Fetch slug per dokumen
-          let slug = null;
-          try {
-            const detailRes = await fetch(
-              `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
-            );
-            const detailData = await detailRes.json();
-            slug = detailData.data?.seo_url_slug_id || null;
-          } catch (err) {
-            console.warn("Gagal mengambil slug untuk ID:", item.id);
-          }
+        return {
+          id: item.id,
+          slug: item.seo_url_slug_id || null,
+          title: item.title || "Tanpa Judul",
+          year: getField("Tahun Terbit"),
+          status: getField("Bahasa"),
+          category: getField("Subjek Statsblads"),
+          image: item.image || "http://via.placeholder.com/100x150",
+          link: getField("Lampiran") || "",
+        };
+      });
 
-          return {
-            id: item.id,
-            slug, // tambahkan slug
-            title: item.title || "Tanpa Judul",
-            year: getField("Tahun Terbit"),
-            status: getField("Keterangan Status"),
-            category: getField("Kategori"),
-            image: item.image_url || "http://via.placeholder.com/100x150",
-            link: item.link || "",
-          };
-        })
-      );
-
-      // Slice the documents to match the total available items
-      setDocuments(mappedDocs.slice(0, result.pagination?.total || 0));
-      setTitle(result.title || "Dokumen Propemperda");
-      setTotalItems(result.pagination?.total || 0);
+      // Pastikan hanya data sesuai halaman yang ditampilkan
+      setDocuments(mappedDocs);
+      setTotalItems(result.data?.pagination?.total || 0);
     } catch (error) {
-      console.error("Error fetching propemperda data:", error);
+      console.error("Error fetching statsblads data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -142,7 +127,6 @@ const PropemperdaPage = () => {
             includeCategory={false}
           />
 
-          {/* Data count display */}
           <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
             <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
               Semua Data ({totalItems})
@@ -167,7 +151,7 @@ const PropemperdaPage = () => {
                   category={doc.category}
                   image={doc.image}
                   onDetailClick={() =>
-                    navigate(`/dokumentasi/propemperda/${doc.slug}`)
+                    navigate(`/dokumentasi/statsblads/${doc.slug}`)
                   }
                 />
               ))
@@ -180,7 +164,6 @@ const PropemperdaPage = () => {
             )}
           </div>
 
-          {/* Pagination */}
           <Pagination
             currentPage={currentPage}
             totalItems={totalItems}
@@ -196,4 +179,4 @@ const PropemperdaPage = () => {
   );
 };
 
-export default PropemperdaPage;
+export default StatsbladsPage;

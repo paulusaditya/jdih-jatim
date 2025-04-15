@@ -198,7 +198,7 @@ function DropdownMenu() {
 
 function DocumentationDropdown() {
   const documentationItems = [
-    { label: "Staatsblad", path: "/dokumentasi/staatsblad" },
+    { label: "Statsblads", path: "/dokumentasi/statsblads" },
     { label: "Monografi", path: "/dokumentasi/monografi" },
     { label: "Artikel", path: "/dokumentasi/artikel" },
     { label: "Propemperda", path: "/dokumentasi/propemperda" },
