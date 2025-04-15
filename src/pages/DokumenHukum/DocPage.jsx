@@ -7,6 +7,12 @@ import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 
+// Fungsi proxy logo
+const proxiedLogo = (logo) =>
+  logo?.startsWith("http://")
+    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+    : logo;
+
 const DocPage = ({
   apiUrl,
   title: pageTitle,
@@ -49,29 +55,31 @@ const DocPage = ({
       const params = new URLSearchParams();
       params.append("page", currentPage);
       if (webmasterId) params.append("webmaster_id", webmasterId);
-  
+
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
       if (filters.year) params.append("year", filters.year);
-  
+
       const response = await fetch(`${apiUrl}?${params.toString()}`);
       const result = await response.json();
-  
+
       let rawDocs = [];
       let mappedDocs = [];
-  
+
       if (Array.isArray(result.data)) {
         // === Data flat seperti Monografi ===
         rawDocs = result.data;
-  
+
         const docsWithSlug = await Promise.all(
           rawDocs.map(async (item) => {
             if (customMap) {
               return customMap(item);
             }
             try {
-              const detailRes = await fetch(`https://jdih.pisdev.my.id/api/v2/topics/${item.id}`);
+              const detailRes = await fetch(
+                `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
+              );
               const detailData = await detailRes.json();
               return {
                 id: item.id,
@@ -80,7 +88,7 @@ const DocPage = ({
                 year: "-",
                 status: "-",
                 category: "-",
-                image: item.image || "http://via.placeholder.com/100x150",
+                image: proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
               };
             } catch (err) {
               return {
@@ -90,23 +98,23 @@ const DocPage = ({
                 year: "-",
                 status: "-",
                 category: "-",
-                image: item.image || "http://via.placeholder.com/100x150",
+                image: proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
               };
             }
           })
         );
-  
+
         mappedDocs = docsWithSlug;
         setTotalItems(result.pagination?.total || rawDocs.length || 0);
       } else {
         // === Data nested seperti dokumen hukum biasa ===
         rawDocs = result.data?.data || [];
-  
+
         mappedDocs = rawDocs.map((item) => {
           const fields = item.fields || [];
           const getField = (fieldName) =>
             fields.find((f) => f.title === fieldName)?.details || "-";
-  
+
           return {
             id: item.id,
             slug: item.seo_url_slug_id,
@@ -114,13 +122,13 @@ const DocPage = ({
             year: getField("Tahun Terbit"),
             status: getField("Subjek Artikel"),
             category: getField("T.E.U Badan/Pengarang"),
-            image: item.image || "http://via.placeholder.com/100x150",
+            image: proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
           };
         });
-  
+
         setTotalItems(result.data?.pagination?.total || 0);
       }
-  
+
       setDocuments(mappedDocs);
     } catch (error) {
       console.error("Error fetching document data:", error);
@@ -128,7 +136,6 @@ const DocPage = ({
       setIsLoading(false);
     }
   };
-  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
