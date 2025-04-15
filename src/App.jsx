@@ -1,31 +1,40 @@
-import "./App.css";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil/Profil";
 import ContactPage from "./pages/Profil/Contact";
 import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
-import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
 import MonographyPage from "./pages/DokumenHukum/MonographyPage";
-import DocDetailPage from "./pages/DokumenHukum/DocDetailPage";
+import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
+import ArticlePage from "./pages/DokumenHukum/ArticlePage";
+import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
+import PutusanPengadilanPage from "./pages/DokumenHukum/PutusanPengadilanPage";
+import DokumenLangkaPage from "./pages/DokumenHukum/DokumenLangkaPage";
 import Berita from "./pages/Berita/Berita";
 import DetailBerita from "./pages/Berita/DetailBerita";
 import NotFound from "./pages/NotFound";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import productLawData from "./data/productLawData";
-import docData from "./data/docData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
-import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
-import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
-import ArticlePage from "./pages/DokumenHukum/ArticlePage";
-import PutusanPengadilanPage from "./pages/DokumenHukum/PutusanPengadilanPage";
-import DokumenLangkaPage from "./pages/DokumenHukum/DokumenLangkaPage";
 
 function App() {
+  const [menuData, setMenuData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jdih.pisdev.my.id/api/v2/menus")
+      .then((response) => response.json())
+      .then((data) => {
+        setMenuData(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch menu data:", error);
+      });
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Router>
@@ -33,90 +42,70 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/profil/tentang-kami" element={<Profil />} />
-            <Route path="/profil/kontak" element={<ContactPage />} />
-            <Route
-              path="/profil/struktur-organisasi"
-              element={<OrganizationalChart />}
-            />
-            <Route path="/profil/struktur-tim" element={<TeamChart />} />
-            <Route path="/berita" element={<Berita />} />
-            <Route path="/berita/detail-berita/:slug" element={<DetailBerita />} />
-            <Route
-              path="/peraturan-terbaru"
-              element={<LatestRegulationPage />}
-            />
-            <Route path="/dokumentasi/monografi" element={<MonographyPage />} />
-            <Route
-              path="/dokumentasi/monografi/:slug"
-              element={<DocDetailPage />}
-            />
-            <Route
-              path="/dokumentasi/propemperda"
-              element={<PropemperdaPage />}
-            />
-            <Route path="/dokumentasi/propemperda/:slug" element={<DocDetailPage />} />
-            <Route
-              path="/dokumentasi/statsblads"
-              element={<StatsbladsPage />}
-            />
-            <Route path="/dokumentasi/statsblads/:slug" element={<DocDetailPage />} />
-            <Route
-              path="/dokumentasi/artikel"
-              element={<ArticlePage />}
-            />
-            <Route path="/dokumentasi/artikel/:slug" element={<DocDetailPage />} />
-            <Route
-              path="/dokumentasi/putusan-pengadilan"
-              element={<PutusanPengadilanPage />}
-            />
-            <Route path="/dokumentasi/putusan-pengadilan/:slug" element={<DocDetailPage />} />
-            <Route
-              path="/dokumentasi/dokumen-langka"
-              element={<DokumenLangkaPage />}
-            />
-            <Route path="/dokumentasi/dokumen-langka/:slug" element={<DocDetailPage />} />
-            {productLawData.map(({ path, title, laws }) => (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <LawPage
-                    laws={laws}
-                    breadcrumbPaths={[
-                      { label: "Beranda", path: "/" },
-                      { label: "Produk Hukum", path: "/produk-hukum" },
-                      { label: title, path: path },
-                    ]}
-                    title={title}
+
+            {menuData.map((menu) => (
+              <React.Fragment key={menu.id}>
+                <Route
+                  path={`/${menu.link}`}
+                  element={
+                    menu.link === "news" ? (
+                      <Berita />
+                    ) : menu.link === "peraturan" ? (
+                      <LawPage data={productLawData} />
+                    ) : (
+                      <Home />
+                    )
+                  }
+                />
+                {menu.sub_menus.map((sub) => (
+                  <Route
+                    key={sub.id}
+                    path={`/${menu.link}${
+                      sub.link.startsWith("/") ? sub.link : `/${sub.link}`
+                    }`}
+                    element={
+                      menu.link === "peraturan" ? (
+                        <LawPage data={productLawData} />
+                      ) : sub.link.includes("about") ? (
+                        <Profil />
+                      ) : sub.link.includes("contact") ? (
+                        <ContactPage />
+                      ) : sub.link.includes(
+                          "struktur-organisasi-jdih-jatim"
+                        ) ? (
+                        <OrganizationalChart />
+                      ) : sub.link.includes("struktur-organisasi-tim") ? (
+                        <TeamChart />
+                      ) : sub.link.includes("staatsblad") ? (
+                        <StatsbladsPage />
+                      ) : sub.link.includes("monografi") ? (
+                        <MonographyPage />
+                      ) : sub.link.includes("artikel-hukum") ? (
+                        <ArticlePage />
+                      ) : sub.link.includes("propemperda") ? (
+                        <PropemperdaPage />
+                      ) : sub.link.includes("putusan-pengadilan") ? (
+                        <PutusanPengadilanPage />
+                      ) : sub.link.includes("dokumen-langka") ? (
+                        <DokumenLangkaPage />
+                      ) : (
+                        <Home />
+                      )
+                    }
                   />
-                }
-              />
+                ))}
+              </React.Fragment>
             ))}
-            {docData.map(({ path, title, documents }) => (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <DocPage
-                    documents={documents}
-                    breadcrumbPaths={[
-                      { label: "Beranda", path: "/" },
-                      { label: title, path: path },
-                    ]}
-                    title={title}
-                  />
-                }
-              />
-            ))}
-            <Route path="/law/:slug" element={<LawDetailPage />} />
-            <Route path="/peraturan-terbaru/:slug" element={<DocDetailPage />} />
-            <Route path="/:slug" element={<DocDetailPage />} />
+
+            <Route
+              path="/news/detail-berita/:slug"
+              element={<DetailBerita />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
-      </Router>  
+      </Router>
     </div>
   );
 }

@@ -107,7 +107,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
 
   return (
     <>
-      <Breadcrumbs paths={customBreadcrumbs} />
+      {/* <Breadcrumbs paths={customBreadcrumbs} /> */}
       <div className="p-8 mx-0 md:mx-8 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <SearchFilter

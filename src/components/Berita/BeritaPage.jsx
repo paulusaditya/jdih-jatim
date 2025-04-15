@@ -84,7 +84,7 @@ export default function BeritaPage() {
 
   const handleCardClick = (link) => {
     const slug = link.startsWith("./") ? link.substring(2) : link
-    navigate(`/berita/detail-berita/${slug}`)
+    navigate(`/news/detail-berita/${slug}`)
   }
 
   const handleSearch = (e) => {
