@@ -32,7 +32,7 @@ export default function BeritaPage() {
 
   useEffect(() => {
     filterBerita()
-    setCurrentPage(1) // reset ke page 1 saat filter berubah
+    setCurrentPage(1)
   }, [searchQuery, selectedDate, beritaList])
 
   const fetchAllBerita = async () => {
@@ -179,7 +179,7 @@ export default function BeritaPage() {
             {currentBeritaList.map((berita) => (
               <div
                 key={berita.id}
-                className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-blue-600 hover:shadow-md transition duration-300 cursor-pointer"
+                className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-blue-600 hover:shadow-md transition duration-300 cursor-pointer flex flex-col"
                 onClick={() => handleCardClick(berita.link)}
               >
                 <img
@@ -190,17 +190,19 @@ export default function BeritaPage() {
                     e.target.src = "/assets/berita/image113.png"
                   }}
                 />
-                <div className="p-4">
-                  <div className="text-xs text-gray-500 mb-2">{formatDate(berita.date)}</div>
-                  <h3 className="text-xl font-bold leading-tight pb-2">{berita.title}</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    {berita.seo_description_id
-                      ? berita.seo_description_id.replace(/<[^>]*>/g, "").substring(0, 150) + "..."
-                      : "Tidak ada deskripsi"}
-                  </p>
+                <div className="p-4 flex flex-col h-full">
+                  <div>
+                    <div className="text-xs text-gray-500 mb-2">{formatDate(berita.date)}</div>
+                    <h3 className="text-xl font-bold leading-tight pb-2">{berita.title}</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {berita.seo_description_id
+                        ? berita.seo_description_id.replace(/<[^>]*>/g, "").substring(0, 150) + "..."
+                        : "Tidak ada deskripsi"}
+                    </p>
+                  </div>
                   <Link
                     to={`/news/detail-berita/${berita.link.startsWith("./") ? berita.link.substring(2) : berita.link}`}
-                    className="text-blue-600 text-sm font-semibold flex items-center"
+                    className="text-blue-600 text-sm font-semibold flex items-center mt-auto"
                     onClick={(e) => {
                       e.preventDefault()
                       handleCardClick(berita.link)
