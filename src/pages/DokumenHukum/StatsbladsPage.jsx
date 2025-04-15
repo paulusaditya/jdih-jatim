@@ -56,25 +56,27 @@ const StatsbladsPage = () => {
 
       const rawDocs = result.data?.data || [];
 
-      const mappedDocs = rawDocs.map((item) => {
-        const fields = item.fields || [];
-        const getField = (fieldName) =>
-          fields.find((f) => f.title === fieldName)?.details || "-";
+      const mappedDocs = await Promise.all(
+        rawDocs.map(async (item) => {
+          const fields = item.fields || [];
+          const getField = (fieldName) =>
+            fields.find((f) => f.title === fieldName)?.details || "-";
 
-        return {
-          id: item.id,
-          slug: item.seo_url_slug_id || null,
-          title: item.title || "Tanpa Judul",
-          year: getField("Tahun Terbit"),
-          status: getField("Bahasa"),
-          category: getField("Subjek Statsblads"),
-          image: item.image || "http://via.placeholder.com/100x150",
-          link: getField("Lampiran") || "",
-        };
-      });
+          return {
+            id: item.id,
+            slug: item.seo_url_slug_id,
+            title: item.title || "Tanpa Judul",
+            year: getField("Tahun Terbit"),
+            status: getField("Subjek Statsblads"),
+            category: getField("T.E.U Badan/Pengarang"),
+            image: item.image || "http://via.placeholder.com/100x150",
+            link: item.link || "",
+          };
+        })
+      );
 
-      // Pastikan hanya data sesuai halaman yang ditampilkan
       setDocuments(mappedDocs);
+      setTitle("Dokumen Statsblads");
       setTotalItems(result.data?.pagination?.total || 0);
     } catch (error) {
       console.error("Error fetching statsblads data:", error);

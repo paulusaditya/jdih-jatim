@@ -20,6 +20,7 @@ import docData from "./data/docData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
 import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
+import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
             <Route path="/dokumentasi/propemperda/:slug" element={<DocDetailPage />} />
             <Route
               path="/dokumentasi/statsblads"
-              element={<PropemperdaPage />}
+              element={<StatsbladsPage />}
             />
             <Route path="/dokumentasi/statsblads/:slug" element={<DocDetailPage />} />
             {productLawData.map(({ path, title, laws }) => (
