@@ -6,14 +6,14 @@ const ArticlePage = () => (
     title="Dokumen Artikel"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
-      { label: "Artikel", path: "/dokumentasi/artikel" },
+      { label: "Artikel", path: "/site-pages/artikel" },
     ]}
     webmasterId="15"
     years={["", "2025", "2024", "2023", "2022"]}
     documentTypes={["", "Buku", "Jurnal", "Artikel", "Penelitian", "Lainnya"]}
     includeStatus={false}
     includeCategory={false}
-    detailPath="/dokumentasi/artikel"
+    detailPath="/site-pages/artikel"
   />
 );
 

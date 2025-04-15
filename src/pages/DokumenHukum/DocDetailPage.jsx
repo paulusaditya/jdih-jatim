@@ -30,8 +30,8 @@ const DocDetailPage = () => {
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: documentLabel, path: `/dokumentasi/${type}` },
-    { label: documentTitle || formatSlug(slug), path: `/dokumentasi/${type}/${slug}` },
+    { label: documentLabel, path: `/site-pages/${type}` },
+    { label: documentTitle || formatSlug(slug), path: `/site-pages/${type}/${slug}` },
   ]
 
   return (

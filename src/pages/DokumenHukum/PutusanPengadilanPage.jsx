@@ -6,7 +6,7 @@ const PutusanPengadilanPage = () => (
     title="Putusan Pengadilan"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
-      { label: "Putusan Pengadilan", path: "/dokumentasi/putusan-pengadilan" },
+      { label: "Putusan Pengadilan", path: "/site-pages/putusan-pengadilan" },
     ]}
     webmasterId="20"
     years={[
@@ -30,7 +30,7 @@ const PutusanPengadilanPage = () => (
     ]}
     includeStatus={false}
     includeCategory={false}
-    detailPath="/dokumentasi/putusan-pengadilan"
+    detailPath="/site-pages/putusan-pengadilan"
   />
 );
 

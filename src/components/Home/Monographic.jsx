@@ -73,7 +73,7 @@ export default function Monographic() {
             <p className="text-gray-600 mt-1">Koleksi dokumen Monografi terbaru milik Biro Hukum Provinsi Jawa Timur</p>
           </div>
           <Link
-            to="/dokumentasi/monografi"
+            to="/site-pages/monografi"
             className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>
@@ -93,7 +93,7 @@ export default function Monographic() {
                 key={book.id}
                 className="w-full sm:w-[calc(50%-8px)] md:w-[calc(20%-16px)] flex flex-col items-center"
               >
-                <Link to={book.slug ? `/dokumentasi/monografi/${book.slug}` : "#"}>
+                <Link to={book.slug ? `/site-pages/monografi/${book.slug}` : "#"}>
                   <img
                     src={proxiedLogo(book.image)}
                     alt={book.title}

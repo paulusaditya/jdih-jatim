@@ -6,7 +6,7 @@ const MonographyPage = () => (
     title="Dokumen Monografi"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
-      { label: "Monografi", path: "/dokumentasi/monografi" },
+      { label: "Monografi", path: "/site-pages/monografi" },
     ]}
     webmasterId="11"
     years={[
@@ -30,7 +30,7 @@ const MonographyPage = () => (
     ]}
     includeStatus={false}
     includeCategory={false}
-    detailPath="/dokumentasi/monografi"
+    detailPath="/site-pages/monografi"
   />
 );
 

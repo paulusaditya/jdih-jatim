@@ -33,7 +33,7 @@ export default function PropemperdaRegulations() {
             </p>
           </div>
           <Link
-            to="/dokumentasi/propemperda"
+            to="/site-pages/propemperda"
             className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>

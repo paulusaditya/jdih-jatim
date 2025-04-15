@@ -6,7 +6,7 @@ const DokumenLangkaPage = () => (
     title="Dokumen Langka"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
-      { label: "Dokumen Langka", path: "/dokumentasi/dokumen-langka" },
+      { label: "Dokumen Langka", path: "/site-pages/dokumen-langka" },
     ]}
     webmasterId="21"
     years={[
@@ -30,7 +30,7 @@ const DokumenLangkaPage = () => (
     ]}
     includeStatus={false}
     includeCategory={false}
-    detailPath="/dokumentasi/dokumen-langka"
+    detailPath="/site-pages/dokumen-langka"
   />
 );
 

@@ -6,7 +6,7 @@ const StatsbladsPage = () => (
     title="Statsblads"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
-      { label: "Statsblads", path: "/dokumentasi/statsblads" },
+      { label: "Statsblads", path: "/site-pages/statsblads" },
     ]}
     webmasterId="17"
     years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018"]}

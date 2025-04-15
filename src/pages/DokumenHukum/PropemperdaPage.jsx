@@ -6,7 +6,7 @@ const PropemperdaPage = () => (
     title="Dokumen Propemperda"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
-      { label: "Propemperda", path: "/dokumentasi/propemperda" },
+      { label: "Propemperda", path: "/site-pages/propemperda" },
     ]}
     webmasterId="16"
     years={[
@@ -30,7 +30,7 @@ const PropemperdaPage = () => (
     ]}
     includeStatus={false}
     includeCategory={false}
-    detailPath="/dokumentasi/propemperda"
+    detailPath="/site-pages/propemperda"
   />
 );
 

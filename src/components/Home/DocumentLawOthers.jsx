@@ -25,25 +25,25 @@ export default function LegalDocumentsSection() {
       title: "Monografi",
       description:
         "Monografi hukum JDIH Jatim: referensi mendalam tentang peraturan dan kebijakan.",
-      url: "/dokumentasi/monografi",
+      url: "/site-pages/monografi",
     },
     {
       title: "Staatsblad",
       description:
         "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
-      url: "/dokumentasi/staatsblad",
+      url: "/site-pages/staatsblad",
     },
     {
       title: "Propemperda",
       description:
         "JDIH Jatim mendukung konsultasi Propemperda untuk penyusunan regulasi daerah.",
-      url: "/dokumentasi/propemperda",
+      url: "/site-pages/propemperda",
     },
     {
       title: "Artikel Hukum",
       description:
         "Baca artikel hukum terkini di JDIH Jatim untuk wawasan regulasi.",
-      url: "/dokumentasi/artikel",
+      url: "/site-pages/artikel",
     },
   ];
 
@@ -51,28 +51,28 @@ export default function LegalDocumentsSection() {
     {
       title: "Putusan Pengadilan",
       description: "Dokumen Putusan Pengadilan yang ada di Jawa Timur.",
-      url: "/dokumentasi/putusan-pengadilan",
+      url: "/site-pages/putusan-pengadilan",
     },
     {
       title: "Dokumen Langka",
       description: "Beberapa Dokumen Langka Jawa Timur ada disini.",
-      url: "/dokumentasi/dokumen-langka",
+      url: "/site-pages/dokumen-langka",
     },
     {
       title: "Kerja Sama Daerah",
       description: "Kerja sama provinsi Jawa Timur dengan para Stakeholder.",
-      url: "/dokumentasi/dokumen-kerja-sama",
+      url: "/site-pages/dokumen-kerja-sama",
     },
     {
       title: "Surat Edaran",
       description:
         "Baca artikel hukum terkini di JDIH Jatim untuk wawasan regulasi.",
-      url: "/dokumentasi/surat-edaran",
+      url: "/site-pages/surat-edaran",
     },
     {
       title: "Rancangan Peraturan Daerah",
       description: "Dokumen rancangan peraturan daerah yang ada di Jawa Timur",
-      url: "/dokumentasi/rancangan-peraturan-daerah",
+      url: "/site-pages/rancangan-peraturan-daerah",
     },
   ];
 
