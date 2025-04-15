@@ -3,6 +3,7 @@
 import { Search, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export default function BeritaPage() {
   const navigate = useNavigate()
@@ -174,8 +175,8 @@ export default function BeritaPage() {
                       ? berita.seo_description_id.replace(/<[^>]*>/g, "").substring(0, 150) + "..."
                       : "Tidak ada deskripsi"}
                   </p>
-                  <a
-                    href={`/berita/detail-berita/${berita.link.startsWith("./") ? berita.link.substring(2) : berita.link}`}
+                  <Link
+                    to={`/news/detail-berita/${berita.link.startsWith("./") ? berita.link.substring(2) : berita.link}`}
                     className="text-blue-600 text-sm font-semibold flex items-center"
                     onClick={(e) => {
                       e.preventDefault()
@@ -183,7 +184,7 @@ export default function BeritaPage() {
                     }}
                   >
                     Baca Selengkapnya <span className="ml-1">→</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}

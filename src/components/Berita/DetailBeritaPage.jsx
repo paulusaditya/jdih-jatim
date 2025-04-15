@@ -69,7 +69,7 @@ function RelatedNews({ currentArticleId }) {
       {relatedArticles.map((article) => (
         <Link
           key={article.id}
-          to={`/berita/detail-berita/${article.link.startsWith("./") ? article.link.substring(2) : article.link}`}
+          to={`/news/detail-berita/${article.link.startsWith("./") ? article.link.substring(2) : article.link}`}
           className="block group"
         >
           <div className="overflow-hidden rounded-lg mb-3">
@@ -161,7 +161,7 @@ export default function DetailBeritaPage() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-6 text-center">
         <p className="text-red-500">Error: {error}</p>
-        <Link to="/berita" className="text-blue-600 mt-4 inline-block">
+        <Link to="/news" className="text-blue-600 mt-4 inline-block">
           Kembali ke daftar berita
         </Link>
       </div>
@@ -172,7 +172,7 @@ export default function DetailBeritaPage() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-6 text-center">
         <p>Artikel tidak ditemukan</p>
-        <Link to="/berita" className="text-blue-600 mt-4 inline-block">
+        <Link to="/news" className="text-blue-600 mt-4 inline-block">
           Kembali ke daftar berita
         </Link>
       </div>
@@ -266,7 +266,7 @@ export default function DetailBeritaPage() {
         </div>
 
         {/* Back Button */}
-        <Link to="/berita" className="inline-flex items-center text-blue-600 text-sm">
+        <Link to="/news" className="inline-flex items-center text-blue-600 text-sm">
           <ChevronLeftCircle className="h-4 w-4 mr-1" />
           Kembali
         </Link>

@@ -31,8 +31,8 @@ const DetailBerita = () => {
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: "Berita", path: "/berita" },
-    { label: title, path: `/berita/detail-berita/${slug}` },
+    { label: "Berita", path: "/news" },
+    { label: title, path: `/news/detail-berita/${slug}` },
   ]
 
   return (

@@ -3,7 +3,7 @@ import Breadcrumbs from "../../components/common/Breadcrumbs";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
-  { label: "Berita", path: "/berita" },
+  { label: "Berita", path: "/news" },
 ];
 
 export default function Berita() {
