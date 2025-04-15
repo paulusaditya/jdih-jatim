@@ -41,7 +41,7 @@ function App() {
             />
             <Route path="/profil/struktur-tim" element={<TeamChart />} />
             <Route path="/berita" element={<Berita />} />
-            <Route path="/berita/:id" element={<DetailBerita />} />
+            <Route path="/berita/detail-berita/:slug" element={<DetailBerita />} />
             <Route
               path="/peraturan-terbaru"
               element={<LatestRegulationPage />}
