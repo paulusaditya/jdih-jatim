@@ -4,8 +4,15 @@ import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { Calendar, Instagram, Facebook, MessageCircle, ChevronLeftCircle } from "lucide-react"
 
+// Proxy function to handle logo URL
+const proxiedLogo = (logo) =>
+  logo?.startsWith("http://")
+    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+    : logo
+
 function RelatedNews({ currentArticleId }) {
   const [relatedArticles, setRelatedArticles] = useState([])
+
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -67,7 +74,7 @@ function RelatedNews({ currentArticleId }) {
         >
           <div className="overflow-hidden rounded-lg mb-3">
             <img
-              src={article.image || "/assets/berita/image113.png"}
+              src={proxiedLogo(article.image) || "/assets/berita/image113.png"}
               alt={article.title}
               className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
@@ -185,7 +192,7 @@ export default function DetailBeritaPage() {
       {/* Header Image */}
       <div className="mb-6">
         <img
-          src={article.image || "/assets/berita/imageberita1.png"}
+          src={proxiedLogo(article.image) || "/assets/berita/imageberita1.png"}
           alt={article.title}
           className="w-full h-auto rounded-lg"
           onError={(e) => {

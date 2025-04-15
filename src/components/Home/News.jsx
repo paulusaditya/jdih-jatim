@@ -4,6 +4,11 @@ import { useState, useEffect } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react"
 import { Link } from "react-router-dom"
 
+const proxiedLogo = (logo) =>
+  logo?.startsWith("http://")
+    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+    : logo
+
 export default function NewsSection() {
   const [newsItems, setNewsItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -34,7 +39,7 @@ export default function NewsSection() {
                 id: item.id,
                 title: item.title,
                 content: item.seo_description_id || item.excerpt || "No description available",
-                image: item.image || "/placeholder.svg?height=300&width=500",
+                image: proxiedLogo(item.image || "/placeholder.svg?height=300&width=500"),
                 date: formattedDate,
                 slug: item.seo_url_slug_id || `news/${item.id}`, // Use slug from API
               }
@@ -123,7 +128,7 @@ export default function NewsSection() {
             Berita Biro Hukum Sekretariat Daerah Jawa Timur
           </h2>
           <Link
-            href="/berita"
+            to="/berita"
             className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>
@@ -152,7 +157,7 @@ export default function NewsSection() {
                 <div className="md:w-5/12 mt-6 md:mt-0">
                   <div className="w-full h-64 md:h-[300px] rounded-lg overflow-hidden relative">
                     <img
-                      src={news.image || "/placeholder.svg"}
+                      src={news.image}
                       alt={news.title}
                       className="w-full h-full object-cover"
                     />

@@ -19,6 +19,12 @@ export default function BeritaPage() {
   const [selectedDate, setSelectedDate] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
 
+  // Proxy logic for image URLs
+  const proxiedLogo = (logo) =>
+    logo?.startsWith("http://")
+      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+      : logo
+
   useEffect(() => {
     fetchBerita(currentPage)
   }, [currentPage])
@@ -77,15 +83,12 @@ export default function BeritaPage() {
   }
 
   const handleCardClick = (link) => {
-    // Extract the slug from the link
     const slug = link.startsWith("./") ? link.substring(2) : link
     navigate(`/berita/detail-berita/${slug}`)
   }
 
   const handleSearch = (e) => {
     e.preventDefault()
-    // In a real implementation, you would call the API with the search query
-    // For now, we'll just log it
     console.log("Searching for:", searchQuery)
     console.log("Date filter:", selectedDate)
   }
@@ -156,7 +159,7 @@ export default function BeritaPage() {
                 onClick={() => handleCardClick(berita.link)}
               >
                 <img
-                  src={berita.image || "/placeholder.svg"}
+                  src={proxiedLogo(berita.image) || "/placeholder.svg"}
                   alt={berita.title}
                   className="w-full h-48 object-cover"
                   onError={(e) => {
