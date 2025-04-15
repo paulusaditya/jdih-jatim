@@ -13,6 +13,7 @@ import TeamChart from "./pages/Profil/TeamChart";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
+import DocDetailPage from "./pages/DokumenHukum/DocDetailPage"; 
 import MonographyPage from "./pages/DokumenHukum/MonographyPage";
 import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
 import ArticlePage from "./pages/DokumenHukum/ArticlePage";
@@ -112,6 +113,32 @@ function App() {
             <Route
               path="peraturan/:typelaw/:slug"
               element={<LawDetailPage />}
+            />
+
+            <Route
+              path="/site-pages/statsblads/:slug"
+              element={<DocDetailPage />}
+            />
+
+            <Route
+              path="/site-pages/monografi/:slug"
+              element={<DocDetailPage />}
+            />
+            <Route
+              path="/site-pages/artikel-hukum/:slug"
+              element={<DocDetailPage />}
+            />
+            <Route
+              path="/site-pages/propemperda/:slug"
+              element={<DocDetailPage />}
+            />
+            <Route
+              path="/site-pages/putusan-pengadilan/:slug"
+              element={<DocDetailPage />}
+            />
+            <Route
+              path="/site-pages/dokumen-langka/:slug"
+              element={<DocDetailPage />}
             />
 
             <Route
