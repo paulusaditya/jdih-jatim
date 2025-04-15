@@ -43,7 +43,7 @@ export default function LegalDocumentsSection() {
       title: "Artikel Hukum",
       description:
         "Baca artikel hukum terkini di JDIH Jatim untuk wawasan regulasi.",
-      url: "/site-pages/artikel",
+      url: "/site-pages/artikel-hukum",
     },
   ];
 
