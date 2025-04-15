@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil/Profil";
 import ContactPage from "./pages/Profil/Contact";
 import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
 import LawPage from "./pages/ProdukHukum/LawPage";
+import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
 import MonographyPage from "./pages/DokumenHukum/MonographyPage";
 import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
@@ -96,6 +102,13 @@ function App() {
                 ))}
               </React.Fragment>
             ))}
+
+
+            <Route
+              path="/peraturan/:slug"
+              element={<LawPage data={productLawData} />}
+            />
+            <Route path="peraturan/:typelaw/:slug" element={<LawDetailPage />} />
 
             <Route
               path="/news/detail-berita/:slug"

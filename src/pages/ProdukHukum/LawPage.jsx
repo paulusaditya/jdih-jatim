@@ -1,7 +1,5 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Filter } from "lucide-react";
 import axios from "axios";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
@@ -16,7 +14,6 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [lastPage, setLastPage] = useState(1);
-
   const [filters, setFilters] = useState({
     number: "",
     status: "",
@@ -25,46 +22,69 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
     year: "",
     searchQuery: "",
   });
-
+  const [sectionId, setSectionId] = useState(null);
   const itemsPerPage = 10;
+
   const navigate = useNavigate();
+  const { slug: typelaw } = useParams(); 
+
+  const fetchSectionId = async () => {
+    try {
+      const res = await axios.get(
+        `https://jdih.pisdev.my.id/api/v2/sections?slug=${typelaw}`
+      );
+      const sections = res.data.data;
+      if (sections.length > 0) {
+        setSectionId(sections[0].id);
+      }
+    } catch (err) {
+      console.error("Failed to fetch section ID:", err);
+    }
+  };
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        `https://jdih.pisdev.my.id/api/v2/topics?page=${currentPage}&per_page=${itemsPerPage}&webmaster_id=10`
-      );
-      const topics = res.data.data.data;
-
-      const mapped = topics.map((item) => {
-        const fields = Object.fromEntries(
-          item.fields.map((field) => [field.title, field.details])
+      if (sectionId) {
+        const res = await axios.get(
+          `https://jdih.pisdev.my.id/api/v2/topics?section_id=${sectionId}&page=${currentPage}&per_page=${itemsPerPage}`
         );
 
-        return {
-          id: item.id,
-          title: fields["Judul Peraturan"] || "Unknown",
-          year: fields["Tahun Terbit"] || "Unknown",
-          number: fields["Nomor"] || "Unknown",
-          type: fields["Singkatan Jenis"] || "Unknown",
-          status: fields["Keterangan Status"] || "-",
-          category: fields["Kategori"] || "",
-          image: item.image,
-          slug: item.seo_url_slug_id,
-        };
-      });
+        const topics = res.data.data.data;
 
-      setDocuments(mapped);
-      setTotalItems(res.data.data.pagination.total);
-      setLastPage(res.data.data.pagination.last_page);
+        const mapped = topics.map((item) => {
+          const fields = Object.fromEntries(
+            item.fields.map((field) => [field.title, field.details])
+          );
+
+          return {
+            id: item.id,
+            title: fields["Judul Peraturan"] || "Unknown",
+            year: fields["Tahun Terbit"] || "Unknown",
+            number: fields["Nomor"] || "Unknown",
+            type: fields["Singkatan Jenis"] || "Unknown",
+            status: fields["Keterangan Status"] || "-",
+            category: fields["Kategori"] || "",
+            image: item.image,
+            slug: item.seo_url_slug_id,
+          };
+        });
+
+        setDocuments(mapped);
+        setTotalItems(res.data.data.pagination.total);
+        setLastPage(res.data.data.pagination.last_page);
+      }
     } catch (err) {
-      console.error("Failed to fetch:", err);
+      console.error("Failed to fetch topics:", err);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, [currentPage]);
+    fetchSectionId(); 
+  }, [typelaw]); 
+
+  useEffect(() => {
+    fetchData(); 
+  }, [currentPage, sectionId]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -152,7 +172,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
                   title={law.title}
                   year={law.year}
                   regulationType={law.type}
-                  onDetailClick={() => navigate(`/law/${law.slug}`)}
+                  onDetailClick={() => navigate(`/peraturan/${typelaw}/${law.slug}`)}
                   number={law.number}
                   status={law.status}
                   type={law.type}
