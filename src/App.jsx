@@ -22,6 +22,7 @@ import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
 import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
 import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
 import ArticlePage from "./pages/DokumenHukum/ArticlePage";
+import PutusanPengadilanPage from "./pages/DokumenHukum/PutusanPengadilanPage";
 
 function App() {
   return (
@@ -64,6 +65,11 @@ function App() {
               element={<ArticlePage />}
             />
             <Route path="/dokumentasi/artikel/:slug" element={<DocDetailPage />} />
+            <Route
+              path="/dokumentasi/putusan-pengadilan"
+              element={<PutusanPengadilanPage />}
+            />
+            <Route path="/dokumentasi/putusan-pengadilan/:slug" element={<DocDetailPage />} />
             {productLawData.map(({ path, title, laws }) => (
               <Route
                 key={path}
