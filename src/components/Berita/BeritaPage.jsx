@@ -118,18 +118,22 @@ export default function BeritaPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <div className="text-center mb-6">
-        <h1 className="text-xl font-semibold text-blue-800">Seputar JDIH Jawa Timur</h1>
+        <h1 className="text-xl font-semibold text-blue-800">
+          Seputar JDIH Jawa Timur
+        </h1>
       </div>
 
       <div className="bg-blue-50 p-4 rounded-lg mb-8">
-        <h2 className="text-sm font-semibold text-blue-800 px-1 mb-3">Pencarian</h2>
+        <h2 className="text-sm font-semibold text-blue-800 px-1 mb-3">
+          Pencarian
+        </h2>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
               placeholder="Cari berita disini.."
-              className="w-full pl-10 pr-4 py-2 border border-blue-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-800"
+              className="bg-white w-full pl-10 pr-4 py-2 border border-blue-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-800"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -139,7 +143,7 @@ export default function BeritaPage() {
             {!showDateInput ? (
               <button
                 type="button"
-                className="bg-white px-4 py-2 border rounded-md flex items-center justify-center gap-2"
+                className="bg-white px-4 py-2 border border-blue-600 rounded-md flex items-center justify-center gap-2"
                 onClick={() => setShowDateInput(true)}
               >
                 <span>Tanggal</span>
@@ -187,25 +191,35 @@ export default function BeritaPage() {
                   alt={berita.title}
                   className="w-full h-48 object-cover"
                   onError={(e) => {
-                    e.target.src = "/assets/berita/image113.png"
+                    e.target.src = "/assets/berita/image113.png";
                   }}
                 />
                 <div className="p-4 flex flex-col h-full">
                   <div>
-                    <div className="text-xs text-gray-500 mb-2">{formatDate(berita.date)}</div>
-                    <h3 className="text-xl font-bold leading-tight pb-2">{berita.title}</h3>
+                    <div className="text-xs text-gray-500 mb-2">
+                      {formatDate(berita.date)}
+                    </div>
+                    <h3 className="text-xl font-bold leading-tight pb-2">
+                      {berita.title}
+                    </h3>
                     <p className="text-sm text-gray-600 mb-4">
                       {berita.seo_description_id
-                        ? berita.seo_description_id.replace(/<[^>]*>/g, "").substring(0, 150) + "..."
+                        ? berita.seo_description_id
+                            .replace(/<[^>]*>/g, "")
+                            .substring(0, 150) + "..."
                         : "Tidak ada deskripsi"}
                     </p>
                   </div>
                   <Link
-                    to={`/news/detail-berita/${berita.link.startsWith("./") ? berita.link.substring(2) : berita.link}`}
+                    to={`/news/detail-berita/${
+                      berita.link.startsWith("./")
+                        ? berita.link.substring(2)
+                        : berita.link
+                    }`}
                     className="text-blue-600 text-sm font-semibold flex items-center mt-auto"
                     onClick={(e) => {
-                      e.preventDefault()
-                      handleCardClick(berita.link)
+                      e.preventDefault();
+                      handleCardClick(berita.link);
                     }}
                   >
                     Baca Selengkapnya <span className="ml-1">→</span>
@@ -235,7 +249,11 @@ export default function BeritaPage() {
               <button
                 key={index}
                 onClick={() => changePage(page)}
-                className={`px-3 py-1 rounded-md ${currentPage === page ? "bg-blue-500 text-white" : "hover:bg-gray-100"}`}
+                className={`px-3 py-1 rounded-md ${
+                  currentPage === page
+                    ? "bg-blue-500 text-white"
+                    : "hover:bg-gray-100"
+                }`}
               >
                 {page}
               </button>
@@ -254,5 +272,5 @@ export default function BeritaPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
