@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function Monographic() {
   const [books, setBooks] = useState([])
@@ -82,7 +83,7 @@ export default function Monographic() {
         </div>
 
         {/* Loading & Error */}
-        {loading && <p className="text-center text-gray-600">Loading...</p>}
+        {loading && <LoadingSpinner />}
         {error && <p className="text-center text-red-600">Error: {error}</p>}
 
         {/* Grid Buku */}

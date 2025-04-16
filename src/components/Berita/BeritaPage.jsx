@@ -4,6 +4,7 @@ import { Search, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function BeritaPage() {
   const navigate = useNavigate()
@@ -168,7 +169,7 @@ export default function BeritaPage() {
 
         {loading ? (
           <div className="text-center py-8">
-            <p>Memuat data...</p>
+      <LoadingSpinner />
           </div>
         ) : error ? (
           <div className="text-center py-8 text-red-500">

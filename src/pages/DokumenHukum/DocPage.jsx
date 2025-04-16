@@ -166,7 +166,7 @@ const DocPage = ({
               Semua Data ({totalItems})
             </div>
             {isLoading ? (
-              <span className="text-sm text-gray-500">Loading...</span>
+              <LoadingSpinner />
             ) : (
               <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
                 <Filter className="text-emerald-600 w-6 h-6" />

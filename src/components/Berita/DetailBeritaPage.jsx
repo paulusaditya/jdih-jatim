@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { Calendar, Instagram, Facebook, MessageCircle, ChevronLeftCircle } from "lucide-react"
+import LoadingSpinner from "../common/LoadingSpinner";
 
 // Proxy function to handle logo URL
 const proxiedLogo = (logo) =>
@@ -57,7 +58,7 @@ function RelatedNews({ currentArticleId }) {
   }
 
   if (loading) {
-    return <div className="text-center py-4">Memuat berita terkait...</div>
+    return <LoadingSpinner />
   }
 
   if (relatedArticles.length === 0) {
@@ -151,9 +152,7 @@ export default function DetailBeritaPage() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-6 text-center">
-        <p>Memuat data artikel...</p>
-      </div>
+      <LoadingSpinner />
     )
   }
 

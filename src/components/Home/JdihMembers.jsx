@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function JDIHNetworkMembers() {
   const [members, setMembers] = useState([]);
@@ -46,7 +47,7 @@ useEffect(() => {
 
 
 
-  if (loading) return <p className="text-center text-gray-600">Memuat...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p className="text-center text-red-600">Error: {error}</p>;
 
   const initialMembers = members.slice(0, 12);

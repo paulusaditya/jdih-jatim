@@ -8,6 +8,7 @@ import LawCard from "../../components/ProdukHukum/LawCard";
 import SearchFilter from "../../components/common/SearchFilter";
 import PopularDocument from "../../components/PopularDocument";
 
+
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
   { label: "Peraturan Terbaru", path: "/peraturan-terbaru" },
@@ -120,7 +121,7 @@ const LatestRegulationPage = () => {
               Semua Data ({totalItems})
             </div>
             {isLoading ? (
-              <span className="text-sm text-gray-500">Loading...</span>
+              <LoadingSpinner />
             ) : (
               <div className="flex gap-2 items-center px-3 w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200">
                 <Filter className="text-emerald-600 w-6 h-6" />
@@ -151,7 +152,7 @@ const LatestRegulationPage = () => {
               })
             ) : (
               <div className="text-center py-8 text-gray-500">
-                {isLoading ? "Memuat data..." : "Tidak ada data ditemukan"}
+                {isLoading ?       <LoadingSpinner /> : "Tidak ada data ditemukan"}
               </div>
             )}
           </div>

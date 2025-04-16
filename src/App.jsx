@@ -32,15 +32,18 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   const [menuData, setMenuData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://jdih.pisdev.my.id/api/v2/menus")
       .then((response) => response.json())
       .then((data) => {
         setMenuData(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Failed to fetch menu data:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -50,115 +53,92 @@ function App() {
         <ScrollToTop />
         <Header />
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
+          {loading ? (
+            // Loading Spinner bisa diganti sesuai komponen kamu
+            <div className="flex justify-center items-center h-screen">
+              <div className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
+                <div className="w-16 h-16 border-4 border-transparent text-yellow-400 text-2xl animate-spin flex items-center justify-center border-t-yellow-400 rounded-full"></div>
+              </div>
+            </div>
+          ) : (
+            <Routes>
+              <Route path="/" element={<Home />} />
 
-            {menuData.map((menu) => (
-              <React.Fragment key={menu.id}>
-                <Route
-                  path={`/${menu.link}`}
-                  element={
-                    menu.link === "news" ? (
-                      <Berita />
-                    ) : menu.link === "peraturan" ? (
-                      <LawPage data={productLawData} />
-                    ) : (
-                      <Home />
-                    )
-                  }
-                />
-                {menu.sub_menus.map((sub) => (
+              {menuData.map((menu) => (
+                <React.Fragment key={menu.id}>
                   <Route
-                    key={sub.id}
-                    path={`/${menu.link}${
-                      sub.link.startsWith("/") ? sub.link : `/${sub.link}`
-                    }`}
+                    path={`/${menu.link}`}
                     element={
-                      menu.link === "peraturan" ? (
+                      menu.link === "news" ? (
+                        <Berita />
+                      ) : menu.link === "peraturan" ? (
                         <LawPage data={productLawData} />
-                      ) : sub.link.includes("about") ? (
-                        <Profil />
-                      ) : sub.link.includes("contact") ? (
-                        <ContactPage />
-                      ) : sub.link.includes(
-                          "struktur-organisasi-jdih-jatim"
-                        ) ? (
-                        <OrganizationalChart />
-                      ) : sub.link.includes("struktur-organisasi-tim") ? (
-                        <TeamChart />
-                      ) : sub.link.includes("staatsblad") ? (
-                        <StatsbladsPage />
-                      ) : sub.link.includes("monografi") ? (
-                        <MonographyPage />
-                      ) : sub.link.includes("artikel-hukum") ? (
-                        <ArticlePage />
-                      ) : sub.link.includes("propemperda") ? (
-                        <PropemperdaPage />
-                      ) : sub.link.includes("putusan-pengadilan") ? (
-                        <PutusanPengadilanPage />
-                      ) : sub.link.includes("dokumen-langka") ? (
-                        <DokumenLangkaPage />
                       ) : (
                         <Home />
                       )
                     }
                   />
-                ))}
-              </React.Fragment>
-            ))}
+                  {menu.sub_menus.map((sub) => (
+                    <Route
+                      key={sub.id}
+                      path={`/${menu.link}${
+                        sub.link.startsWith("/") ? sub.link : `/${sub.link}`
+                      }`}
+                      element={
+                        menu.link === "peraturan" ? (
+                          <LawPage data={productLawData} />
+                        ) : sub.link.includes("about") ? (
+                          <Profil />
+                        ) : sub.link.includes("contact") ? (
+                          <ContactPage />
+                        ) : sub.link.includes("struktur-organisasi-jdih-jatim") ? (
+                          <OrganizationalChart />
+                        ) : sub.link.includes("struktur-organisasi-tim") ? (
+                          <TeamChart />
+                        ) : sub.link.includes("staatsblad") ? (
+                          <StatsbladsPage />
+                        ) : sub.link.includes("monografi") ? (
+                          <MonographyPage />
+                        ) : sub.link.includes("artikel-hukum") ? (
+                          <ArticlePage />
+                        ) : sub.link.includes("propemperda") ? (
+                          <PropemperdaPage />
+                        ) : sub.link.includes("putusan-pengadilan") ? (
+                          <PutusanPengadilanPage />
+                        ) : sub.link.includes("dokumen-langka") ? (
+                          <DokumenLangkaPage />
+                        ) : (
+                          <Home />
+                        )
+                      }
+                    />
+                  ))}
+                </React.Fragment>
+              ))}
 
-            <Route
-              path="/peraturan-terbaru"
-              element={<LatestRegulationPage />}
-            />
-            <Route path="/peraturan-terbaru/:slug" element={<LawDetailPage />} />
+              <Route path="/peraturan-terbaru" element={<LatestRegulationPage />} />
+              <Route path="/peraturan-terbaru/:slug" element={<LawDetailPage />} />
 
-            <Route
-              path="/peraturan/:slug"
-              element={<LawPage data={productLawData} />}
-            />
-            <Route
-              path="peraturan/:typelaw/:slug"
-              element={<LawDetailPage />}
-            />
+              <Route path="/peraturan/:slug" element={<LawPage data={productLawData} />} />
+              <Route path="peraturan/:typelaw/:slug" element={<LawDetailPage />} />
 
-            <Route
-              path="/site-pages/statsblads/:slug"
-              element={<DocDetailPage />}
-            />
+              <Route path="/site-pages/statsblads/:slug" element={<DocDetailPage />} />
+              <Route path="/site-pages/monografi/:slug" element={<DocDetailPage />} />
+              <Route path="/site-pages/artikel-hukum/:slug" element={<DocDetailPage />} />
+              <Route path="/site-pages/propemperda/:slug" element={<DocDetailPage />} />
+              <Route path="/site-pages/putusan-pengadilan/:slug" element={<DocDetailPage />} />
+              <Route path="/site-pages/dokumen-langka/:slug" element={<DocDetailPage />} />
 
-            <Route
-              path="/site-pages/monografi/:slug"
-              element={<DocDetailPage />}
-            />
-            <Route
-              path="/site-pages/artikel-hukum/:slug"
-              element={<DocDetailPage />}
-            />
-            <Route
-              path="/site-pages/propemperda/:slug"
-              element={<DocDetailPage />}
-            />
-            <Route
-              path="/site-pages/putusan-pengadilan/:slug"
-              element={<DocDetailPage />}
-            />
-            <Route
-              path="/site-pages/dokumen-langka/:slug"
-              element={<DocDetailPage />}
-            />
-
-            <Route
-              path="/news/detail-berita/:slug"
-              element={<DetailBerita />}
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="/news/detail-berita/:slug" element={<DetailBerita />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          )}
         </main>
         <Footer />
       </Router>
     </div>
   );
 }
+
 
 export default App;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function PropemperdaRegulations() {
   const [regulations, setRegulations] = useState([]);
@@ -27,9 +28,7 @@ export default function PropemperdaRegulations() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-blue-900">
-              Dokumen Propemperda
-            </h2>
+          <h2 className="text-3xl font-bold text-blue-900">Dokumen Propemperda</h2>
             <p className="text-gray-600">
               Koleksi Dokumen Propemperda terbaru milik Biro Hukum Provinsi Jawa
               Timur
@@ -45,7 +44,7 @@ export default function PropemperdaRegulations() {
         </div>
 
         {loading ? (
-          <p className="text-center text-gray-600">Memuat data...</p>
+      <LoadingSpinner />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {regulations.map((regulation) => (

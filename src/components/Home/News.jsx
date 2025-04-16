@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react"
 import { Link } from "react-router-dom"
+import LoadingSpinner from "../common/LoadingSpinner";
 
 const proxiedLogo = (logo) =>
   logo?.startsWith("http://")
@@ -79,7 +80,7 @@ export default function NewsSection() {
             </h2>
           </div>
           <div className="h-64 flex items-center justify-center">
-            <div className="animate-pulse text-gray-500">Memuat berita...</div>
+          <LoadingSpinner />
           </div>
         </div>
       </section>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function JDIHUniversityMembers() {
   const [members, setMembers] = useState([]);
@@ -29,7 +30,7 @@ export default function JDIHUniversityMembers() {
         </h2>
 
         {loading ? (
-          <p className="text-center text-gray-600">Memuat data...</p>
+      <LoadingSpinner />
         ) : (
           <div className="grid gap-6 justify-items-center grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {members.map((member) => (
