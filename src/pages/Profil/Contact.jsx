@@ -3,8 +3,8 @@ import Breadcrumbs from "../../components/common/Breadcrumbs";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
-  { label: "Profil", path: "/profil" },
-  { label: "Kontak", path: "/kontak" },
+  { label: "Profil", path: "/site-pages" },
+  { label: "Kontak", path: "/contact" },
 ];
 
 export default function Contact() {
