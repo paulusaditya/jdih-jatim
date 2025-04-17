@@ -30,7 +30,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://jdih.p isdev.my.id/api/v2/menus")
+    fetch("https://jdih.pisdev.my.id/api/v2/menus")
       .then((response) => response.json())
       .then((data) => {
         setMenuData(data);
@@ -118,11 +118,11 @@ function App() {
                 path="/peraturan-terbaru/:slug"
                 element={<LawDetailPage />}
               />
-              <Route path="/peraturan/:slug" element={<LawPage />} />
               <Route
-                path="peraturan/:typelaw/:slug"
+                path="/peraturan/:typelaw/:slug"
                 element={<LawDetailPage />}
               />
+              <Route path="/peraturan/:typelaw" element={<LawPage />} />
               <Route
                 path="/site-pages/statsblads/:slug"
                 element={<DocDetailPage />}

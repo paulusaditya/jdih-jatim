@@ -15,6 +15,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [lastPage, setLastPage] = useState(1);
+  const [sectionSlug, setSectionSlug] = useState("");
   const [filters, setFilters] = useState({
     number: "",
     status: "",
@@ -23,69 +24,62 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
     year: "",
     searchQuery: "",
   });
-  const [sectionId, setSectionId] = useState(null);
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
-  const { slug: typelaw } = useParams();
+  const { typelaw } = useParams();
+  const decodedTypeLaw = decodeURIComponent(typelaw?.trim() || "");
 
-  const fetchSectionId = async () => {
-    try {
-      const res = await axios.get(
-        `https://jdih.pisdev.my.id/api/v2/sections?slug=${typelaw}`
-      );
-      const sections = res.data.data;
-      if (sections.length > 0) {
-        setSectionId(sections[0].id);
-      }
-    } catch (err) {
-      console.error("Failed to fetch section ID:", err);
-    }
-  };
 
-  const fetchData = async () => {
-    try {
-      if (sectionId) {
+  useEffect(() => {
+    const fetchSectionAndData = async () => {
+      try {
         const res = await axios.get(
-          `https://jdih.pisdev.my.id/api/v2/topics?section_id=${sectionId}&page=${currentPage}&per_page=${itemsPerPage}`
+          `https://jdih.pisdev.my.id/api/v2/sections?slug=${decodedTypeLaw}`
         );
+        const sections = res.data.data;
 
-        const topics = res.data.data.data;
+        if (sections.length > 0) {
+          const sectionId = sections[0].id;
+          setSectionSlug(sections[0].slug); 
 
-        const mapped = topics.map((item) => {
-          const fields = Object.fromEntries(
-            item.fields.map((field) => [field.title, field.details])
+          const dataRes = await axios.get(
+            `https://jdih.pisdev.my.id/api/v2/topics?section_id=${sectionId}&page=${currentPage}&per_page=${itemsPerPage}&category=${filters.category}&type=${filters.type}&year=${filters.year}&searchQuery=${filters.searchQuery}`
           );
 
-          return {
-            id: item.id,
-            title: fields["Judul Peraturan"] || "Unknown",
-            year: fields["Tahun Terbit"] || "Unknown",
-            number: fields["Nomor"] || "Unknown",
-            type: fields["Singkatan Jenis"] || "Unknown",
-            status: fields["Keterangan Status"] || "-",
-            category: fields["Kategori"] || "",
-            image: item.image,
-            slug: item.seo_url_slug_id,
-          };
-        });
+          const topics = dataRes.data.data.data;
+          const mapped = topics.map((item) => {
+            const fields = Object.fromEntries(
+              item.fields.map((field) => [field.title, field.details])
+            );
 
-        setDocuments(mapped);
-        setTotalItems(res.data.data.pagination.total);
-        setLastPage(res.data.data.pagination.last_page);
+            return {
+              id: item.id,
+              title: fields["Judul Peraturan"] || "Unknown",
+              year: fields["Tahun Terbit"] || "Unknown",
+              number: fields["Nomor"] || "Unknown",
+              type: fields["Singkatan Jenis"] || "Unknown",
+              status: fields["Keterangan Status"] || "-",
+              category: fields["Kategori"] || "",
+              image: item.image,
+              slug: item.seo_url_slug_id,
+            };
+          });
+
+          setDocuments(mapped);
+          setTotalItems(dataRes.data.data.pagination.total);
+          setLastPage(dataRes.data.data.pagination.last_page);
+        } else {
+          setDocuments([]);
+          setTotalItems(0);
+        }
+      } catch (err) {
+        console.error("Gagal ambil data:", err);
       }
-    } catch (err) {
-      console.error("Failed to fetch topics:", err);
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchSectionId();
-  }, [typelaw]);
-
-  useEffect(() => {
-    fetchData();
-  }, [currentPage, sectionId]);
+    fetchSectionAndData();
+  }, [decodedTypeLaw, currentPage, filters]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -96,8 +90,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   };
 
   const handleSearch = () => {
-    setCurrentPage(1);
-    fetchData();
+    setCurrentPage(1); // Reset ke halaman pertama
   };
 
   const filteredLaws = documents.filter((law) => {
@@ -128,7 +121,6 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
 
   return (
     <>
-      {/* <Breadcrumbs paths={customBreadcrumbs} /> */}
       <div className="p-8 mx-0 md:mx-8 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <SearchFilter
@@ -174,7 +166,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
                   year={law.year}
                   regulationType={law.type}
                   onDetailClick={() =>
-                    navigate(`/peraturan/${typelaw}/${law.slug}`)
+                    navigate(`/peraturan/${sectionSlug}/${law.slug}`) 
                   }
                   number={law.number}
                   status={law.status}
