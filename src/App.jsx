@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil/Profil";
 import ContactPage from "./pages/Profil/Contact";
@@ -27,7 +22,7 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 import productLawData from "./data/productLawData";
-import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage"
+import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
@@ -35,7 +30,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/menus")
+    fetch("https://jdih.p isdev.my.id/api/v2/menus")
       .then((response) => response.json())
       .then((data) => {
         setMenuData(data);
@@ -54,7 +49,6 @@ function App() {
         <Header />
         <main className="flex-grow">
           {loading ? (
-            // Loading Spinner bisa diganti sesuai komponen kamu
             <div className="flex justify-center items-center h-screen">
               <div className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
                 <div className="w-16 h-16 border-4 border-transparent text-yellow-400 text-2xl animate-spin flex items-center justify-center border-t-yellow-400 rounded-full"></div>
@@ -63,7 +57,6 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={<Home />} />
-
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
                   <Route
@@ -72,7 +65,7 @@ function App() {
                       menu.link === "news" ? (
                         <Berita />
                       ) : menu.link === "peraturan" ? (
-                        <LawPage data={productLawData} />
+                        <LawPage />
                       ) : (
                         <Home />
                       )
@@ -86,12 +79,14 @@ function App() {
                       }`}
                       element={
                         menu.link === "peraturan" ? (
-                          <LawPage data={productLawData} />
+                          <LawPage />
                         ) : sub.link.includes("about") ? (
                           <Profil />
                         ) : sub.link.includes("contact") ? (
                           <ContactPage />
-                        ) : sub.link.includes("struktur-organisasi-jdih-jatim") ? (
+                        ) : sub.link.includes(
+                            "struktur-organisasi-jdih-jatim"
+                          ) ? (
                           <OrganizationalChart />
                         ) : sub.link.includes("struktur-organisasi-tim") ? (
                           <TeamChart />
@@ -115,21 +110,47 @@ function App() {
                   ))}
                 </React.Fragment>
               ))}
-
-              <Route path="/peraturan-terbaru" element={<LatestRegulationPage />} />
-              <Route path="/peraturan-terbaru/:slug" element={<LawDetailPage />} />
-
-              <Route path="/peraturan/:slug" element={<LawPage data={productLawData} />} />
-              <Route path="peraturan/:typelaw/:slug" element={<LawDetailPage />} />
-
-              <Route path="/site-pages/statsblads/:slug" element={<DocDetailPage />} />
-              <Route path="/site-pages/monografi/:slug" element={<DocDetailPage />} />
-              <Route path="/site-pages/artikel-hukum/:slug" element={<DocDetailPage />} />
-              <Route path="/site-pages/propemperda/:slug" element={<DocDetailPage />} />
-              <Route path="/site-pages/putusan-pengadilan/:slug" element={<DocDetailPage />} />
-              <Route path="/site-pages/dokumen-langka/:slug" element={<DocDetailPage />} />
-
-              <Route path="/news/detail-berita/:slug" element={<DetailBerita />} />
+              <Route
+                path="/peraturan-terbaru"
+                element={<LatestRegulationPage />}
+              />
+              <Route
+                path="/peraturan-terbaru/:slug"
+                element={<LawDetailPage />}
+              />
+              <Route path="/peraturan/:slug" element={<LawPage />} />
+              <Route
+                path="peraturan/:typelaw/:slug"
+                element={<LawDetailPage />}
+              />
+              <Route
+                path="/site-pages/statsblads/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/monografi/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/artikel-hukum/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/propemperda/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/putusan-pengadilan/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/dokumen-langka/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/news/detail-berita/:slug"
+                element={<DetailBerita />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           )}
@@ -139,6 +160,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;

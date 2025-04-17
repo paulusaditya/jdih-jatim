@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Filter } from "lucide-react";
 import axios from "axios";
+
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import Kategori from "../../components/Kategori";
@@ -26,7 +27,7 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
-  const { slug: typelaw } = useParams(); 
+  const { slug: typelaw } = useParams();
 
   const fetchSectionId = async () => {
     try {
@@ -79,11 +80,11 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   };
 
   useEffect(() => {
-    fetchSectionId(); 
-  }, [typelaw]); 
+    fetchSectionId();
+  }, [typelaw]);
 
   useEffect(() => {
-    fetchData(); 
+    fetchData();
   }, [currentPage, sectionId]);
 
   const handleChange = (e) => {
@@ -172,7 +173,9 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
                   title={law.title}
                   year={law.year}
                   regulationType={law.type}
-                  onDetailClick={() => navigate(`/peraturan/${typelaw}/${law.slug}`)}
+                  onDetailClick={() =>
+                    navigate(`/peraturan/${typelaw}/${law.slug}`)
+                  }
                   number={law.number}
                   status={law.status}
                   type={law.type}
