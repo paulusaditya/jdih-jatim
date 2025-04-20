@@ -68,14 +68,11 @@ const DocPage = ({
       let mappedDocs = [];
 
       if (Array.isArray(result.data)) {
-        // === Data flat seperti Monografi ===
         rawDocs = result.data;
 
         const docsWithSlug = await Promise.all(
           rawDocs.map(async (item) => {
-            if (customMap) {
-              return customMap(item);
-            }
+            if (customMap) return customMap(item);
             try {
               const detailRes = await fetch(
                 `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
@@ -85,10 +82,27 @@ const DocPage = ({
                 id: item.id,
                 slug: detailData.data?.seo_url_slug_id || item.id,
                 title: item.title || "Tanpa Judul",
-                year: "-",
-                status: "-",
-                category: "-",
-                image: proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
+                year:
+                  detailData.data?.fields?.find(
+                    (f) => f.title === "Tahun Terbit"
+                  )?.details || "-",
+                status:
+                  detailData.data?.fields?.find(
+                    (f) => f.title === "Subjek Artikel"
+                  )?.details || "-",
+                category:
+                  detailData.data?.fields?.find(
+                    (f) => f.title === "T.E.U Badan/Pengarang"
+                  )?.details || "-",
+                bidang: detailData.data?.fields?.find(
+                  (f) => f.title === "Bidang Hukum"
+                )?.details,
+                nomorPutusan: detailData.data?.fields?.find(
+                  (f) => f.title === "Nomor Putusan"
+                )?.details,
+                image:
+                  proxiedLogo(item.image) ||
+                  "http://via.placeholder.com/100x150",
               };
             } catch (err) {
               return {
@@ -98,7 +112,9 @@ const DocPage = ({
                 year: "-",
                 status: "-",
                 category: "-",
-                image: proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
+                image:
+                  proxiedLogo(item.image) ||
+                  "http://via.placeholder.com/100x150",
               };
             }
           })
@@ -107,22 +123,26 @@ const DocPage = ({
         mappedDocs = docsWithSlug;
         setTotalItems(result.pagination?.total || rawDocs.length || 0);
       } else {
-        // === Data nested seperti dokumen hukum biasa ===
         rawDocs = result.data?.data || [];
 
         mappedDocs = rawDocs.map((item) => {
           const fields = item.fields || [];
           const getField = (fieldName) =>
-            fields.find((f) => f.title === fieldName)?.details || "-";
+            fields.find((f) => f.title === fieldName)?.details;
 
           return {
             id: item.id,
             slug: item.seo_url_slug_id,
             title: item.title || "Tanpa Judul",
             year: getField("Tahun Terbit"),
-            status: getField("Subjek Artikel"),
-            category: getField("T.E.U Badan/Pengarang"),
-            image: proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
+            status: getField("Subjek Artikel") || getField("Subjek"),
+            category:
+              getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
+            bidang: getField("Bidang Hukum"),
+            nomorPutusan:
+              getField("Nomor Putusan") || getField("Nomor Panggil"),
+            image:
+              proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
           };
         });
 
@@ -183,10 +203,10 @@ const DocPage = ({
                   year={doc.year}
                   status={doc.status}
                   category={doc.category}
+                  bidang={doc.bidang}
+                  nomorPutusan={doc.nomorPutusan}
                   image={doc.image}
-                  onDetailClick={() =>
-                    navigate(`${detailPath}/${doc.slug}`)
-                  }
+                  onDetailClick={() => navigate(`${detailPath}/${doc.slug}`)}
                 />
               ))
             ) : (

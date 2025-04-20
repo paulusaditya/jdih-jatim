@@ -16,12 +16,23 @@ function StatusBadge({ children }) {
   );
 }
 
-function DocCard({ title, year, status, category, onDetailClick, image }) {
+function DocCard({
+  title,
+  year,
+  status,
+  category,
+  bidang,
+  nomorPutusan,
+  onDetailClick,
+  image,
+}) {
   return (
     <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5 max-md:max-w-full">
       <img
-        src={image ||
-          "https://jdih.pisdev.my.id/uploads/default_document_image.png"}
+        src={
+          image ||
+          "https://jdih.pisdev.my.id/uploads/default_document_image.png"
+        }
         alt={title}
         className="w-[100px] h-[151px] rounded-lg object-cover md:mr-4"
       />
@@ -30,10 +41,11 @@ function DocCard({ title, year, status, category, onDetailClick, image }) {
           {title}
         </div>
         <div className="flex flex-wrap gap-2 justify-start items-center self-start text-sm text-left text-blue-950">
-          {" "}
-          <StatusBadge>{status}</StatusBadge>
-          <StatusBadge>{year}</StatusBadge>
-          <StatusBadge>{category}</StatusBadge>
+          {status && <StatusBadge>{status}</StatusBadge>}
+          {year && <StatusBadge>{year}</StatusBadge>}
+          {category && <StatusBadge>{category}</StatusBadge>}
+          {bidang && <StatusBadge>{bidang}</StatusBadge>}
+          {nomorPutusan && <StatusBadge>{nomorPutusan}</StatusBadge>}
         </div>
       </div>
       <div
