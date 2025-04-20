@@ -225,7 +225,7 @@ const DocPage = ({
             onPageChange={handlePageChange}
           />
         </div>
-        <div className="w-full mt-6">
+        <div className="w-full">
           <PopularDocument />
         </div>
       </div>
