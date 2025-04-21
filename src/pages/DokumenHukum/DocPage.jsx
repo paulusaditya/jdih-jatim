@@ -134,13 +134,13 @@ const DocPage = ({
             id: item.id,
             slug: item.seo_url_slug_id,
             title: item.title || "Tanpa Judul",
-            year: getField("Tahun Terbit"),
+            year: getField("Tahun Terbit") || getField("Tahun"),
             status: getField("Subjek Artikel") || getField("Subjek"),
             category:
               getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
             bidang: getField("Bidang Hukum"),
             nomorPutusan:
-              getField("Nomor Putusan") || getField("Nomor Panggil"),
+              getField("Nomor Putusan") || getField("Nomor Induk"),
             image:
               proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
           };
