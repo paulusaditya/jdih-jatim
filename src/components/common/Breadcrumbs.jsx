@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ChevronRight, Home } from "lucide-react";
 
 const Breadcrumbs = ({ paths }) => {
@@ -15,7 +16,15 @@ const Breadcrumbs = ({ paths }) => {
                 : "text-blue-600 hover:text-blue-800 transition duration-200"
             }`}
           >
-            {path.label}
+            {index === 0 ? (
+              // Hanya Beranda yang bisa diklik
+              <Link to={path.path} className="hover:underline">
+                {path.label}
+              </Link>
+            ) : (
+              // Breadcrumb lainnya hanya teks, tidak bisa diklik
+              <span>{path.label}</span>
+            )}
           </span>
         </div>
       ))}
