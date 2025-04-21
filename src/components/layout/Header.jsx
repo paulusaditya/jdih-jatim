@@ -56,16 +56,22 @@ export default function Header() {
               className="w-auto h-8 sm:h-10"
               src="/assets/nav-logo/logo1.png"
               alt="Logo 1"
+              width={32} 
+              height={32} 
             />
             <img
               className="w-auto h-8 sm:h-10"
               src="/assets/nav-logo/logo2.png"
               alt="Logo 2"
+              width={32} 
+              height={32} 
             />
             <img
               className="w-auto h-8 sm:h-10"
               src="/assets/nav-logo/logo3.png"
               alt="Logo 3"
+              width={32} 
+              height={32}
             />
             <div>
               <div className="text-blue-900 text-[10px] sm:text-xs">

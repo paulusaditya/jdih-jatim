@@ -41,6 +41,8 @@ function PopularDocument() {
           src="/assets/logo-biro-hukum.png"
           alt="Logo Biro Hukum"
           className="w-full max-w-xs h-auto"
+          width="200"
+          height="100"
         />
       </div>
     </div>
