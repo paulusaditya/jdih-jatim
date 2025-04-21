@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Main() {
   const [banners, setBanners] = useState([]);
@@ -13,7 +13,7 @@ export default function Main() {
       : logo;
 
   useEffect(() => {
-    fetch('http://54.169.231.19/api/v2/home/banners')
+    fetch("http://54.169.231.19/api/v2/home/banners")
       .then((res) => res.json())
       .then((data) => setBanners(data.data || []));
   }, []);
@@ -50,9 +50,9 @@ export default function Main() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1, ease: 'easeInOut' }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
               className="w-full h-auto object-contain"
-              style={{ maxWidth: '100%' }}
+              style={{ maxWidth: "100%" }}
             />
           )}
         </AnimatePresence>
@@ -82,7 +82,7 @@ export default function Main() {
           <button
             key={index}
             className={`w-3 h-3 rounded-full ${
-              index === activeIndex ? 'bg-white' : 'bg-white/50'
+              index === activeIndex ? "bg-white" : "bg-white/50"
             } transition-all duration-300`}
             onClick={() => setActiveIndex(index)}
           />
