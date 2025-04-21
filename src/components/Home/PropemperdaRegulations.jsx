@@ -1,63 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
-import LoadingSpinner from "../common/LoadingSpinner";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-export default function PropemperdaRegulations() {
-  const [regulations, setRegulations] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("https://jdih.pisdev.my.id/api/v2/home/propemperda")
-      .then((response) => {
-        const shuffledData = shuffleArray(response.data.data || []); // Acak data
-        setRegulations(shuffledData.slice(0, 3)); // Ambil 3 data acak
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  return (
-    <section className="py-8 px-4 md:px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-          <h2 className="text-3xl font-bold text-blue-900">Dokumen Propemperda</h2>
-            <p className="text-gray-600">
-              Koleksi Dokumen Propemperda terbaru milik Biro Hukum Provinsi Jawa
-              Timur
-            </p>
-          </div>
-          <Link
-            to="/site-pages/propemperda"
-            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
-          >
-            <span className="hidden md:inline">LIHAT SEMUA</span>
-            <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
-          </Link>
-        </div>
-
-        {loading ? (
-      <LoadingSpinner />
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {regulations.map((regulation) => (
-              <RegulationCard key={regulation.id} regulation={regulation} />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-// Fungsi untuk mengacak urutan array
 function shuffleArray(array) {
   return array
     .map((item) => ({ item, sort: Math.random() }))
@@ -65,52 +9,109 @@ function shuffleArray(array) {
     .map(({ item }) => item);
 }
 
-function RegulationCard({ regulation }) {
+export default function PropemperdaRegulations() {
+  const [regulations, setRegulations] = useState([]);
+  const [sectionTitle, setSectionTitle] = useState("");
+  const [sectionDesc, setSectionDesc] = useState("");
+
+  useEffect(() => {
+    fetch("https://jdih.pisdev.my.id/api/v2/home/propemperda")
+      .then((res) => res.json())
+      .then(async (data) => {
+        setSectionTitle(data.title);
+        setSectionDesc(data.description);
+
+        const shuffled = shuffleArray(data.data || []).slice(0, 3);
+
+        const regulationsWithSlugs = await Promise.all(
+          shuffled.map(async (reg) => {
+            try {
+              const res = await fetch(
+                `https://jdih.pisdev.my.id/api/v2/topics/${reg.id}`
+              );
+              const topicData = await res.json();
+              const slug = topicData?.data?.seo_url_slug_id || "default-slug";
+              return { ...reg, slug };
+            } catch (error) {
+              console.error("Failed to fetch slug for id:", reg.id);
+              return { ...reg, slug: "default-slug" };
+            }
+          })
+        );
+
+        setRegulations(regulationsWithSlugs);
+      })
+      .catch((err) => console.error("Failed to fetch data:", err));
+  }, []);
+
   return (
-    <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+    <section className="py-8 px-4 md:px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-blue-900">{sectionTitle}</h2>
+            <p className="text-gray-600">{sectionDesc}</p>
+          </div>
+          <Link
+            to="/site-pages/propemperda"
+            className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-600 rounded px-4 py-2 transition-colors md:px-4 md:py-2"
+          >
+            <span className="hidden md:inline">LIHAT SEMUA</span>
+            <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {regulations.map((regulation) => (
+            <RegulationCard key={regulation.id} regulation={regulation} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RegulationCard({ regulation }) {
+  const getField = (keyword) => {
+    const field = regulation.fields.find((f) =>
+      f.title.includes(keyword)
+    );
+    return field ? field.details : "-";
+  };
+
+  return (
+    <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 leading-tight mb-3">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">
           {regulation.title}
         </h3>
 
-        <div className="text-sm text-gray-600 space-y-6 mb-4">
+        <div className="space-y-2 mb-6 text-sm">
           <RegulationDetail
-            label="Tahun Promperda"
-            value={
-              regulation.fields?.find((f) => f.title.includes("Tahun"))
-                ?.details || "-"
-            }
+            label="Tahun Propemperda"
+            value={getField("Tahun")}
           />
           <RegulationDetail
             label="Tanggal Rapat Pembahasan"
-            value={
-              regulation.fields?.find((f) =>
-                f.title.includes("Tanggal Rapat Pembahasan")
-              )?.details || "-"
-            }
+            value={getField("Tanggal Rapat Pembahasan")}
           />
           <RegulationDetail
             label="Keterangan Rapat Pembahasan"
-            value={
-              regulation.fields?.find((f) =>
-                f.title.includes("Keterangan Rapat Pembahasan")
-              )?.details || "-"
-            }
+            value={getField("Keterangan Rapat Pembahasan")}
           />
           <RegulationDetail
             label="Tahapan"
-            value={
-              regulation.fields?.find((f) => f.title.includes("Tahapan"))
-                ?.details || "-"
-            }
+            value={getField("Tahapan")}
           />
         </div>
       </div>
 
       <div className="mt-auto pt-2">
         <Link
-          to={regulation.link}
-          className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
+          to={regulation.slug ? `/site-pages/propemperda/${regulation.slug}` : "#"}
+          className={`flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm ${
+            !regulation.slug && "pointer-events-none opacity-50"
+          }`}
         >
           Lihat Selengkapnya <ArrowUpRight className="ml-1 h-4 w-4" />
         </Link>
@@ -121,8 +122,8 @@ function RegulationCard({ regulation }) {
 
 function RegulationDetail({ label, value }) {
   return (
-    <div className="flex justify-between">
-      <span className="text-gray-500">{label}:</span>
+    <div className="flex justify-between text-sm">
+      <span className="text-gray-600">{label}</span>
       <span className="text-gray-900 font-medium">{value}</span>
     </div>
   );
