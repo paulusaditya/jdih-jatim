@@ -9,20 +9,27 @@ export default function Main() {
 
   const proxiedLogo = (logo) =>
     logo?.startsWith("http://")
-      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
+      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}` // Proxing gambar
       : logo;
 
   useEffect(() => {
-    fetch("http://54.169.231.19/api/v2/home/banners")
+    // Menggunakan proxy AllOrigins untuk request API yang aman
+    fetch(
+      "https://api.allorigins.win/get?url=" +
+        encodeURIComponent("http://54.169.231.19/api/v2/home/banners")
+    )
       .then((res) => res.json())
-      .then((data) => setBanners(data.data || []));
+      .then((data) => {
+        const parsed = JSON.parse(data.contents);
+        setBanners(parsed.data || []);
+      });
   }, []);
 
   useEffect(() => {
     if (banners.length === 0) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % banners.length);
-    }, 7000); // ⏱️ 7 detik
+    }, 7000); 
     return () => clearInterval(interval);
   }, [banners]);
 
@@ -34,6 +41,12 @@ export default function Main() {
     setActiveIndex((prev) => (prev + 1) % banners.length);
   };
 
+  const handleBannerClick = (link) => {
+    if (link) {
+      window.open(link, "_blank");
+    }
+  };
+
   return (
     <div
       className="w-full relative overflow-hidden"
@@ -43,17 +56,21 @@ export default function Main() {
       <div className="w-full flex justify-center">
         <AnimatePresence mode="wait">
           {banners.length > 0 && (
-            <motion.img
+            <motion.div
               key={banners[activeIndex].id}
-              src={proxiedLogo(banners[activeIndex].image)}
-              alt={banners[activeIndex].title}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="w-full h-auto object-contain"
-              style={{ maxWidth: "100%" }}
-            />
+              className="w-full h-auto"
+            >
+              <img
+                src={proxiedLogo(banners[activeIndex].image)}
+                alt={banners[activeIndex].title}
+                className="w-full h-auto object-contain cursor-pointer"
+                onClick={() => handleBannerClick(banners[activeIndex].link)} // Tangkap klik dan buka link
+              />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
