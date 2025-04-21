@@ -147,6 +147,11 @@ function App() {
               <Route
                 path="/site-pages/dokumen-langka/:slug"
                 element={<DocDetailPage />}
+                />
+
+              <Route
+                path="/dokumen-populer/:slug"
+                element={<DocDetailPage />}
               />
               <Route
                 path="/news/detail-berita/:slug"

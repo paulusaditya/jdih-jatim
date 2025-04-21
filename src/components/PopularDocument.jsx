@@ -1,52 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const documents = [
-  {
-    id: 1,
-    title:
-      "Peraturan Daerah Provinsi Jawa Timur Nomor 10 Tahun 2023 tentang Rencana Tata Ruang Wilayah Provinsi Jawa Timur Tahun 2023-2043",
-  },
-  {
-    id: 2,
-    title:
-      "Peraturan Daerah Provinsi Jawa Timur Nomor 11 Tahun 2023 tentang Rencana Pembangunan Jangka Menengah Daerah",
-  },
-  {
-    id: 3,
-    title:
-      "Peraturan Daerah Provinsi Jawa Timur Nomor 12 Tahun 2023 tentang Pengelolaan Sampah",
-  },
-];
+const API_BASE = "https://jdih.pisdev.my.id/api/v2";
 
-function PopularDocument() {
+const PopularDocument = () => {
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getPopularDocuments = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/most-viewed-by-section-id/15`);
+        const { data } = await res.json();
+        const topThree = data.slice(0, 3);
+        setDocuments(topThree);
+      } catch (err) {
+        console.error("Failed to fetch popular documents:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getPopularDocuments();
+  }, []);
+
   return (
     <div className="flex flex-col w-full max-w-[395px] mx-auto">
-      <section className="flex flex-col px-5 pt-6 pb-3 w-full text-sm md:text-base font-semibold rounded-lg bg-zinc-100 text-zinc-800 shadow-md">
+      <section className="px-5 pt-6 pb-3 rounded-lg bg-zinc-100 text-zinc-800 shadow-md">
         <h2 className="text-lg md:text-xl font-bold text-sky-900 mb-2">
-          Dokumen Terpopuler
+          Dokumen Populer
         </h2>
-        <ul className="flex flex-col mt-3 w-full leading-6">
-          {documents.map((doc) => (
-            <li
-              key={doc.id}
-              className="flex gap-2 items-start py-3 w-full text-left"
-            >
-              <div className="flex-1 min-w-0 break-words">{doc.title}</div>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ul className="mt-3 space-y-3 text-sm md:text-base font-semibold leading-6">
+            {documents.map((doc, idx) => (
+              <li key={idx} className="break-words">
+                <Link to={`/dokumen-populer/${doc.slug}`}>{doc.title}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
       <div className="mt-6 flex justify-center px-5">
         <img
           src="/assets/logo-biro-hukum.png"
           alt="Logo Biro Hukum"
           className="w-full max-w-xs h-auto"
-          width="200"
-          height="100"
+          width={200}
+          height={100}
         />
       </div>
     </div>
   );
-}
+};
 
 export default PopularDocument;
