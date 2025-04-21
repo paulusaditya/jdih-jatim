@@ -22,7 +22,7 @@ const typeLabelMap = {
   monografi: "Monografi",
 };
 
-const DocDetailPage = () => {
+const DocDetailPage = ({ customSidebar }) => {
   const { slug, type } = useParams();
   const documentLabel = typeLabelMap[type] || "Dokumen";
   const [documentTitle, setDocumentTitle] = useState("");
@@ -67,8 +67,8 @@ const DocDetailPage = () => {
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="p-16 bg-white flex flex-col md:flex-row gap-6">
-        <div className="flex-1">
+      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-2">
           {type === "monografi" ? (
             isLoading ? (
               <p className="text-gray-500">Memuat detail...</p>
@@ -93,10 +93,8 @@ const DocDetailPage = () => {
             <DetailDocCard docId={slug} onTitleFetched={setDocumentTitle} />
           )}
         </div>
-        <div className="w-full md:w-1/3">
-          <div className="mt-6">
-            <PopularDocument />
-          </div>
+        <div className="w-full">
+          {customSidebar ? customSidebar : <PopularDocument />}
         </div>
       </div>
     </>

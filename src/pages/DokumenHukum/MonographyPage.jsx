@@ -1,4 +1,5 @@
 import DocPage from "./DocPage";
+import PopularDocumentMonography from "../../components/PopularDocumentMonography";
 
 const MonographyPage = () => (
   <DocPage
@@ -30,7 +31,7 @@ const MonographyPage = () => (
     includeStatus={false}
     includeCategory={false}
     detailPath="/site-pages/monografi"
-    dataKey="data"
+    customSidebar={<PopularDocumentMonography />} // ini bagian yang kamu update
   />
 );
 

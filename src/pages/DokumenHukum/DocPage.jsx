@@ -24,6 +24,7 @@ const DocPage = ({
   includeCategory = false,
   detailPath = "",
   customMap = null,
+  customSidebar = null, // <-- Tambahan prop di sini
 }) => {
   const [documents, setDocuments] = useState([]);
   const [title, setTitle] = useState(pageTitle);
@@ -225,8 +226,9 @@ const DocPage = ({
             onPageChange={handlePageChange}
           />
         </div>
+
         <div className="w-full">
-          <PopularDocument />
+          {customSidebar ? customSidebar : <PopularDocument />}
         </div>
       </div>
     </>

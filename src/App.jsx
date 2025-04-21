@@ -24,6 +24,7 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import productLawData from "./data/productLawData";
 import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import PopularDocumentMonography from "./components/PopularDocumentMonography";
 
 function App() {
   const [menuData, setMenuData] = useState([]);
@@ -129,7 +130,7 @@ function App() {
               />
               <Route
                 path="/site-pages/monografi/:slug"
-                element={<DocDetailPage />}
+                element={<DocDetailPage customSidebar={<PopularDocumentMonography />} />}
               />
               <Route
                 path="/site-pages/artikel-hukum/:slug"
