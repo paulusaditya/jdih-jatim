@@ -6,7 +6,7 @@ import DetailDocCard from "../../components/DokumenHukum/DetailDocCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
-// Fungsi untuk konversi slug jadi judul (fallback)
+// Fungsi untuk konversi slug jadi judul fallback
 const formatSlug = (slug) => {
   return slug
     .split("-")
@@ -14,24 +14,44 @@ const formatSlug = (slug) => {
     .join(" ");
 };
 
-// Mapping tipe dokumen ke label tampilan
-const typeLabelMap = {
-  propemperda: "Propemperda",
-  statsblad: "Statsblad",
-  peraturan: "Peraturan",
-  monografi: "Monografi",
+// Mapping type ke label dan path breadcrumbs
+const breadcrumbMap = {
+  statsblad: {
+    label: "Statsblad",
+    path: "/site-pages/statsblad",
+  },
+  monografi: {
+    label: "Monografi",
+    path: "/site-pages/monografi",
+  },
+  artikel: {
+    label: "Artikel",
+    path: "/site-pages/artikel",
+  },
+  propemperda: {
+    label: "Propemperda",
+    path: "/site-pages/propemperda",
+  },
+  putusanpengadilan: {
+    label: "Putusan Pengadilan",
+    path: "/site-pages/putusan-pengadilan",
+  },
+  dokumenlangka: {
+    label: "Dokumen Langka",
+    path: "/site-pages/dokumen-langka",
+  },
 };
 
 const DocDetailPage = ({ customSidebar }) => {
-  const { slug, type } = useParams();
-  const documentLabel = typeLabelMap[type] || "Dokumen";
+  const { slug } = useParams();
+  const type = window.location.pathname.split("/")[2];
   const [documentTitle, setDocumentTitle] = useState("");
   const [monografiData, setMonografiData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: documentLabel, path: `/site-pages/${type}` },
+    breadcrumbMap[type] || { label: "Dokumen", path: `/site-pages/${type}` },
     {
       label: documentTitle || formatSlug(slug),
       path: `/site-pages/${type}/${slug}`,
