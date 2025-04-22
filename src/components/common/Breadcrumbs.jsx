@@ -9,23 +9,16 @@ const Breadcrumbs = ({ paths }) => {
           {index === 0 && <Home size={16} className="text-blue-600" />}
           {index > 0 && <ChevronRight size={14} className="text-gray-800" />}
 
-          <span
+          <Link
+            to={path.path}
             className={`${
               index === paths.length - 1
                 ? "text-black"
-                : "text-blue-600 hover:text-blue-800 transition duration-200"
-            }`}
+                : "text-blue-600 hover:text-blue-800"
+            } hover:underline transition duration-200`}
           >
-            {index === 0 ? (
-              // Hanya Beranda yang bisa diklik
-              <Link to={path.path} className="hover:underline">
-                {path.label}
-              </Link>
-            ) : (
-              // Breadcrumb lainnya hanya teks, tidak bisa diklik
-              <span>{path.label}</span>
-            )}
-          </span>
+            {path.label}
+          </Link>
         </div>
       ))}
     </nav>

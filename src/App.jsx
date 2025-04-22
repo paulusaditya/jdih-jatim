@@ -10,7 +10,7 @@ import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
 import DocDetailPage from "./pages/DokumenHukum/DocDetailPage";
 import MonographyPage from "./pages/DokumenHukum/MonographyPage";
-import StatsbladsPage from "./pages/DokumenHukum/StatsbladsPage";
+import StatsbladPage from "./pages/DokumenHukum/StatsbladPage";
 import ArticlePage from "./pages/DokumenHukum/ArticlePage";
 import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
 import PutusanPengadilanPage from "./pages/DokumenHukum/PutusanPengadilanPage";
@@ -92,7 +92,7 @@ function App() {
                         ) : sub.link.includes("struktur-organisasi-tim") ? (
                           <TeamChart />
                         ) : sub.link.includes("staatsblad") ? (
-                          <StatsbladsPage />
+                          <StatsbladPage />
                         ) : sub.link.includes("monografi") ? (
                           <MonographyPage />
                         ) : sub.link.includes("artikel-hukum") ? (
@@ -125,7 +125,7 @@ function App() {
               />
               <Route path="/peraturan/:typelaw" element={<LawPage />} />
               <Route
-                path="/site-pages/statsblads/:slug"
+                path="/site-pages/statsblad/:slug"
                 element={<DocDetailPage />}
               />
               <Route

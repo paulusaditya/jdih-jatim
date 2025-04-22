@@ -17,7 +17,7 @@ const formatSlug = (slug) => {
 // Mapping tipe dokumen ke label tampilan
 const typeLabelMap = {
   propemperda: "Propemperda",
-  statsblads: "Statsblads",
+  statsblad: "Statsblad",
   peraturan: "Peraturan",
   monografi: "Monografi",
 };
