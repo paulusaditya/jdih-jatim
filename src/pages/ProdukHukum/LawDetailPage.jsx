@@ -21,7 +21,7 @@ const LawDetailPage = () => {
           <DetailLawCard lawId={slug} />{" "}
         </div>
         <div className="w-full md:w-1/3">
-          <div className="mt-6">
+          <div>
             <PopularDocument /> 
           </div>
         </div>
