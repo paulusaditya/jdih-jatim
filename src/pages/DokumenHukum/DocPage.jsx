@@ -24,7 +24,7 @@ const DocPage = ({
   includeCategory = false,
   detailPath = "",
   customMap = null,
-  customSidebar = null, // <-- Tambahan prop di sini
+  customSidebar = null,
 }) => {
   const [documents, setDocuments] = useState([]);
   const [title, setTitle] = useState(pageTitle);
@@ -140,8 +140,7 @@ const DocPage = ({
             category:
               getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
             bidang: getField("Bidang Hukum"),
-            nomorPutusan:
-              getField("Nomor Putusan") || getField("Nomor Induk"),
+            nomorPutusan: getField("Nomor Putusan") || getField("Nomor Induk"),
             image:
               proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
           };
@@ -228,7 +227,11 @@ const DocPage = ({
         </div>
 
         <div className="w-full">
-          {customSidebar ? customSidebar : <PopularDocument />}
+          {customSidebar !== null ? (
+            customSidebar
+          ) : (
+            <PopularDocument webmasterId={webmasterId} />
+          )}
         </div>
       </div>
     </>

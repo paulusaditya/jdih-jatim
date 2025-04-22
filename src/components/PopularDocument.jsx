@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 
 const API_BASE = "https://jdih.pisdev.my.id/api/v2";
 
-const PopularDocument = () => {
+const PopularDocument = ({ webmasterId }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getPopularDocuments = async () => {
       try {
-        const res = await fetch(`${API_BASE}/most-viewed-by-section-id/15`);
+        const res = await fetch(
+          `${API_BASE}/most-viewed-by-section-id/${webmasterId}`
+        );
         const { data } = await res.json();
         const topThree = data.slice(0, 3);
         setDocuments(topThree);
@@ -21,8 +23,10 @@ const PopularDocument = () => {
       }
     };
 
-    getPopularDocuments();
-  }, []);
+    if (webmasterId) {
+      getPopularDocuments();
+    }
+  }, [webmasterId]);
 
   return (
     <div className="flex flex-col w-full max-w-[395px] mx-auto">
@@ -35,7 +39,7 @@ const PopularDocument = () => {
         ) : (
           <ul className="mt-3 space-y-3 text-sm md:text-base font-semibold leading-6">
             {documents.map((doc, idx) => (
-              <li key={idx} className="break-words hover:underline">
+              <li key={idx} className="break-words">
                 <Link to={`/dokumen-populer/${doc.slug}`}>{doc.title}</Link>
               </li>
             ))}
