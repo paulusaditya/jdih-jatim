@@ -16,9 +16,9 @@ const formatSlug = (slug) => {
 
 // Mapping type ke label dan path breadcrumbs
 const breadcrumbMap = {
-  statsblad: {
-    label: "Statsblad",
-    path: "/site-pages/statsblad",
+  staatsblad: {
+    label: "Staatsblad",
+    path: "/site-pages/staatsblad",
   },
   monografi: {
     label: "Monografi",
