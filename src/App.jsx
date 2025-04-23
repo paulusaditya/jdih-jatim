@@ -6,6 +6,7 @@ import ContactPage from "./pages/Profil/Contact";
 import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
 import LawPage from "./pages/ProdukHukum/LawPage";
+import ProdukJatimPage from "./pages/ProdukHukum/ProdukJatimPage";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
 import DocDetailPage from "./pages/DokumenHukum/DocDetailPage";
@@ -80,7 +81,7 @@ function App() {
                       }`}
                       element={
                         menu.link === "peraturan" ? (
-                          <LawPage />
+                          <ProdukJatimPage />
                         ) : sub.link.includes("about") ? (
                           <Profil />
                         ) : sub.link.includes("contact") ? (

@@ -1,88 +1,156 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
-import axios from "axios";
-
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
-import Kategori from "../../components/Kategori";
 import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 
-const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
-  const [documents, setDocuments] = useState([]);
+const LawPage = ({
+  apiUrl,
+  title: pageTitle,
+  breadcrumbPaths,
+  sectionId,
+  years = [],
+  documentTypes = [],
+  includeStatus = false,
+  includeCategory = false,
+  detailPath = "",
+  customMap = null,
+  customSidebar = null,
+}) => {
+  const [laws, setLaws] = useState([]);
+  const [title, setTitle] = useState(pageTitle);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const [lastPage, setLastPage] = useState(1);
-  const [sectionSlug, setSectionSlug] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [filters, setFilters] = useState({
     number: "",
-    status: "",
-    category: "",
-    type: "",
     year: "",
+    type: "",
     searchQuery: "",
   });
+
   const itemsPerPage = 10;
-
   const navigate = useNavigate();
-  const { typelaw } = useParams();
-  const decodedTypeLaw = decodeURIComponent(typelaw?.trim() || "");
-
-
-  useEffect(() => {
-    const fetchSectionAndData = async () => {
-      try {
-        const res = await axios.get(
-          `https://jdih.pisdev.my.id/api/v2/sections?slug=${decodedTypeLaw}`
-        );
-        const sections = res.data.data;
-
-        if (sections.length > 0) {
-          const sectionId = sections[0].id;
-          setSectionSlug(sections[0].slug); 
-
-          const dataRes = await axios.get(
-            `https://jdih.pisdev.my.id/api/v2/topics?section_id=${sectionId}&page=${currentPage}&per_page=${itemsPerPage}&category=${filters.category}&type=${filters.type}&year=${filters.year}&searchQuery=${filters.searchQuery}`
-          );
-
-          const topics = dataRes.data.data.data;
-          const mapped = topics.map((item) => {
-            const fields = Object.fromEntries(
-              item.fields.map((field) => [field.title, field.details])
-            );
-
-            return {
-              id: item.id,
-              title: fields["Judul Peraturan"] || "Unknown",
-              year: fields["Tahun Terbit"] || "Unknown",
-              number: fields["Nomor"] || "Unknown",
-              type: fields["Singkatan Jenis"] || "Unknown",
-              status: fields["Keterangan Status"] || "-",
-              category: fields["Kategori"] || "",
-              image: item.image,
-              slug: item.seo_url_slug_id,
-            };
-          });
-
-          setDocuments(mapped);
-          setTotalItems(dataRes.data.data.pagination.total);
-          setLastPage(dataRes.data.data.pagination.last_page);
-        } else {
-          setDocuments([]);
-          setTotalItems(0);
-        }
-      } catch (err) {
-        console.error("Gagal ambil data:", err);
-      }
-    };
-
-    fetchSectionAndData();
-  }, [decodedTypeLaw, currentPage, filters]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    fetchLaws();
+  }, [currentPage, filters]);
+
+  const fetchLaws = async () => {
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.append("page", currentPage);
+      if (sectionId) params.append("section_id", sectionId);
+
+      if (filters.searchQuery) params.append("search", filters.searchQuery);
+      if (filters.number) params.append("classification", filters.number);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.year) params.append("year", filters.year);
+
+      const fullUrl = `${apiUrl}?${params.toString()}`;
+      console.log("Fetching from:", fullUrl); 
+
+      const response = await fetch(fullUrl);
+      const contentType = response.headers.get("content-type");
+
+      if (!response.ok || !contentType.includes("application/json")) {
+        throw new Error(`Invalid response: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      let rawLaws = [];
+      let mappedLaws = [];
+
+      if (Array.isArray(result.data)) {
+        rawLaws = result.data;
+
+        const lawsWithSlug = await Promise.all(
+          rawLaws.map(async (item) => {
+            if (customMap) return customMap(item);
+            try {
+              const detailRes = await fetch(
+                `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
+              );
+              const detailData = await detailRes.json();
+              return {
+                id: item.id,
+                slug: detailData.data?.seo_url_slug_id || item.id,
+                title: item.title || "Tanpa Judul",
+                year:
+                  detailData.data?.fields?.find(
+                    (f) => f.title === "Tahun Terbit"
+                  )?.details || "-",
+                status:
+                  detailData.data?.fields?.find(
+                    (f) => f.title === "Subjek Artikel"
+                  )?.details || "-",
+                category:
+                  detailData.data?.fields?.find(
+                    (f) => f.title === "T.E.U Badan/Pengarang"
+                  )?.details || "-",
+                bidang: detailData.data?.fields?.find(
+                  (f) => f.title === "Bidang Hukum"
+                )?.details,
+                nomorPutusan: detailData.data?.fields?.find(
+                  (f) => f.title === "Nomor Putusan"
+                )?.details,
+              };
+            } catch (err) {
+              console.error("Detail fetch failed:", err);
+              return {
+                id: item.id,
+                slug: item.id,
+                title: item.title || "Tanpa Judul",
+                year: "-",
+                status: "-",
+                category: "-",
+              };
+            }
+          })
+        );
+
+        mappedLaws = lawsWithSlug;
+        setTotalItems(result.pagination?.total || rawLaws.length || 0);
+      } else {
+        rawLaws = result.data?.data || [];
+
+        mappedLaws = rawLaws.map((item) => {
+          const fields = item.fields || [];
+          const getField = (fieldName) =>
+            fields.find((f) => f.title === fieldName)?.details;
+
+          return {
+            id: item.id,
+            slug: item.seo_url_slug_id,
+            title: item.title || "Tanpa Judul",
+            year: getField("Tahun Terbit") || getField("Tahun"),
+            status: getField("Subjek Artikel") || getField("Subjek"),
+            category:
+              getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
+            bidang: getField("Bidang Hukum"),
+            nomorPutusan: getField("Nomor Putusan") || getField("Nomor Induk"),
+          };
+        });
+
+        setTotalItems(result.data?.pagination?.total || 0);
+      }
+
+      setLaws(mappedLaws);
+    } catch (error) {
+      console.error("Error fetching law data:", error); 
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePageChange = (pageNumber) => {
@@ -90,92 +158,57 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
   };
 
   const handleSearch = () => {
-    setCurrentPage(1); // Reset ke halaman pertama
+    setCurrentPage(1);
+    fetchLaws();
   };
-
-  const filteredLaws = documents.filter((law) => {
-    const matchesNumber = filters.number
-      ? law.number.toString().includes(filters.number)
-      : true;
-    const matchesStatus = filters.status ? law.status === filters.status : true;
-    const matchesCategory = filters.category
-      ? law.category === filters.category
-      : true;
-    const matchesType = filters.type ? law.type === filters.type : true;
-    const matchesYear = filters.year
-      ? law.year.toString() === filters.year
-      : true;
-    const matchesSearchQuery = filters.searchQuery
-      ? law.title.toLowerCase().includes(filters.searchQuery.toLowerCase())
-      : true;
-
-    return (
-      matchesNumber &&
-      matchesStatus &&
-      matchesCategory &&
-      matchesType &&
-      matchesYear &&
-      matchesSearchQuery
-    );
-  });
 
   return (
     <>
-      <div className="p-8 mx-0 md:mx-8 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* <Breadcrumbs paths={breadcrumbPaths} /> */}
+      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <SearchFilter
             filters={filters}
             onChange={handleChange}
             onSearch={handleSearch}
-            years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
-            documentTypes={[
-              "",
-              "Peraturan Daerah",
-              "Peraturan Gubernur",
-              "Keputusan Gubernur",
-              "Surat Keputusan Gubernur",
-              "Instruksi Gubernur",
-              "Keputusan Bersama Gubernur",
-              "Keputusan Atas Nama Gubernur",
-            ]}
-            categories={[
-              "",
-              "Keuangan",
-              "Tata Ruang",
-              "Pendidikan",
-              "Kesehatan",
-            ]}
-            includeStatus={true}
+            years={years}
+            documentTypes={documentTypes}
+            includeStatus={includeStatus}
+            includeCategory={includeCategory}
           />
 
           <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
             <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
-              Semua Data ({totalItems})
+              Semua Dokumen Hukum ({totalItems})
             </div>
-            <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
-              <Filter className="text-emerald-600 w-6 h-6" />
-            </div>
+            {isLoading ? (
+              <span className="text-sm text-gray-500">Loading...</span>
+            ) : (
+              <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
+                <Filter className="text-emerald-600 w-6 h-6" />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-4 mt-4">
-            {filteredLaws.length > 0 ? (
-              filteredLaws.map((law) => (
+            {laws.length > 0 ? (
+              laws.map((law) => (
                 <LawCard
                   key={law.id}
                   title={law.title}
                   year={law.year}
-                  regulationType={law.type}
-                  onDetailClick={() =>
-                    navigate(`/peraturan/${sectionSlug}/${law.slug}`) 
-                  }
-                  number={law.number}
                   status={law.status}
-                  type={law.type}
+                  category={law.category}
+                  bidang={law.bidang}
+                  nomorPutusan={law.nomorPutusan}
+                  onDetailClick={() => navigate(`${detailPath}/${law.slug}`)}
                 />
               ))
             ) : (
               <div className="text-center py-8 text-gray-500">
-                Tidak ada dokumen yang ditemukan
+                {isLoading
+                  ? "Memuat data..."
+                  : "Tidak ada dokumen hukum yang ditemukan"}
               </div>
             )}
           </div>
@@ -189,10 +222,11 @@ const LawPage = ({ breadcrumbPaths: customBreadcrumbs }) => {
         </div>
 
         <div className="w-full">
-          <Kategori />
-          <div className="mt-6">
-            <PopularDocument />
-          </div>
+          {customSidebar !== null ? (
+            customSidebar
+          ) : (
+            <PopularDocument sectionId={sectionId} />
+          )}
         </div>
       </div>
     </>

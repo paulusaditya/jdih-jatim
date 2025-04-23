@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const API_BASE = "https://jdih.pisdev.my.id/api/v2";
 
-const PopularDocument = ({ webmasterId }) => {
+const PopularDocument = ({ sectionId }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -11,7 +11,7 @@ const PopularDocument = ({ webmasterId }) => {
     const getPopularDocuments = async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/most-viewed-by-section-id/${webmasterId}`
+          `${API_BASE}/most-viewed-by-section-id/${sectionId}`
         );
         const { data } = await res.json();
         const topThree = data.slice(0, 3);
@@ -23,10 +23,10 @@ const PopularDocument = ({ webmasterId }) => {
       }
     };
 
-    if (webmasterId) {
+    if (sectionId) {
       getPopularDocuments();
     }
-  }, [webmasterId]);
+  }, [sectionId]);
 
   return (
     <div className="flex flex-col w-full max-w-[395px] mx-auto">
