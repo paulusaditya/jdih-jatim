@@ -17,7 +17,7 @@ const DocPage = ({
   apiUrl,
   title: pageTitle,
   breadcrumbPaths,
-  webmasterId,
+  sectionId,
   years = [],
   documentTypes = [],
   includeStatus = false,
@@ -55,7 +55,9 @@ const DocPage = ({
     try {
       const params = new URLSearchParams();
       params.append("page", currentPage);
-      if (webmasterId) params.append("webmaster_id", webmasterId);
+
+
+      if (sectionId) params.append("webmaster_id", sectionId); 
 
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
@@ -230,7 +232,7 @@ const DocPage = ({
           {customSidebar !== null ? (
             customSidebar
           ) : (
-            <PopularDocument webmasterId={webmasterId} />
+            <PopularDocument sectionId={sectionId} />
           )}
         </div>
       </div>
