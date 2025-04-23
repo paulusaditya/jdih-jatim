@@ -4,6 +4,7 @@ import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import PopularDocument from "../../components/PopularDocument";
+import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 
@@ -222,10 +223,13 @@ const LawPage = ({
         </div>
 
         <div className="w-full">
+          <Kategori />
           {customSidebar !== null ? (
             customSidebar
           ) : (
-            <PopularDocument sectionId={sectionId} />
+            <div className="mt-6">
+              <PopularDocument sectionId={sectionId} />
+            </div>
           )}
         </div>
       </div>
