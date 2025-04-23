@@ -39,7 +39,7 @@ const PopularDocument = ({ sectionId }) => {
         ) : (
           <ul className="mt-3 space-y-3 text-sm md:text-base font-semibold leading-6">
             {documents.map((doc, idx) => (
-              <li key={idx} className="break-words">
+              <li key={idx} className="break-words hover:underline">
                 <Link to={`/dokumen-populer/${doc.slug}`}>{doc.title}</Link>
               </li>
             ))}
