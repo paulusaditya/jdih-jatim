@@ -19,14 +19,7 @@ function StatusBadge({ children }) {
   );
 }
 
-function LawCard({
-  number,
-  title,
-  year,
-  status,
-  regulationType,
-  onDetailClick,
-}) {
+function LawCard({ number, title, year, status, type, onDetailClick }) {
   return (
     <div className="flex flex-wrap gap-10 items-center p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5">
       <div className="flex flex-col flex-1 shrink self-stretch my-auto basis-full sm:basis-1/2 md:basis-1/3 min-w-0 md:min-w-[240px] max-w-full">
@@ -37,7 +30,7 @@ function LawCard({
           <StatusBadge>{number}</StatusBadge>
           <StatusBadge>{year}</StatusBadge>
           <StatusBadge>{status}</StatusBadge>
-          <StatusBadge>{regulationType}</StatusBadge>
+          <StatusBadge>{type}</StatusBadge>
         </div>
       </div>
 

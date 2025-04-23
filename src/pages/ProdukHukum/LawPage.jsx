@@ -58,7 +58,7 @@ const LawPage = ({
       if (filters.year) params.append("year", filters.year);
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
-      console.log("Fetching from:", fullUrl); 
+      console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
       const contentType = response.headers.get("content-type");
@@ -68,78 +68,72 @@ const LawPage = ({
       }
 
       const result = await response.json();
-
       let rawLaws = [];
       let mappedLaws = [];
 
       if (Array.isArray(result.data)) {
         rawLaws = result.data;
 
-        const lawsWithSlug = await Promise.all(
+        mappedLaws = await Promise.all(
           rawLaws.map(async (item) => {
-            if (customMap) return customMap(item);
             try {
               const detailRes = await fetch(
                 `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
               );
               const detailData = await detailRes.json();
+              const fields = {};
+              detailData.data?.fields?.forEach(
+                (f) => (fields[f.title] = f.details)
+              );
+
               return {
                 id: item.id,
+                title: fields["Judul Peraturan"] || item.title || "Unknown",
+                year: fields["Tahun Terbit"] || "Unknown",
+                number: fields["Nomor"] || "Unknown",
+                type: fields["Singkatan Jenis"] || "Unknown",
+                status: fields["Keterangan Status"] || "-",
+                category: fields["Kategori"] || "",
+                image: item.image,
                 slug: detailData.data?.seo_url_slug_id || item.id,
-                title: item.title || "Tanpa Judul",
-                year:
-                  detailData.data?.fields?.find(
-                    (f) => f.title === "Tahun Terbit"
-                  )?.details || "-",
-                status:
-                  detailData.data?.fields?.find(
-                    (f) => f.title === "Subjek Artikel"
-                  )?.details || "-",
-                category:
-                  detailData.data?.fields?.find(
-                    (f) => f.title === "T.E.U Badan/Pengarang"
-                  )?.details || "-",
-                bidang: detailData.data?.fields?.find(
-                  (f) => f.title === "Bidang Hukum"
-                )?.details,
-                nomorPutusan: detailData.data?.fields?.find(
-                  (f) => f.title === "Nomor Putusan"
-                )?.details,
               };
             } catch (err) {
               console.error("Detail fetch failed:", err);
               return {
                 id: item.id,
-                slug: item.id,
                 title: item.title || "Tanpa Judul",
                 year: "-",
+                number: "-",
+                type: "-",
                 status: "-",
                 category: "-",
+                image: item.image,
+                slug: item.id,
               };
             }
           })
         );
 
-        mappedLaws = lawsWithSlug;
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
       } else {
         rawLaws = result.data?.data || [];
 
         mappedLaws = rawLaws.map((item) => {
-          const fields = item.fields || [];
-          const getField = (fieldName) =>
-            fields.find((f) => f.title === fieldName)?.details;
+          const fields = {};
+          (item.fields || []).forEach((f) => (fields[f.title] = f.details));
 
           return {
             id: item.id,
-            slug: item.seo_url_slug_id,
-            title: item.title || "Tanpa Judul",
-            year: getField("Tahun Terbit") || getField("Tahun"),
-            status: getField("Subjek Artikel") || getField("Subjek"),
+            title: fields["Judul Peraturan"] || item.title || "Unknown",
+            year: fields["Tahun Terbit"] || fields["Tahun"] || "-",
+            number: fields["Nomor"] || "-",
+            type: fields["Singkatan Jenis"] || "-",
+            status:
+              fields["Keterangan Status"] || fields["Subjek Artikel"] || "-",
             category:
-              getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
-            bidang: getField("Bidang Hukum"),
-            nomorPutusan: getField("Nomor Putusan") || getField("Nomor Induk"),
+              fields["Kategori"] || fields["T.E.U Badan/Pengarang"] || "-",
+            image: item.image,
+            slug: item.seo_url_slug_id || item.id,
           };
         });
 
@@ -148,7 +142,7 @@ const LawPage = ({
 
       setLaws(mappedLaws);
     } catch (error) {
-      console.error("Error fetching law data:", error); 
+      console.error("Error fetching law data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -198,10 +192,11 @@ const LawPage = ({
                   key={law.id}
                   title={law.title}
                   year={law.year}
+                  number={law.number}
+                  type={law.type}
                   status={law.status}
                   category={law.category}
-                  bidang={law.bidang}
-                  nomorPutusan={law.nomorPutusan}
+                  image={law.image}
                   onDetailClick={() => navigate(`${detailPath}/${law.slug}`)}
                 />
               ))
