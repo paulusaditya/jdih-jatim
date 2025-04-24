@@ -7,6 +7,9 @@ import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import ProdukJatimPage from "./pages/ProdukHukum/ProdukJatimPage";
+import ProdukKotaPage from "./pages/ProdukHukum/ProdukKotaPage";
+import ProdukDesaPage from "./pages/ProdukHukum/ProdukDesaPage";
+import AlihBahasaPage from "./pages/ProdukHukum/AlihBahasaPage";
 import LawDetailPage from "./pages/ProdukHukum/LawDetailPage";
 import DocPage from "./pages/DokumenHukum/DocPage";
 import DocDetailPage from "./pages/DokumenHukum/DocDetailPage";
@@ -80,8 +83,14 @@ function App() {
                         sub.link.startsWith("/") ? sub.link : `/${sub.link}`
                       }`}
                       element={
-                        menu.link === "peraturan" ? (
+                        sub.link.includes("produk-hukum-jatim") ? (
                           <ProdukJatimPage />
+                        ) : sub.link.includes("produk-hukum-kabupatenkota") ? (
+                          <ProdukKotaPage />
+                        ) : sub.link.includes("produk-hukum-desa") ? (
+                          <ProdukDesaPage />
+                        ) : sub.link.includes("peraturan-alih-bahasa") ? (
+                          <AlihBahasaPage />
                         ) : sub.link.includes("about") ? (
                           <Profil />
                         ) : sub.link.includes("contact") ? (
@@ -131,7 +140,11 @@ function App() {
               />
               <Route
                 path="/site-pages/monografi/:slug"
-                element={<DocDetailPage customSidebar={<PopularDocumentMonography />} />}
+                element={
+                  <DocDetailPage
+                    customSidebar={<PopularDocumentMonography />}
+                  />
+                }
               />
               <Route
                 path="/site-pages/artikel-hukum/:slug"
@@ -148,8 +161,7 @@ function App() {
               <Route
                 path="/site-pages/dokumen-langka/:slug"
                 element={<DocDetailPage />}
-                />
-
+              />
               <Route
                 path="/dokumen-populer/:slug"
                 element={<DocDetailPage />}

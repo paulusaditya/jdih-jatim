@@ -1,0 +1,26 @@
+import LawPage from "./LawPage";
+
+const ProdukDesaPage = () => (
+  <LawPage
+    apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+    title="Produk Hukum Desa"
+    breadcrumbPaths={[
+      { label: "Beranda", path: "/" },
+      { label: "Produk Hukum Desa", path: "/site-pages/produk-desa" },
+    ]}
+    sectionId="40"
+    years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
+    documentTypes={[
+      "",
+      "Peraturan Desa",
+      "Keputusan Kepala Desa",
+      "Surat Keputusan Kepala Desa",
+      "Instruksi Kepala Desa",
+    ]}
+    includeStatus={true}
+    includeCategory={true}
+    detailPath="/peraturan/produk-hukum-desa"
+  />
+);
+
+export default ProdukDesaPage;
