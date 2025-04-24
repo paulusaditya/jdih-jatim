@@ -7,6 +7,7 @@ import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
 import SearchFilter from "../../components/common/SearchFilter";
 import PopularDocument from "../../components/PopularDocument";
+import LoadingSpinner from "../../components/common/LoadingSpinner"
 
 
 const breadcrumbPaths = [
