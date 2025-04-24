@@ -8,7 +8,6 @@ const ProdukJatimPage = () => {
     "Peraturan Gubernur": 30,
     "Keputusan Bersama Gubernur": 41,
     "Surat Keputusan Gubernur": 44,
-    "Keputusan Atas Nama Gubernur": 45,
   };
 
   return (
@@ -29,7 +28,6 @@ const ProdukJatimPage = () => {
         "Surat Keputusan Gubernur",
         "Instruksi Gubernur",
         "Keputusan Bersama Gubernur",
-        "Keputusan Atas Nama Gubernur",
       ]}
       includeStatus={true}
       includeCategory={true}
