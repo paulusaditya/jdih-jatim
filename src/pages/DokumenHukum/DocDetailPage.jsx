@@ -6,7 +6,7 @@ import DetailDocCard from "../../components/DokumenHukum/DetailDocCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 
-// Fungsi untuk konversi slug jadi judul (fallback)
+// Fungsi untuk konversi slug jadi judul fallback
 const formatSlug = (slug) => {
   return slug
     .split("-")
@@ -14,24 +14,44 @@ const formatSlug = (slug) => {
     .join(" ");
 };
 
-// Mapping tipe dokumen ke label tampilan
-const typeLabelMap = {
-  propemperda: "Propemperda",
-  statsblads: "Statsblads",
-  peraturan: "Peraturan",
-  monografi: "Monografi",
+
+const breadcrumbMap = {
+  staatsblad: {
+    label: "Staatsblad",
+    path: "/site-pages/staatsblad",
+  },
+  monografi: {
+    label: "Monografi",
+    path: "/site-pages/monografi",
+  },
+  "artikel-hukum": {
+    label: "Artikel",
+    path: "/site-pages/artikel-hukum",
+  },
+  propemperda: {
+    label: "Propemperda",
+    path: "/site-pages/propemperda",
+  },
+  "putusan-pengadilan": {
+    label: "Putusan Pengadilan",
+    path: "/site-pages/putusan-pengadilan",
+  },
+  "dokumen-langka": {
+    label: "Dokumen Langka",
+    path: "/site-pages/dokumen-langka",
+  },
 };
 
 const DocDetailPage = ({ customSidebar }) => {
-  const { slug, type } = useParams();
-  const documentLabel = typeLabelMap[type] || "Dokumen";
+  const { slug } = useParams();
+  const type = window.location.pathname.split("/")[2];
   const [documentTitle, setDocumentTitle] = useState("");
   const [monografiData, setMonografiData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: documentLabel, path: `/site-pages/${type}` },
+    breadcrumbMap[type] || { label: "Dokumen", path: `/site-pages/${type}` },
     {
       label: documentTitle || formatSlug(slug),
       path: `/site-pages/${type}/${slug}`,
@@ -49,10 +69,11 @@ const DocDetailPage = ({ customSidebar }) => {
     try {
       const res = await fetch("https://jdih.pisdev.my.id/api/v2/home/monography");
       const result = await res.json();
+      console.log("Monografi result:", result); // Log the result here
       const found = result.data.find((item) =>
         item.link.replace("./", "") === slug
       );
-
+  
       if (found) {
         setMonografiData(found);
         setDocumentTitle(found.title);
@@ -63,6 +84,7 @@ const DocDetailPage = ({ customSidebar }) => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <>
