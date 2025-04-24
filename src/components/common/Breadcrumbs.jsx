@@ -9,16 +9,16 @@ const Breadcrumbs = ({ paths }) => {
           {index === 0 && <Home size={16} className="text-blue-600" />}
           {index > 0 && <ChevronRight size={14} className="text-gray-800" />}
 
-          <Link
-            to={path.path}
-            className={`${
-              index === paths.length - 1
-                ? "text-black"
-                : "text-blue-600 hover:text-blue-800"
-            } hover:underline transition duration-200`}
-          >
-            {path.label}
-          </Link>
+          {index === paths.length - 1 ? (
+            <span className="text-black cursor-default">{path.label}</span>
+          ) : (
+            <Link
+              to={path.path}
+              className="text-blue-600 hover:text-blue-800 hover:underline transition duration-200"
+            >
+              {path.label}
+            </Link>
+          )}
         </div>
       ))}
     </nav>
