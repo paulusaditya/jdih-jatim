@@ -13,9 +13,7 @@ const ProdukDesaPage = () => (
     documentTypes={[
       "",
       "Peraturan Desa",
-      "Keputusan Kepala Desa",
-      "Surat Keputusan Kepala Desa",
-      "Instruksi Kepala Desa",
+      "Keputusan Desa",
     ]}
     includeStatus={true}
     includeCategory={true}
