@@ -36,6 +36,8 @@ const PopularDocument = ({ sectionId }) => {
         </h2>
         {loading ? (
           <p>Loading...</p>
+        ) : documents.length === 0 ? (
+          <p className="text-sm text-gray-600">Tidak ada dokumen populer.</p>
         ) : (
           <ul className="mt-3 space-y-3 text-sm md:text-base font-semibold leading-6">
             {documents.map((doc, idx) => (

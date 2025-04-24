@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-const CustomSelect = ({ options, value, onChange, name }) => {
+const CustomSelect = ({ options, value, onChange, name, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -20,7 +20,7 @@ const CustomSelect = ({ options, value, onChange, name }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, []);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -28,7 +28,9 @@ const CustomSelect = ({ options, value, onChange, name }) => {
         className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-zinc-600">{value || name}</span>
+        <span className={`text-zinc-600 ${!value && "text-gray-400"}`}>
+          {value || placeholder}
+        </span>
         <span className="text-zinc-600">▼</span>
       </div>
       {isOpen && (

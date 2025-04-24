@@ -20,6 +20,7 @@ const LawPage = ({
   detailPath = "",
   customMap = null,
   customSidebar = null,
+  typeToSectionId = {},
 }) => {
   const [laws, setLaws] = useState([]);
   const [title, setTitle] = useState(pageTitle);
@@ -41,6 +42,10 @@ const LawPage = ({
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
+  const handleSearch = () => {
+    setCurrentPage(1);
+  };
+
   useEffect(() => {
     fetchLaws();
   }, [currentPage, filters]);
@@ -48,10 +53,14 @@ const LawPage = ({
   const fetchLaws = async () => {
     setIsLoading(true);
     try {
+      let dynamicSectionId = sectionId;
+      if (filters.type && typeToSectionId[filters.type]) {
+        dynamicSectionId = typeToSectionId[filters.type];
+      }
+
       const params = new URLSearchParams();
       params.append("page", currentPage);
-      if (sectionId) params.append("section_id", sectionId);
-
+      if (dynamicSectionId) params.append("section_id", dynamicSectionId);
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
@@ -68,6 +77,8 @@ const LawPage = ({
       }
 
       const result = await response.json();
+      console.log("API Response:", result);
+
       let rawLaws = [];
       let mappedLaws = [];
 
@@ -118,6 +129,12 @@ const LawPage = ({
       } else {
         rawLaws = result.data?.data || [];
 
+        if (filters.number) {
+          rawLaws = rawLaws.filter(
+            (item) => item.classification === filters.number
+          );
+        }
+
         mappedLaws = rawLaws.map((item) => {
           const fields = {};
           (item.fields || []).forEach((f) => (fields[f.title] = f.details));
@@ -152,83 +169,75 @@ const LawPage = ({
     setCurrentPage(pageNumber);
   };
 
-  const handleSearch = () => {
-    setCurrentPage(1);
-    fetchLaws();
-  };
-
   return (
-    <>
-      {/* <Breadcrumbs paths={breadcrumbPaths} /> */}
-      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2">
-          <SearchFilter
-            filters={filters}
-            onChange={handleChange}
-            onSearch={handleSearch}
-            years={years}
-            documentTypes={documentTypes}
-            includeStatus={includeStatus}
-            includeCategory={includeCategory}
-          />
+    <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="md:col-span-2">
+        <SearchFilter
+          filters={filters}
+          onChange={handleChange}
+          onSearch={handleSearch}
+          years={years}
+          documentTypes={documentTypes}
+          includeStatus={includeStatus}
+          includeCategory={includeCategory}
+        />
 
-          <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
-            <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
-              Semua Dokumen Hukum ({totalItems})
-            </div>
-            {isLoading ? (
-              <span className="text-sm text-gray-500">Loading...</span>
-            ) : (
-              <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
-                <Filter className="text-emerald-600 w-6 h-6" />
-              </div>
-            )}
+        <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
+          <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
+            Semua Dokumen Hukum ({totalItems})
           </div>
-
-          <div className="grid grid-cols-1 gap-4 mt-4">
-            {laws.length > 0 ? (
-              laws.map((law) => (
-                <LawCard
-                  key={law.id}
-                  title={law.title}
-                  year={law.year}
-                  number={law.number}
-                  type={law.type}
-                  status={law.status}
-                  category={law.category}
-                  image={law.image}
-                  onDetailClick={() => navigate(`${detailPath}/${law.slug}`)}
-                />
-              ))
-            ) : (
-              <div className="text-center py-8 text-gray-500">
-                {isLoading
-                  ? "Memuat data..."
-                  : "Tidak ada dokumen hukum yang ditemukan"}
-              </div>
-            )}
-          </div>
-
-          <Pagination
-            currentPage={currentPage}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-
-        <div className="w-full">
-          <Kategori />
-          {customSidebar !== null ? (
-            customSidebar
+          {isLoading ? (
+            <span className="text-sm text-gray-500">Loading...</span>
           ) : (
-            <div className="mt-6">
-              <PopularDocument sectionId={sectionId} />
+            <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
+              <Filter className="text-emerald-600 w-6 h-6" />
             </div>
           )}
         </div>
+
+        <div className="grid grid-cols-1 gap-4 mt-4">
+          {laws.length > 0 ? (
+            laws.map((law) => (
+              <LawCard
+                key={law.id}
+                title={law.title}
+                year={law.year}
+                number={law.number}
+                type={law.type}
+                status={law.status}
+                category={law.category}
+                image={law.image}
+                onDetailClick={() => navigate(`${detailPath}/${law.slug}`)}
+              />
+            ))
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              {isLoading
+                ? "Memuat data..."
+                : "Tidak ada dokumen hukum yang ditemukan"}
+            </div>
+          )}
+        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+        />
       </div>
-    </>
+
+      <div className="w-full">
+        <Kategori />
+        {customSidebar !== null ? (
+          customSidebar
+        ) : (
+          <div className="mt-6">
+            <PopularDocument sectionId={sectionId} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
