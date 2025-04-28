@@ -1,5 +1,5 @@
 import { Twitter, Instagram, Youtube } from "lucide-react";
-import { SiTiktok } from "react-icons/si";
+import { FaFacebook } from "react-icons/fa"; 
 import { Link } from "react-router-dom";
 
 export default function Footer() {
@@ -66,15 +66,15 @@ export default function Footer() {
               <h3 className="text-lg font-semibold mb-4">Media Sosial</h3>
               <div className="flex space-x-4 gap-4">
                 <a
-                  href="https://www.tiktok.com/@jdihjatim"
+                  href="https://www.facebook.com/JDIH-Jatimprov-607856333021401/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-blue-300"
                 >
-                  <SiTiktok size={24} />
+                  <FaFacebook size={24} /> {/* Changed to Facebook icon */}
                 </a>
                 <a
-                  href="https://twitter.com/jdihjatim"
+                  href="https://twitter.com/jdihjatimprov"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-blue-300"
@@ -90,7 +90,7 @@ export default function Footer() {
                   <Instagram size={24} />
                 </a>
                 <a
-                  href="https://www.youtube.com/jdihjatim"
+                  href="https://www.youtube.com/channel/UCqVqELJZYASq8_1RckTKCnw"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-blue-300"
@@ -114,13 +114,13 @@ export default function Footer() {
                   <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <Link to="/site-pages">Profil</Link>
+                  <Link to="/site-pages/about">Profil</Link>
                 </li>
                 <li>
                   <Link to="/peraturan">Produk Hukum</Link>
                 </li>
                 <li>
-                  <Link to="/site-pages">Dokumen Hukum Lainnya</Link>
+                  <Link to="/site-pages/staatsblad">Dokumen Hukum Lainnya</Link>
                 </li>
                 <li>
                   <Link to="/news">Berita</Link>
