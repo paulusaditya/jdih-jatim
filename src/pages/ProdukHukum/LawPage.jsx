@@ -50,21 +50,17 @@ const LawPage = ({
     fetchLaws();
   }, [currentPage, filters]);
 
-  const webmasterSectionMapping = {
-    10: 10, // Produk Hukum
-  };
-
   const fetchLaws = async () => {
     setIsLoading(true);
     try {
-      let dynamicSectionId = sectionId;
-      if (filters.type && webmasterSectionMapping[filters.type]) {
-        dynamicSectionId = webmasterSectionMapping[filters.type];
-      }
-
       const params = new URLSearchParams();
+      params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
-      if (dynamicSectionId) params.append("webmaster_section_id", dynamicSectionId);
+      params.append("webmaster_section_id", "10");
+      params.append("sort_by", "id");
+      params.append("sort_order", "asc");
+      params.append("section_id", sectionId);
+
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
@@ -173,18 +169,14 @@ const LawPage = ({
     setCurrentPage(pageNumber);
   };
 
-    // Ambil webmasterSectionId berdasarkan mapping
-    const webmasterSectionId = webmasterSectionMapping[sectionId] || null;
-
   return (
     <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
-      <SearchFilter
-            filters={filters}
-            onChange={handleChange}
-            onSearch={handleSearch}
-            webmasterSectionId={webmasterSectionId}
-          />
+        <SearchFilter
+          filters={filters}
+          onChange={handleChange}
+          onSearch={handleSearch}
+        />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
           <div className="self-stretch my-auto text-base font-semibold text-zinc-800">

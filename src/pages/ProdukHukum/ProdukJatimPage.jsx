@@ -18,7 +18,7 @@ const ProdukJatimPage = () => {
         { label: "Beranda", path: "/" },
         { label: "Produk Hukum Jawa Timur", path: "/site-pages/produk-jatim" },
       ]}
-      sectionId="10"
+      sectionId="3"
       years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
       documentTypes={[
         "",
