@@ -50,12 +50,16 @@ const LawPage = ({
     fetchLaws();
   }, [currentPage, filters]);
 
+  const webmasterSectionMapping = {
+    10: 10, // Produk Hukum
+  };
+
   const fetchLaws = async () => {
     setIsLoading(true);
     try {
       let dynamicSectionId = sectionId;
-      if (filters.type && typeToSectionId[filters.type]) {
-        dynamicSectionId = typeToSectionId[filters.type];
+      if (filters.type && webmasterSectionMapping[filters.type]) {
+        dynamicSectionId = webmasterSectionMapping[filters.type];
       }
 
       const params = new URLSearchParams();
@@ -169,18 +173,18 @@ const LawPage = ({
     setCurrentPage(pageNumber);
   };
 
+    // Ambil webmasterSectionId berdasarkan mapping
+    const webmasterSectionId = webmasterSectionMapping[sectionId] || null;
+
   return (
     <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
-        <SearchFilter
-          filters={filters}
-          onChange={handleChange}
-          onSearch={handleSearch}
-          years={years}
-          documentTypes={documentTypes}
-          includeStatus={includeStatus}
-          includeCategory={includeCategory}
-        />
+      <SearchFilter
+            filters={filters}
+            onChange={handleChange}
+            onSearch={handleSearch}
+            webmasterSectionId={webmasterSectionId}
+          />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
           <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
