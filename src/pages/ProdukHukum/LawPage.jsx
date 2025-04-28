@@ -7,6 +7,7 @@ import PopularDocument from "../../components/PopularDocument";
 import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
+import NewOldFilter from "../../components/common/NewOldFilter"; // Make sure this is imported
 
 const LawPage = ({
   apiUrl,
@@ -28,6 +29,7 @@ const LawPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest"); // New state for sorting
 
   const [filters, setFilters] = useState({
     number: "",
@@ -47,9 +49,14 @@ const LawPage = ({
     setCurrentPage(1);
   };
 
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+    setCurrentPage(1);
+  };
+
   useEffect(() => {
     fetchLaws();
-  }, [currentPage, filters]);
+  }, [currentPage, filters, sortOrder]);
 
   const fetchLaws = async () => {
     setIsLoading(true);
@@ -126,6 +133,15 @@ const LawPage = ({
           })
         );
 
+        // Apply sorting here before setting the state
+        const sortedMappedLaws = mappedLaws.sort((a, b) => {
+          const yearA = parseInt(a.year) || 0;
+          const yearB = parseInt(b.year) || 0;
+          if (sortOrder === "newest") return yearB - yearA;
+          return yearA - yearB;
+        });
+
+        setLaws(sortedMappedLaws);
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
       } else {
         rawLaws = result.data?.data || [];
@@ -155,10 +171,17 @@ const LawPage = ({
           };
         });
 
+        // Apply sorting here before setting the state
+        const sortedMappedLaws = mappedLaws.sort((a, b) => {
+          const yearA = parseInt(a.year) || 0;
+          const yearB = parseInt(b.year) || 0;
+          if (sortOrder === "newest") return yearB - yearA;
+          return yearA - yearB;
+        });
+
+        setLaws(sortedMappedLaws);
         setTotalItems(result.data?.pagination?.total || 0);
       }
-
-      setLaws(mappedLaws);
     } catch (error) {
       console.error("Error fetching law data:", error);
     } finally {
@@ -187,8 +210,8 @@ const LawPage = ({
           {isLoading ? (
             <span className="text-sm text-gray-500">Loading...</span>
           ) : (
-            <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
-              <Filter className="text-emerald-600 w-6 h-6" />
+            <div className="flex justify-between items-center mt-5">
+              <NewOldFilter onSortChange={handleSortChange} />
             </div>
           )}
         </div>

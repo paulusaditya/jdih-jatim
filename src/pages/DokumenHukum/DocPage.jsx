@@ -6,15 +6,15 @@ import DocCard from "../../components/DokumenHukum/DocCard";
 import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
+import NewOldFilter from "../../components/common/NewOldFilter";
 
-// Tambahkan mapping antara sectionId dan webmasterSectionId
 const webmasterSectionMapping = {
-  16: 16, // Propemperda
-  17: 17, // Staatblad
-  20: 20, // Putusan Pengadilan
-  11: 11, // Monografi
-  15: 15, // Artikel Hukum
-  21: 21, // Dokumen Langka
+  16: 16,
+  17: 17,
+  20: 20,
+  11: 11,
+  15: 15,
+  21: 21,
 };
 
 const DocPage = ({
@@ -31,10 +31,12 @@ const DocPage = ({
   customSidebar = null,
 }) => {
   const [documents, setDocuments] = useState([]);
+  const [allDocuments, setAllDocuments] = useState([]);
   const [title, setTitle] = useState(pageTitle);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest"); // newest | oldest
 
   const [filters, setFilters] = useState({
     number: "",
@@ -52,20 +54,19 @@ const DocPage = ({
 
   useEffect(() => {
     fetchDocuments();
-  }, [currentPage, filters]);
+  }, []);
+
+  useEffect(() => {
+    applyFiltersAndSorting();
+  }, [filters, sortOrder, allDocuments, currentPage]);
 
   const fetchDocuments = async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
-      params.append("page", currentPage);
-
+      params.append("page", 1);
+      params.append("per_page", 1000); // ambil banyak sekalian
       if (sectionId) params.append("webmaster_section_id", sectionId);
-
-      if (filters.searchQuery) params.append("search", filters.searchQuery);
-      if (filters.number) params.append("classification", filters.number);
-      if (filters.type) params.append("type", filters.type);
-      if (filters.year) params.append("year", filters.year);
 
       const response = await fetch(`${apiUrl}?${params.toString()}`);
       const result = await response.json();
@@ -75,62 +76,11 @@ const DocPage = ({
 
       if (Array.isArray(result.data)) {
         rawDocs = result.data;
-
-        const docsWithSlug = await Promise.all(
-          rawDocs.map(async (item) => {
-            if (customMap) return customMap(item);
-            try {
-              const detailRes = await fetch(
-                `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
-              );
-              const detailData = await detailRes.json();
-              return {
-                id: item.id,
-                slug: detailData.data?.seo_url_slug_id || item.id,
-                title: item.title || "Tanpa Judul",
-                year:
-                  detailData.data?.fields?.find(
-                    (f) => f.title === "Tahun Terbit"
-                  )?.details || "-",
-                status:
-                  detailData.data?.fields?.find(
-                    (f) => f.title === "Subjek Artikel"
-                  )?.details || "-",
-                category:
-                  detailData.data?.fields?.find(
-                    (f) => f.title === "T.E.U Badan/Pengarang"
-                  )?.details || "-",
-                bidang: detailData.data?.fields?.find(
-                  (f) => f.title === "Bidang Hukum"
-                )?.details,
-                nomorPutusan: detailData.data?.fields?.find(
-                  (f) => f.title === "Nomor Putusan"
-                )?.details,
-                image:
-                  item.image ||
-                  "http://via.placeholder.com/100x150",
-              };
-            } catch (err) {
-              return {
-                id: item.id,
-                slug: item.id,
-                title: item.title || "Tanpa Judul",
-                year: "-",
-                status: "-",
-                category: "-",
-                image:
-                  item.image ||
-                  "http://via.placeholder.com/100x150",
-              };
-            }
-          })
-        );
-
-        mappedDocs = docsWithSlug;
-        setTotalItems(result.pagination?.total || rawDocs.length || 0);
+        mappedDocs = await mapDocuments(rawDocs);
+        setAllDocuments(mappedDocs);
+        setTotalItems(mappedDocs.length);
       } else {
         rawDocs = result.data?.data || [];
-
         mappedDocs = rawDocs.map((item) => {
           const fields = item.fields || [];
           const getField = (fieldName) =>
@@ -146,16 +96,12 @@ const DocPage = ({
               getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
             bidang: getField("Bidang Hukum"),
             nomorPutusan: getField("Nomor Putusan") || getField("Nomor Induk"),
-            image:
-              item.image ||
-              "http://via.placeholder.com/100x150",
+            image: item.image || "http://via.placeholder.com/100x150",
           };
         });
-
-        setTotalItems(result.data?.pagination?.total || 0);
+        setAllDocuments(mappedDocs);
+        setTotalItems(mappedDocs.length);
       }
-
-      setDocuments(mappedDocs);
     } catch (error) {
       console.error("Error fetching document data:", error);
     } finally {
@@ -163,17 +109,98 @@ const DocPage = ({
     }
   };
 
+  const mapDocuments = async (rawDocs) => {
+    return await Promise.all(
+      rawDocs.map(async (item) => {
+        if (customMap) return customMap(item);
+        try {
+          const detailRes = await fetch(`https://jdih.pisdev.my.id/api/v2/topics/${item.id}`);
+          const detailData = await detailRes.json();
+          return {
+            id: item.id,
+            slug: detailData.data?.seo_url_slug_id || item.id,
+            title: item.title || "Tanpa Judul",
+            year:
+              detailData.data?.fields?.find((f) => f.title === "Tahun Terbit")?.details || "-",
+            status:
+              detailData.data?.fields?.find((f) => f.title === "Subjek Artikel")?.details || "-",
+            category:
+              detailData.data?.fields?.find((f) => f.title === "T.E.U Badan/Pengarang")?.details || "-",
+            bidang: detailData.data?.fields?.find((f) => f.title === "Bidang Hukum")?.details,
+            nomorPutusan:
+              detailData.data?.fields?.find((f) => f.title === "Nomor Putusan")?.details,
+            image: item.image || "http://via.placeholder.com/100x150",
+          };
+        } catch (err) {
+          return {
+            id: item.id,
+            slug: item.id,
+            title: item.title || "Tanpa Judul",
+            year: "-",
+            status: "-",
+            category: "-",
+            image: item.image || "http://via.placeholder.com/100x150",
+          };
+        }
+      })
+    );
+  };
+
+  const applyFiltersAndSorting = () => {
+    let filtered = [...allDocuments];
+
+    // Apply search
+    if (filters.searchQuery) {
+      filtered = filtered.filter((doc) =>
+        doc.title.toLowerCase().includes(filters.searchQuery.toLowerCase())
+      );
+    }
+
+    // Apply number, type, year filter if needed
+    if (filters.number) {
+      filtered = filtered.filter((doc) => doc.nomorPutusan?.includes(filters.number));
+    }
+    if (filters.type) {
+      filtered = filtered.filter((doc) => doc.category?.includes(filters.type));
+    }
+    if (filters.year) {
+      filtered = filtered.filter((doc) => String(doc.year).includes(filters.year));
+    }
+
+    // Sorting based on year
+    filtered.sort((a, b) => {
+      const yearA = parseInt(a.year) || 0;
+      const yearB = parseInt(b.year) || 0;
+      if (sortOrder === "newest") return yearB - yearA;
+      return yearA - yearB;
+    });
+
+    // Pagination frontend
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    setDocuments(filtered.slice(startIdx, endIdx));
+    setTotalItems(filtered.length);
+  };
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleSearch = () => {
-    setCurrentPage(1);
-    fetchDocuments();
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+    setCurrentPage(1); // Reset ke halaman 1 kalau ganti urutan
   };
 
-  // Ambil webmasterSectionId berdasarkan mapping
+  const handleSearch = () => {
+    setCurrentPage(1);
+    applyFiltersAndSorting();
+  };
+
   const webmasterSectionId = webmasterSectionMapping[sectionId] || null;
+
+  useEffect(() => {
+    applyFiltersAndSorting(); // Apply sorting and filter again after sortOrder is updated
+  }, [sortOrder]);
 
   return (
     <>
@@ -194,9 +221,7 @@ const DocPage = ({
             {isLoading ? (
               <span className="text-sm text-gray-500">Loading...</span>
             ) : (
-              <div className="flex gap-2 justify-center items-center self-stretch px-3 my-auto w-10 h-10 bg-emerald-50 rounded-lg border border-emerald-200 border-solid">
-                <Filter className="text-emerald-600 w-6 h-6" />
-              </div>
+              <NewOldFilter onSortChange={handleSortChange} />
             )}
           </div>
 
@@ -217,9 +242,7 @@ const DocPage = ({
               ))
             ) : (
               <div className="text-center py-8 text-gray-500">
-                {isLoading
-                  ? "Memuat data..."
-                  : "Tidak ada dokumen yang ditemukan"}
+                {isLoading ? "Memuat data..." : "Tidak ada dokumen yang ditemukan"}
               </div>
             )}
           </div>
