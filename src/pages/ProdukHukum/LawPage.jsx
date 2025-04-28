@@ -21,6 +21,7 @@ const LawPage = ({
   customMap = null,
   customSidebar = null,
   typeToSectionId = {},
+  webmasterSectionId = "10",
 }) => {
   const [laws, setLaws] = useState([]);
   const [title, setTitle] = useState(pageTitle);
@@ -56,7 +57,7 @@ const LawPage = ({
       const params = new URLSearchParams();
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
-      params.append("webmaster_section_id", "10");
+      params.append("webmaster_section_id", webmasterSectionId);
       params.append("sort_by", "id");
       params.append("sort_order", "asc");
       params.append("section_id", sectionId);
@@ -176,6 +177,7 @@ const LawPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
+          webmasterSectionId={webmasterSectionId} 
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
