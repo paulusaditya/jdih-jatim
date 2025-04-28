@@ -2,20 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
-import DocCard from "../../components/DokumenHukum/DocCard";
+import DocumentCard from "../../components/DokumenHukum/DocCard";
 import PopularDocument from "../../components/PopularDocument";
+import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 import NewOldFilter from "../../components/common/NewOldFilter";
-
-const webmasterSectionMapping = {
-  16: 16,
-  17: 17,
-  20: 20,
-  11: 11,
-  15: 15,
-  21: 21,
-};
 
 const DocPage = ({
   apiUrl,
@@ -29,14 +21,15 @@ const DocPage = ({
   detailPath = "",
   customMap = null,
   customSidebar = null,
+  typeToSectionId = {},
+  webmasterSectionId,
 }) => {
   const [documents, setDocuments] = useState([]);
-  const [allDocuments, setAllDocuments] = useState([]);
   const [title, setTitle] = useState(pageTitle);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("newest"); // newest | oldest
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const [filters, setFilters] = useState({
     number: "",
@@ -52,55 +45,125 @@ const DocPage = ({
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    fetchDocuments();
-  }, []);
+  const handleSearch = () => {
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
-    applyFiltersAndSorting();
-  }, [filters, sortOrder, allDocuments, currentPage]);
+    fetchDocuments();
+  }, [currentPage, filters, sortOrder]);
 
   const fetchDocuments = async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
-      params.append("page", 1);
-      params.append("per_page", 1000); // ambil banyak sekalian
-      if (sectionId) params.append("webmaster_section_id", sectionId);
+      params.append("per_page", itemsPerPage);
+      params.append("page", currentPage);
+      params.append("webmaster_section_id", sectionId);
+      params.append("sort_by", "created_at");
+      params.append("sort_order", sortOrder);
 
-      const response = await fetch(`${apiUrl}?${params.toString()}`);
+      if (filters.searchQuery) params.append("search", filters.searchQuery);
+      if (filters.number) params.append("classification", filters.number);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.year) params.append("year", filters.year);
+
+      const fullUrl = `${apiUrl}?${params.toString()}`;
+      console.log("Fetching from:", fullUrl);
+
+      const response = await fetch(fullUrl);
+      const contentType = response.headers.get("content-type");
+
+      if (!response.ok || !contentType.includes("application/json")) {
+        throw new Error(`Invalid response: ${response.status}`);
+      }
+
       const result = await response.json();
+      console.log("API Response:", result);
 
-      let rawDocs = [];
-      let mappedDocs = [];
+      let rawDocuments = [];
+      let mappedDocuments = [];
 
       if (Array.isArray(result.data)) {
-        rawDocs = result.data;
-        mappedDocs = await mapDocuments(rawDocs);
-        setAllDocuments(mappedDocs);
-        setTotalItems(mappedDocs.length);
+        rawDocuments = result.data;
+
+        mappedDocuments = await Promise.all(
+          rawDocuments.map(async (item) => {
+            try {
+              const detailRes = await fetch(
+                `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
+              );
+              const detailData = await detailRes.json();
+              const fields = {};
+              detailData.data?.fields?.forEach(
+                (f) => (fields[f.title] = f.details)
+              );
+
+              return {
+                id: item.id,
+                title: fields["Judul Peraturan"] || item.title || "Unknown",
+                year: fields["Tahun Terbit"] || "Unknown",
+                number: fields["Nomor"] || "Unknown",
+                type: fields["Singkatan Jenis"] || "Unknown",
+                status: fields["Keterangan Status"] || "-",
+                category: fields["Kategori"] || "",
+                image: item.image,
+                slug: detailData.data?.seo_url_slug_id || item.id,
+              };
+            } catch (err) {
+              console.error("Detail fetch failed:", err);
+              return {
+                id: item.id,
+                title: item.title || "Tanpa Judul",
+                year: "-",
+                number: "-",
+                type: "-",
+                status: "-",
+                category: "-",
+                image: item.image,
+                slug: item.id,
+              };
+            }
+          })
+        );
+
+        setDocuments(mappedDocuments);
+        setTotalItems(result.pagination?.total || rawDocuments.length || 0);
       } else {
-        rawDocs = result.data?.data || [];
-        mappedDocs = rawDocs.map((item) => {
-          const fields = item.fields || [];
-          const getField = (fieldName) =>
-            fields.find((f) => f.title === fieldName)?.details;
+        rawDocuments = result.data?.data || [];
+
+        if (filters.number) {
+          rawDocuments = rawDocuments.filter(
+            (item) => item.classification === filters.number
+          );
+        }
+
+        mappedDocuments = rawDocuments.map((item) => {
+          const fields = {};
+          (item.fields || []).forEach((f) => (fields[f.title] = f.details));
 
           return {
             id: item.id,
-            slug: item.seo_url_slug_id,
-            title: item.title || "Tanpa Judul",
-            year: getField("Tahun Terbit") || getField("Tahun"),
-            status: getField("Subjek Artikel") || getField("Subjek"),
+            title: fields["Judul Peraturan"] || item.title || "Unknown",
+            year: fields["Tahun Terbit"] || fields["Tahun"] || "-",
+            number: fields["Nomor"] || "-",
+            type: fields["Singkatan Jenis"] || "-",
+            status:
+              fields["Keterangan Status"] || fields["Subjek Artikel"] || "-",
             category:
-              getField("T.E.U Badan/Pengarang") || getField("T.E.U Badan"),
-            bidang: getField("Bidang Hukum"),
-            nomorPutusan: getField("Nomor Putusan") || getField("Nomor Induk"),
-            image: item.image || "http://via.placeholder.com/100x150",
+              fields["Kategori"] || fields["T.E.U Badan/Pengarang"] || "-",
+            image: item.image,
+            slug: item.seo_url_slug_id || item.id,
           };
         });
-        setAllDocuments(mappedDocs);
-        setTotalItems(mappedDocs.length);
+
+        setDocuments(mappedDocuments);
+        setTotalItems(result.data?.pagination?.total || 0);
       }
     } catch (error) {
       console.error("Error fetching document data:", error);
@@ -109,161 +172,76 @@ const DocPage = ({
     }
   };
 
-  const mapDocuments = async (rawDocs) => {
-    return await Promise.all(
-      rawDocs.map(async (item) => {
-        if (customMap) return customMap(item);
-        try {
-          const detailRes = await fetch(`https://jdih.pisdev.my.id/api/v2/topics/${item.id}`);
-          const detailData = await detailRes.json();
-          return {
-            id: item.id,
-            slug: detailData.data?.seo_url_slug_id || item.id,
-            title: item.title || "Tanpa Judul",
-            year:
-              detailData.data?.fields?.find((f) => f.title === "Tahun Terbit")?.details || "-",
-            status:
-              detailData.data?.fields?.find((f) => f.title === "Subjek Artikel")?.details || "-",
-            category:
-              detailData.data?.fields?.find((f) => f.title === "T.E.U Badan/Pengarang")?.details || "-",
-            bidang: detailData.data?.fields?.find((f) => f.title === "Bidang Hukum")?.details,
-            nomorPutusan:
-              detailData.data?.fields?.find((f) => f.title === "Nomor Putusan")?.details,
-            image: item.image || "http://via.placeholder.com/100x150",
-          };
-        } catch (err) {
-          return {
-            id: item.id,
-            slug: item.id,
-            title: item.title || "Tanpa Judul",
-            year: "-",
-            status: "-",
-            category: "-",
-            image: item.image || "http://via.placeholder.com/100x150",
-          };
-        }
-      })
-    );
-  };
-
-  const applyFiltersAndSorting = () => {
-    let filtered = [...allDocuments];
-
-    // Apply search
-    if (filters.searchQuery) {
-      filtered = filtered.filter((doc) =>
-        doc.title.toLowerCase().includes(filters.searchQuery.toLowerCase())
-      );
-    }
-
-    // Apply number, type, year filter if needed
-    if (filters.number) {
-      filtered = filtered.filter((doc) => doc.nomorPutusan?.includes(filters.number));
-    }
-    if (filters.type) {
-      filtered = filtered.filter((doc) => doc.category?.includes(filters.type));
-    }
-    if (filters.year) {
-      filtered = filtered.filter((doc) => String(doc.year).includes(filters.year));
-    }
-
-    // Sorting based on year
-    filtered.sort((a, b) => {
-      const yearA = parseInt(a.year) || 0;
-      const yearB = parseInt(b.year) || 0;
-      if (sortOrder === "newest") return yearB - yearA;
-      return yearA - yearB;
-    });
-
-    // Pagination frontend
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const endIdx = startIdx + itemsPerPage;
-    setDocuments(filtered.slice(startIdx, endIdx));
-    setTotalItems(filtered.length);
-  };
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleSortChange = (order) => {
-    setSortOrder(order);
-    setCurrentPage(1); // Reset ke halaman 1 kalau ganti urutan
-  };
-
-  const handleSearch = () => {
-    setCurrentPage(1);
-    applyFiltersAndSorting();
-  };
-
-  const webmasterSectionId = webmasterSectionMapping[sectionId] || null;
-
-  useEffect(() => {
-    applyFiltersAndSorting(); // Apply sorting and filter again after sortOrder is updated
-  }, [sortOrder]);
-
   return (
-    <>
-      <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2">
-          <SearchFilter
-            filters={filters}
-            onChange={handleChange}
-            onSearch={handleSearch}
-            webmasterSectionId={webmasterSectionId}
-          />
+    <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="md:col-span-2">
+        <SearchFilter
+          filters={filters}
+          onChange={handleChange}
+          onSearch={handleSearch}
+          webmasterSectionId={sectionId}
+        />
 
-          <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
-            <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
-              Semua Data ({totalItems})
-            </div>
-            {isLoading ? (
-              <span className="text-sm text-gray-500">Loading...</span>
-            ) : (
-              <NewOldFilter onSortChange={handleSortChange} />
-            )}
+        <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
+          <div className="self-stretch my-auto text-base font-semibold text-zinc-800">
+            Semua Dokumen ({totalItems})
           </div>
-
-          <div className="grid grid-cols-1 gap-4 mt-4">
-            {documents.length > 0 ? (
-              documents.map((doc) => (
-                <DocCard
-                  key={doc.id}
-                  title={doc.title}
-                  year={doc.year}
-                  status={doc.status}
-                  category={doc.category}
-                  bidang={doc.bidang}
-                  nomorPutusan={doc.nomorPutusan}
-                  image={doc.image}
-                  onDetailClick={() => navigate(`${detailPath}/${doc.slug}`)}
-                />
-              ))
-            ) : (
-              <div className="text-center py-8 text-gray-500">
-                {isLoading ? "Memuat data..." : "Tidak ada dokumen yang ditemukan"}
-              </div>
-            )}
-          </div>
-
-          <Pagination
-            currentPage={currentPage}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-
-        <div className="w-full">
-          {customSidebar !== null ? (
-            customSidebar
+          {isLoading ? (
+            <span className="text-sm text-gray-500">Loading...</span>
           ) : (
-            <PopularDocument sectionId={sectionId} />
+            <div className="flex justify-between items-center mt-5">
+              <NewOldFilter onSortChange={handleSortChange} />
+            </div>
           )}
         </div>
+
+        <div className="grid grid-cols-1 gap-4 mt-4">
+          {documents.length > 0 ? (
+            documents.map((doc) => (
+              <DocumentCard
+                key={doc.id}
+                title={doc.title}
+                year={doc.year}
+                number={doc.number}
+                type={doc.type}
+                status={doc.status}
+                category={doc.category}
+                image={doc.image}
+                onDetailClick={() => navigate(`${detailPath}/${doc.slug}`)}
+              />
+            ))
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              {isLoading
+                ? "Memuat data..."
+                : "Tidak ada dokumen yang ditemukan"}
+            </div>
+          )}
+        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+        />
       </div>
-    </>
+
+      <div className="w-full">
+        <Kategori />
+        {customSidebar !== null ? (
+          customSidebar
+        ) : (
+          <div className="mt-6">
+            <PopularDocument sectionId={sectionId} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
