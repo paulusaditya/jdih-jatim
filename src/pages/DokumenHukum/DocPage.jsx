@@ -7,12 +7,6 @@ import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 
-// Fungsi proxy logo
-const proxiedLogo = (logo) =>
-  logo?.startsWith("http://")
-    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-    : logo;
-
 const DocPage = ({
   apiUrl,
   title: pageTitle,
@@ -56,8 +50,7 @@ const DocPage = ({
       const params = new URLSearchParams();
       params.append("page", currentPage);
 
-
-      if (sectionId) params.append("webmaster_id", sectionId); 
+      if (sectionId) params.append("webmaster_section_id", sectionId);
 
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
@@ -104,7 +97,7 @@ const DocPage = ({
                   (f) => f.title === "Nomor Putusan"
                 )?.details,
                 image:
-                  proxiedLogo(item.image) ||
+                  item.image ||
                   "http://via.placeholder.com/100x150",
               };
             } catch (err) {
@@ -116,7 +109,7 @@ const DocPage = ({
                 status: "-",
                 category: "-",
                 image:
-                  proxiedLogo(item.image) ||
+                  item.image ||
                   "http://via.placeholder.com/100x150",
               };
             }
@@ -144,7 +137,8 @@ const DocPage = ({
             bidang: getField("Bidang Hukum"),
             nomorPutusan: getField("Nomor Putusan") || getField("Nomor Induk"),
             image:
-              proxiedLogo(item.image) || "http://via.placeholder.com/100x150",
+              item.image ||
+              "http://via.placeholder.com/100x150",
           };
         });
 

@@ -8,11 +8,6 @@ export default function PopularDocumentMonography() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const proxiedLogo = (logo) =>
-    logo?.startsWith("http://")
-      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-      : logo;
-
   useEffect(() => {
     const fetchMostViewedDocuments = async () => {
       try {
@@ -23,7 +18,6 @@ export default function PopularDocumentMonography() {
         const data = await response.json();
 
         const mostViewedBooks = data.data || [];
-
 
         const booksWithDetails = await Promise.all(
           mostViewedBooks.slice(0, 2).map(async (book) => {
@@ -82,7 +76,7 @@ export default function PopularDocumentMonography() {
               >
                 {book.image && (
                   <img
-                    src={proxiedLogo(book.image)}
+                    src={book.image}
                     alt={book.title}
                     className="w-full h-auto rounded shadow group-hover:opacity-90"
                   />

@@ -3,17 +3,12 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
-import LoadingSpinner from "../common/LoadingSpinner";
+import LoadingSpinner from "../common/LoadingSpinner"
 
 export default function Monographic() {
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
-  const proxiedLogo = (logo) =>
-    logo?.startsWith("http://")
-      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-      : logo
 
   // Fisher-Yates shuffle algorithm to randomize array
   const shuffleArray = (array) => {
@@ -96,7 +91,7 @@ export default function Monographic() {
               >
                 <Link to={book.slug ? `/site-pages/monografi/${book.slug}` : "#"}>
                   <img
-                    src={proxiedLogo(book.image)}
+                    src={book.image}
                     alt={book.title}
                     className="w-full h-64 object-cover rounded-lg shadow-md hover:opacity-90 transition-opacity"
                   />

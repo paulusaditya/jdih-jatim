@@ -31,7 +31,7 @@ const MonographyPage = () => (
     includeStatus={false}
     includeCategory={false}
     detailPath="/site-pages/monografi"
-    customSidebar={<PopularDocumentMonography />} // ini bagian yang kamu update
+    customSidebar={<PopularDocumentMonography />}
   />
 );
 

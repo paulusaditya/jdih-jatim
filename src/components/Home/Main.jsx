@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -7,13 +9,7 @@ export default function Main() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const proxiedLogo = (logo) =>
-    logo?.startsWith("http://")
-      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}` // Proxing gambar
-      : logo;
-
   useEffect(() => {
-    // Menggunakan proxy AllOrigins untuk request API yang aman
     fetch(
       "https://api.allorigins.win/get?url=" +
         encodeURIComponent("http://54.169.231.19/api/v2/home/banners")
@@ -22,14 +18,19 @@ export default function Main() {
       .then((data) => {
         const parsed = JSON.parse(data.contents);
         setBanners(parsed.data || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching banners:", error);
       });
   }, []);
 
   useEffect(() => {
     if (banners.length === 0) return;
+
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % banners.length);
-    }, 7000); 
+    }, 7000);
+
     return () => clearInterval(interval);
   }, [banners]);
 
@@ -65,17 +66,17 @@ export default function Main() {
               className="w-full h-auto"
             >
               <img
-                src={proxiedLogo(banners[activeIndex].image)}
+                src={banners[activeIndex].image}
                 alt={banners[activeIndex].title}
                 className="w-full h-auto object-contain cursor-pointer"
-                onClick={() => handleBannerClick(banners[activeIndex].link)} // Tangkap klik dan buka link
+                onClick={() => handleBannerClick(banners[activeIndex].link)}
               />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Arrow navigation (show only on hover) */}
+      {/* Arrow navigation */}
       {isHovered && banners.length > 1 && (
         <>
           <button

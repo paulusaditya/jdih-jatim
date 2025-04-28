@@ -10,7 +10,7 @@ const DetailBerita = () => {
   useEffect(() => {
     const fetchTitle = async () => {
       try {
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/topics?webmaster_id=3")
+        const response = await fetch("https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3")
         const data = await response.json()
         if (data.status === "success") {
           const found = data.data.data.find((item) => {

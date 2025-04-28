@@ -30,7 +30,7 @@ export default function JDIHUniversityMembers() {
         </h2>
 
         {loading ? (
-      <LoadingSpinner />
+          <LoadingSpinner />
         ) : (
           <div className="grid gap-6 justify-items-center grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {members.map((member) => (
@@ -49,10 +49,6 @@ export default function JDIHUniversityMembers() {
 }
 
 function MemberCard({ name, logo, link }) {
-  const proxiedLogo = logo?.startsWith("http://")
-    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-    : logo;
-
   return (
     <a
       href={link !== "#" ? link : undefined}
@@ -63,7 +59,7 @@ function MemberCard({ name, logo, link }) {
     >
       <div className="text-xl mb-3 w-full h-full">
         <img
-          src={proxiedLogo || "/placeholder.svg"}
+          src={logo || "/placeholder.svg"}
           alt={`Logo ${name}`}
           className="object-contain w-full h-full"
           onError={(e) => (e.target.src = "/placeholder.svg")}

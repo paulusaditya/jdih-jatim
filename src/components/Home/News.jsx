@@ -5,10 +5,6 @@ import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react"
 import { Link } from "react-router-dom"
 import LoadingSpinner from "../common/LoadingSpinner";
 
-const proxiedLogo = (logo) =>
-  logo?.startsWith("http://")
-    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-    : logo
 
 export default function NewsSection() {
   const [newsItems, setNewsItems] = useState([])
@@ -21,7 +17,7 @@ export default function NewsSection() {
     const fetchNews = async () => {
       try {
         setLoading(true)
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/topics?webmaster_id=3")
+        const response = await fetch("https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3")
 
         if (!response.ok) {
           throw new Error("Failed to fetch news data")
@@ -40,7 +36,7 @@ export default function NewsSection() {
                 id: item.id,
                 title: item.title,
                 content: item.seo_description_id || item.excerpt || "No description available",
-                image: proxiedLogo(item.image || "/placeholder.svg?height=300&width=500"),
+                image: item.image || "/placeholder.svg?height=300&width=500",
                 date: formattedDate,
                 slug: item.seo_url_slug_id || `news/${item.id}`, // Use slug from API
               }

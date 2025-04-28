@@ -10,42 +10,42 @@ export default function JDIHNetworkMembers() {
   const [error, setError] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-useEffect(() => {
-  const fetchAllMembers = async () => {
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    const fetchAllMembers = async () => {
+      setLoading(true);
+      setError(null);
 
-    let allData = [];
-    let currentPage = 1;
-    let lastPage = 1;
+      let allData = [];
+      let currentPage = 1;
+      let lastPage = 1;
 
-    try {
-      while (currentPage <= lastPage) {
-        const response = await fetch(`https://jdih.pisdev.my.id/api/v2/home/partner-affiliates?page=${currentPage}`);
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data anggota JDIH");
+      try {
+        while (currentPage <= lastPage) {
+          const response = await fetch(
+            `https://jdih.pisdev.my.id/api/v2/home/partner-affiliates?page=${currentPage}`
+          );
+          if (!response.ok) {
+            throw new Error("Gagal mengambil data anggota JDIH");
+          }
+
+          const result = await response.json();
+          const { data, pagination } = result;
+
+          allData = [...allData, ...data];
+          lastPage = pagination?.last_page || 1;
+          currentPage++;
         }
 
-        const result = await response.json();
-        const { data, pagination } = result;
-
-        allData = [...allData, ...data];
-        lastPage = pagination?.last_page || 1;
-        currentPage++;
+        setMembers(allData);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setMembers(allData);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchAllMembers();
-}, []);
-
-
+    fetchAllMembers();
+  }, []);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p className="text-center text-red-600">Error: {error}</p>;
@@ -104,11 +104,6 @@ useEffect(() => {
 }
 
 function MemberCard({ logo, link, className = "", style = {} }) {
-  // Gunakan proxy untuk gambar HTTP agar tidak diblokir di environment HTTPS
-  const proxiedLogo = logo?.startsWith("http://")
-    ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-    : logo;
-
   return (
     <a
       href={link}
@@ -118,7 +113,7 @@ function MemberCard({ logo, link, className = "", style = {} }) {
       style={style}
     >
       <img
-        src={proxiedLogo || "/placeholder.svg"}
+        src={logo || "/placeholder.svg"}
         alt="Logo Kabupaten"
         className="object-contain w-full h-full"
         onError={(e) => (e.target.src = "/placeholder.svg")}

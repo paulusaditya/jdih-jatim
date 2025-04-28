@@ -1,120 +1,115 @@
-"use client"
+"use client";
 
-import { Search, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
+import { Search, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function BeritaPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [beritaList, setBeritaList] = useState([])
-  const [filteredBeritaList, setFilteredBeritaList] = useState([])
+  const [beritaList, setBeritaList] = useState([]);
+  const [filteredBeritaList, setFilteredBeritaList] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [recordsPerPage] = useState(9)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(9);
 
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [showDateInput, setShowDateInput] = useState(false)
-  const [selectedDate, setSelectedDate] = useState("")
-  const [searchQuery, setSearchQuery] = useState("")
-
-  const proxiedLogo = (logo) =>
-    logo?.startsWith("http://")
-      ? `https://images.weserv.nl/?url=${logo.replace("http://", "")}`
-      : logo
+  const [showDateInput, setShowDateInput] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetchAllBerita()
-  }, [])
+    fetchAllBerita();
+  }, []);
 
   useEffect(() => {
-    filterBerita()
-    setCurrentPage(1)
-  }, [searchQuery, selectedDate, beritaList])
+    filterBerita();
+    setCurrentPage(1);
+  }, [searchQuery, selectedDate, beritaList]);
 
   const fetchAllBerita = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await fetch(
-        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_id=3&per_page=9999`
-      )
+        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=9999`
+      );
       if (!response.ok) {
-        throw new Error("Network response was not ok")
+        throw new Error("Network response was not ok");
       }
-      const data = await response.json()
+      const data = await response.json();
       if (data.status === "success") {
-        setBeritaList(data.data.data)
+        setBeritaList(data.data.data);
       } else {
-        throw new Error("Failed to fetch data")
+        throw new Error("Failed to fetch data");
       }
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filterBerita = () => {
-    let filtered = beritaList
+    let filtered = beritaList;
 
     if (searchQuery) {
       filtered = filtered.filter((berita) =>
         berita.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      );
     }
 
     if (selectedDate) {
       filtered = filtered.filter(
         (berita) => berita.date && berita.date.startsWith(selectedDate)
-      )
+      );
     }
 
-    setFilteredBeritaList(filtered)
-  }
+    setFilteredBeritaList(filtered);
+  };
 
   const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "long", year: "numeric" }
-    const date = new Date(dateString)
-    return date.toLocaleDateString("id-ID", options)
-  }
+    const options = { day: "2-digit", month: "long", year: "numeric" };
+    const date = new Date(dateString);
+    return date.toLocaleDateString("id-ID", options);
+  };
 
-  const totalRecords = filteredBeritaList.length
-  const totalPages = Math.ceil(totalRecords / recordsPerPage)
-  const startIndex = (currentPage - 1) * recordsPerPage
-  const endIndex = startIndex + recordsPerPage
-  const currentBeritaList = filteredBeritaList.slice(startIndex, endIndex)
+  const totalRecords = filteredBeritaList.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+  const startIndex = (currentPage - 1) * recordsPerPage;
+  const endIndex = startIndex + recordsPerPage;
+  const currentBeritaList = filteredBeritaList.slice(startIndex, endIndex);
 
-  const startRecord = startIndex + 1
-  const endRecord = Math.min(endIndex, totalRecords)
+  const startRecord = startIndex + 1;
+  const endRecord = Math.min(endIndex, totalRecords);
 
   const getPageNumbers = () => {
-    const pages = []
-    pages.push(1)
+    const pages = [];
+    pages.push(1);
     for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
       if (i === 2 && currentPage > 3) {
-        pages.push("...")
+        pages.push("...");
       } else if (i === totalPages - 1 && currentPage < totalPages - 2) {
-        pages.push("...")
+        pages.push("...");
       } else {
-        pages.push(i)
+        pages.push(i);
       }
     }
-    if (totalPages > 1) pages.push(totalPages)
-    return pages
-  }
+    if (totalPages > 1) pages.push(totalPages);
+    return pages;
+  };
 
   const changePage = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page)
-  }
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
 
   const handleCardClick = (link) => {
-    const slug = link.startsWith("./") ? link.substring(2) : link
-    navigate(`/news/detail-berita/${slug}`)
-  }
+    const slug = link.startsWith("./") ? link.substring(2) : link;
+    navigate(`/news/detail-berita/${slug}`);
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
@@ -169,7 +164,7 @@ export default function BeritaPage() {
 
         {loading ? (
           <div className="text-center py-8">
-      <LoadingSpinner />
+            <LoadingSpinner />
           </div>
         ) : error ? (
           <div className="text-center py-8 text-red-500">
@@ -188,7 +183,7 @@ export default function BeritaPage() {
                 onClick={() => handleCardClick(berita.link)}
               >
                 <img
-                  src={proxiedLogo(berita.image) || "/placeholder.svg"}
+                  src={berita.image || "/placeholder.svg"}
                   alt={berita.title}
                   className="w-full h-48 object-cover"
                   onError={(e) => {
