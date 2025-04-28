@@ -1,8 +1,29 @@
+import { useEffect, useState } from "react";
 import { Twitter, Instagram, Youtube } from "lucide-react";
-import { FaFacebook } from "react-icons/fa"; 
+import { FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
+  const [visitorStats, setVisitorStats] = useState({
+    today: 0,
+    last_week: 0,
+    last_month: 0,
+    total: 0,
+  });
+
+  useEffect(() => {
+    fetch("https://jdih.pisdev.my.id/api/v2/analytics/visitors")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setVisitorStats(data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching visitor analytics:", error);
+      });
+  }, []);
+
   return (
     <footer className="md:pt-80 pt-40">
       {/* Main Footer */}
@@ -12,7 +33,8 @@ export default function Footer() {
           <img src="/assets/Group 380.png" alt="" className="hidden md:block" />
         </div>
       </div>
-      <div className="bg-blue-950 text-white py-15 px-4 md:px-8 md:pt-60  pt-20">
+
+      <div className="bg-blue-950 text-white py-15 px-4 md:px-8 md:pt-60 pt-20">
         <div className="max-w-7xl mx-auto">
           {/* Bagian Atas: Info Kantor, Support, Media Sosial */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
@@ -71,7 +93,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-blue-300"
                 >
-                  <FaFacebook size={24} /> {/* Changed to Facebook icon */}
+                  <FaFacebook size={24} />
                 </a>
                 <a
                   href="https://twitter.com/jdihjatimprov"
@@ -106,28 +128,16 @@ export default function Footer() {
             {/* Empty Column untuk menjaga struktur */}
             <div></div>
 
-            {/* Sitemap*/}
+            {/* Sitemap */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Sitemap</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/site-pages/about">Profil</Link>
-                </li>
-                <li>
-                  <Link to="/peraturan">Produk Hukum</Link>
-                </li>
-                <li>
-                  <Link to="/site-pages/staatsblad">Dokumen Hukum Lainnya</Link>
-                </li>
-                <li>
-                  <Link to="/news">Berita</Link>
-                </li>
-                <li>
-                  <Link to="/survey">Survey</Link>
-                </li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/site-pages/about">Profil</Link></li>
+                <li><Link to="/peraturan">Produk Hukum</Link></li>
+                <li><Link to="/site-pages/staatsblad">Dokumen Hukum Lainnya</Link></li>
+                <li><Link to="/news">Berita</Link></li>
+                <li><Link to="/survey">Survey</Link></li>
               </ul>
             </div>
 
@@ -135,15 +145,23 @@ export default function Footer() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Analytics</h3>
               <ul className="space-y-2">
-                <li className="text-sm">Pengunjung Hari Ini : 689</li>
-                <li className="text-sm">Pengunjung Minggu Lalu : 19009</li>
-                <li className="text-sm">Pengunjung Bulan Lalu : 83992</li>
-                <li className="text-sm">Total Pengunjung : 120000392</li>
+                <li className="text-sm">
+                  Pengunjung Hari Ini : {visitorStats.today}
+                </li>
+                <li className="text-sm">
+                  Pengunjung Minggu Lalu : {visitorStats.last_week}
+                </li>
+                <li className="text-sm">
+                  Pengunjung Bulan Lalu : {visitorStats.last_month}
+                </li>
+                <li className="text-sm">
+                  Total Pengunjung : {visitorStats.total}
+                </li>
               </ul>
             </div>
           </div>
 
-          {/* Copyright Section */}
+          {/* Copyright */}
           <div className="border-t border-blue-900 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-sm">
