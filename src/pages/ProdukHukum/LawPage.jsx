@@ -7,7 +7,7 @@ import PopularDocument from "../../components/PopularDocument";
 import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
-import NewOldFilter from "../../components/common/NewOldFilter"; // Make sure this is imported
+import NewOldFilter from "../../components/common/NewOldFilter"; 
 
 const LawPage = ({
   apiUrl,
@@ -29,7 +29,7 @@ const LawPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("newest"); // New state for sorting
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const [filters, setFilters] = useState({
     number: "",
@@ -65,8 +65,8 @@ const LawPage = ({
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
-      params.append("sort_by", "id");
-      params.append("sort_order", "asc");
+      params.append("sort_by", "created_at");
+      params.append("sort_order", sortOrder);
       params.append("section_id", sectionId);
 
       if (filters.searchQuery) params.append("search", filters.searchQuery);
@@ -133,15 +133,7 @@ const LawPage = ({
           })
         );
 
-        // Apply sorting here before setting the state
-        const sortedMappedLaws = mappedLaws.sort((a, b) => {
-          const yearA = parseInt(a.year) || 0;
-          const yearB = parseInt(b.year) || 0;
-          if (sortOrder === "newest") return yearB - yearA;
-          return yearA - yearB;
-        });
-
-        setLaws(sortedMappedLaws);
+        setLaws(mappedLaws);
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
       } else {
         rawLaws = result.data?.data || [];
@@ -171,15 +163,7 @@ const LawPage = ({
           };
         });
 
-        // Apply sorting here before setting the state
-        const sortedMappedLaws = mappedLaws.sort((a, b) => {
-          const yearA = parseInt(a.year) || 0;
-          const yearB = parseInt(b.year) || 0;
-          if (sortOrder === "newest") return yearB - yearA;
-          return yearA - yearB;
-        });
-
-        setLaws(sortedMappedLaws);
+        setLaws(mappedLaws);
         setTotalItems(result.data?.pagination?.total || 0);
       }
     } catch (error) {
@@ -200,7 +184,7 @@ const LawPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
-          webmasterSectionId={webmasterSectionId} 
+          webmasterSectionId={webmasterSectionId}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">

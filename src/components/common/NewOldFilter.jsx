@@ -26,13 +26,13 @@ export default function NewOldFilter({ onSortChange }) {
             onClick={() => handleSort("desc")}
             className="block w-full text-left px-4 py-2 text-sm text-blue-900 hover:bg-gray-100 rounded-t-lg"
           >
-            Urutkan Berdasarkan Terbaru
+            Baru ke Lama
           </button>
           <button
             onClick={() => handleSort("asc")}
             className="block w-full text-left px-4 py-2 text-sm text-blue-900 hover:bg-gray-100 rounded-b-lg"
           >
-            Urutkan Berdasarkan Terlama
+            Lama ke Baru
           </button>
         </div>
       )}
