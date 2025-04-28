@@ -9,20 +9,37 @@ export default function LegalStatsDashboard() {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
+    produkHukum: 0,
+    monografi: 0,
+    artikel: 0,
+    staatsblad: 0,
+  });
+
+  const [animatedCounts, setAnimatedCounts] = useState({
+    produkHukum: 0,
+    monografi: 0,
+    artikel: 0,
+    staatsblad: 0,
   });
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/home")
+    fetch("https://jdih.pisdev.my.id/api/v2/sections/active-topics-count")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data dari API:", data);
+        const produkHukum = data.data.find((item) => item.title === "Produk Hukum");
+        const monografi = data.data.find((item) => item.title === "Monografi");
+        const artikel = data.data.find((item) => item.title === "Artikel");
+        const staatsblad = data.data.find((item) => item.title === "Staatsblad");
+
+        setCounts({
+          produkHukum: produkHukum?.count || 0,
+          monografi: monografi?.count || 0,
+          artikel: artikel?.count || 0,
+          staatsblad: staatsblad?.count || 0,
+        });
       })
       .catch((error) => {
-        console.error("Error fetching home data:", error);
+        console.error("Error fetching active topics count:", error);
       });
   }, []);
 
@@ -44,53 +61,52 @@ export default function LegalStatsDashboard() {
 
   useEffect(() => {
     if (isVisible) {
-      const animateNumbers = (id, targetValue) => {
+      const animateNumbers = (key, targetValue) => {
         const duration = 1500;
-        const step = (timestamp, startTime) => {
-          const progress = Math.min((timestamp - startTime) / duration, 1);
-          setCounts((prev) => ({
+        const startTime = performance.now();
+
+        const step = (currentTime) => {
+          const progress = Math.min((currentTime - startTime) / duration, 1);
+          setAnimatedCounts((prev) => ({
             ...prev,
-            [id]: Math.floor(progress * targetValue),
+            [key]: Math.floor(progress * targetValue),
           }));
 
           if (progress < 1) {
-            requestAnimationFrame((ts) => step(ts, startTime));
+            requestAnimationFrame(step);
           }
         };
-        requestAnimationFrame((ts) => step(ts, ts));
+
+        requestAnimationFrame(step);
       };
 
-      animateNumbers(1, 7000);
-      animateNumbers(2, 1800);
-      animateNumbers(3, 100);
-      animateNumbers(4, 80);
+      animateNumbers("produkHukum", counts.produkHukum);
+      animateNumbers("monografi", counts.monografi);
+      animateNumbers("artikel", counts.artikel);
+      animateNumbers("staatsblad", counts.staatsblad);
     }
-  }, [isVisible]);
+  }, [isVisible, counts]);
 
   const stats = [
     {
-      id: 1,
+      key: "produkHukum",
       icon: <FileText className="h-10 w-10 text-white" />,
       label: "Dokumen Peraturan",
-      value: 7000,
     },
     {
-      id: 2,
+      key: "monografi",
       icon: <Scale className="h-10 w-10 text-white" />,
       label: "Monografi Hukum",
-      value: 1800,
     },
     {
-      id: 3,
+      key: "artikel",
       icon: <FileSpreadsheet className="h-10 w-10 text-white" />,
       label: "Artikel Hukum",
-      value: 100,
     },
     {
-      id: 4,
+      key: "staatsblad",
       icon: <Book className="h-10 w-10 text-white" />,
       label: "Staatsblad",
-      value: 80,
     },
   ];
 
@@ -118,7 +134,7 @@ export default function LegalStatsDashboard() {
           >
             {stats.map((item) => (
               <motion.div
-                key={item.id}
+                key={item.key}
                 role="region"
                 aria-label={`Statistik ${item.label}`}
                 className="flex flex-col gap-3 items-start p-5 rounded-2xl flex-[1_0_0] max-md:p-4 max-sm:p-3"
@@ -144,9 +160,9 @@ export default function LegalStatsDashboard() {
                   {item.icon}
                   <span
                     className="text-3xl font-bold leading-10 text-white max-md:text-2xl max-md:leading-8 max-sm:text-xl max-sm:leading-7"
-                    aria-label={`Over ${item.value} documents`}
+                    aria-label={`Over ${animatedCounts[item.key]} documents`}
                   >
-                    {counts[item.id]}+
+                    {animatedCounts[item.key]}+
                   </span>
                 </div>
               </motion.div>
