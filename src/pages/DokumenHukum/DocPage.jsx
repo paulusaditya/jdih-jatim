@@ -7,6 +7,16 @@ import PopularDocument from "../../components/PopularDocument";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 
+// Tambahkan mapping antara sectionId dan webmasterSectionId
+const webmasterSectionMapping = {
+  16: 16, // Propemperda
+  17: 17, // Staatblad
+  20: 20, // Putusan Pengadilan
+  11: 11, // Monografi
+  15: 15, // Artikel Hukum
+  21: 21, // Dokumen Langka
+};
+
 const DocPage = ({
   apiUrl,
   title: pageTitle,
@@ -162,6 +172,9 @@ const DocPage = ({
     fetchDocuments();
   };
 
+  // Ambil webmasterSectionId berdasarkan mapping
+  const webmasterSectionId = webmasterSectionMapping[sectionId] || null;
+
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
@@ -171,10 +184,7 @@ const DocPage = ({
             filters={filters}
             onChange={handleChange}
             onSearch={handleSearch}
-            years={years}
-            documentTypes={documentTypes}
-            includeStatus={includeStatus}
-            includeCategory={includeCategory}
+            webmasterSectionId={webmasterSectionId}
           />
 
           <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">

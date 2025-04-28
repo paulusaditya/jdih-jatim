@@ -3,31 +3,13 @@ import PopularDocumentMonography from "../../components/PopularDocumentMonograph
 
 const MonographyPage = () => (
   <DocPage
-    apiUrl="https://jdih.pisdev.my.id/api/v2/home/monography"
+    apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
     title="Dokumen Monografi"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },
       { label: "Monografi", path: "/site-pages/monografi" },
     ]}
-    years={[
-      "",
-      "2025",
-      "2024",
-      "2023",
-      "2022",
-      "2021",
-      "2020",
-      "2019",
-      "2018",
-    ]}
-    documentTypes={[
-      "",
-      "Buku",
-      "Jurnal",
-      "Artikel",
-      "Penelitian",
-      "Lainnya",
-    ]}
+    sectionId="11"
     includeStatus={false}
     includeCategory={false}
     detailPath="/site-pages/monografi"

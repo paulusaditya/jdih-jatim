@@ -1,89 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import CustomSelect from "./CustomSelect";
+import axios from "axios";
 
-const SearchFilter = ({
-  filters,
-  onChange,
-  onSearch,
-  years,
-  documentTypes,
-  categories,
-  includeStatus,
-  includeCategory,
-}) => {
+const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
+  const [fields, setFields] = useState([]);
+
+  useEffect(() => {
+    if (!webmasterSectionId) return;
+
+    const fetchFields = async () => {
+      try {
+        const res = await axios.get(
+          `https://jdih.pisdev.my.id/api/v2/topics/filter-options?webmaster_section_id=${webmasterSectionId}`
+        );
+        setFields(res.data.data);
+      } catch (error) {
+        console.error("Failed to fetch fields:", error);
+      }
+    };
+
+    fetchFields();
+  }, [webmasterSectionId]); // Refetch saat webmasterSectionId berubah
+
   return (
     <div className="flex flex-col p-8 w-full text-base bg-blue-50 rounded-xl max-md:px-5 max-md:max-w-full">
       <h2 className="text-lg font-semibold mb-4">Pencarian</h2>
       <div className="flex flex-wrap gap-4 items-end w-full max-md:max-w-full">
-        <div className="flex flex-col grow shrink w-44">
-          <input
-            type="text"
-            name="number"
-            value={filters.number}
-            onChange={onChange}
-            placeholder="Nomor Klasifikasi"
-            className="px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
-          />
-        </div>
+        {fields.map((field) => {
+          if (field.type === "text") {
+            return (
+              <div key={field.name} className="flex flex-col grow shrink w-44">
+                <input
+                  type="text"
+                  name={field.name}
+                  value={filters[field.name] || ""}
+                  onChange={onChange}
+                  placeholder={field.label}
+                  className="px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
+                />
+              </div>
+            );
+          }
 
-        {includeCategory && categories && (
-          <div className="flex flex-col grow shrink w-32">
-            <CustomSelect
-              options={categories}
-              value={filters.category}
-              onChange={onChange}
-              name="category"
-              placeholder="Kategori"
-            />
-          </div>
-        )}
+          if (field.type === "select" && field.options) {
+            return (
+              <div key={field.name} className="flex flex-col grow shrink w-44">
+                <CustomSelect
+                  name={field.name}
+                  options={field.options}
+                  value={filters[field.name] || ""}
+                  onChange={onChange}
+                  placeholder={field.label}
+                />
+              </div>
+            );
+          }
 
-        {includeStatus && (
-          <div className="flex flex-col grow shrink w-32">
-            <CustomSelect
-              options={["Berlaku", "Tidak Berlaku"]}
-              value={filters.status}
-              onChange={onChange}
-              name="status"
-              placeholder="Status"
-            />
-          </div>
-        )}
-
-        <div className="flex flex-col grow shrink w-32">
-          <CustomSelect
-            options={documentTypes}
-            value={filters.type}
-            onChange={onChange}
-            name="type"
-            placeholder="Jenis"
-          />
-        </div>
-
-        <div className="flex flex-col grow shrink w-32">
-          <CustomSelect
-            options={years}
-            value={filters.year}
-            onChange={onChange}
-            name="year"
-            placeholder="Tahun Terbit"
-          />
-        </div>
-
-        <div className="flex flex-col w-full sm:w-full mt-4">
-          <input
-            type="text"
-            name="searchQuery"
-            value={filters.searchQuery}
-            onChange={onChange}
-            placeholder="Silakan ketikkan dokumen yang kamu cari di sini..."
-            className="px-4 py-3 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
-          />
-        </div>
+          return null;
+        })}
 
         <div className="flex flex-wrap gap-2 justify-center items-center px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-blue-600 rounded-xl max-md:max-w-full">
           <button
+            type="button"
             onClick={onSearch}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer"
           >

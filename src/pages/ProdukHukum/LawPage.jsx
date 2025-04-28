@@ -60,7 +60,7 @@ const LawPage = ({
 
       const params = new URLSearchParams();
       params.append("page", currentPage);
-      if (dynamicSectionId) params.append("section_id", dynamicSectionId);
+      if (dynamicSectionId) params.append("webmaster_section_id", dynamicSectionId);
       if (filters.searchQuery) params.append("search", filters.searchQuery);
       if (filters.number) params.append("classification", filters.number);
       if (filters.type) params.append("type", filters.type);
