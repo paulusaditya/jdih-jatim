@@ -35,7 +35,7 @@ function LawCard({ number, title, year, status, type, onDetailClick }) {
       </div>
 
       <div
-        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer border border-blue-600 hover:bg-blue-50 transition"
+        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
         onClick={onDetailClick}
       >
         <span className="self-stretch my-auto">Detail</span>
