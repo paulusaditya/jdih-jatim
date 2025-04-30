@@ -10,14 +10,15 @@ const PopularDocument = ({ sectionId }) => {
   useEffect(() => {
     const getPopularDocuments = async () => {
       try {
-        const res = await fetch(
-          `${API_BASE}/most-viewed-by-section-id/${sectionId}`
-        );
+        const url = sectionId
+          ? `${API_BASE}/most-viewed-by-section-id/${sectionId}`
+          : `${API_BASE}/topics/most-viewed?limit=3`;
+
+        const res = await fetch(url);
         const data = await res.json();
 
         if (data && Array.isArray(data.data)) {
-          const topThree = data.data.slice(0, 3);
-          setDocuments(topThree);
+          setDocuments(data.data.slice(0, 3));
         } else {
           console.error("Invalid data format:", data);
         }
@@ -28,9 +29,7 @@ const PopularDocument = ({ sectionId }) => {
       }
     };
 
-    if (sectionId) {
-      getPopularDocuments();
-    }
+    getPopularDocuments();
   }, [sectionId]);
 
   return (
