@@ -27,6 +27,9 @@ import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 import productLawData from "./data/productLawData";
 import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
+import KerjasamaPage from "./pages/DokumenHukum/KerjasamaPage";
+import RancanganPerdaPage from "./pages/DokumenHukum/RancanganPerdaPage";
+import SuratEdaranPage from "./pages/DokumenHukum/SuratEdaranPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import PopularDocumentMonography from "./components/PopularDocumentMonography";
 
@@ -113,6 +116,12 @@ function App() {
                           <PutusanPengadilanPage />
                         ) : sub.link.includes("dokumen-langka") ? (
                           <DokumenLangkaPage />
+                        ) : sub.link.includes("kerjasama") ? (
+                          <KerjasamaPage />
+                        ) : sub.link.includes("rancangan-perda") ? (
+                          <RancanganPerdaPage />
+                        ) : sub.link.includes("surat-edaran") ? (
+                          <SuratEdaranPage />
                         ) : (
                           <Home />
                         )
