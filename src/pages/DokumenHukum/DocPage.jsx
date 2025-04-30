@@ -31,12 +31,7 @@ const DocPage = ({
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
 
-  const [filters, setFilters] = useState({
-    number: "",
-    year: "",
-    type: "",
-    searchQuery: "",
-  });
+  const [filters, setFilters] = useState({});
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
@@ -47,6 +42,7 @@ const DocPage = ({
 
   const handleSearch = () => {
     setCurrentPage(1);
+    fetchDocuments();
   };
 
   const handleSortChange = (order) => {
@@ -56,7 +52,7 @@ const DocPage = ({
 
   useEffect(() => {
     fetchDocuments();
-  }, [currentPage, filters, sortOrder]);
+  }, [currentPage, sortOrder]);
 
   const fetchDocuments = async () => {
     setIsLoading(true);
@@ -64,14 +60,20 @@ const DocPage = ({
       const params = new URLSearchParams();
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
-      params.append("webmaster_section_id", sectionId);
+      params.append("webmaster_section_id", webmasterSectionId || sectionId);
       params.append("sort_by", "created_at");
       params.append("sort_order", sortOrder);
 
-      if (filters.searchQuery) params.append("search", filters.searchQuery);
-      if (filters.number) params.append("classification", filters.number);
-      if (filters.type) params.append("type", filters.type);
-      if (filters.year) params.append("year", filters.year);
+      // if (sectionId && !webmasterSectionId) {
+      //   params.append("section_id", sectionId);
+      // }
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && value.trim() !== "") {
+          params.append("filter_type", key);
+          params.append("filter_value", value);
+        }
+      });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
       console.log("Fetching from:", fullUrl);
@@ -137,12 +139,6 @@ const DocPage = ({
       } else {
         rawDocuments = result.data?.data || [];
 
-        if (filters.number) {
-          rawDocuments = rawDocuments.filter(
-            (item) => item.classification === filters.number
-          );
-        }
-
         mappedDocuments = rawDocuments.map((item) => {
           const fields = {};
           (item.fields || []).forEach((f) => (fields[f.title] = f.details));
@@ -183,7 +179,7 @@ const DocPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
-          webmasterSectionId={sectionId}
+          webmasterSectionId={webmasterSectionId || sectionId}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
@@ -232,10 +228,11 @@ const DocPage = ({
       </div>
 
       <div className="w-full">
+        <Kategori />
         {customSidebar !== null ? (
           customSidebar
         ) : (
-          <div>
+          <div className="mt-6">
             <PopularDocument sectionId={sectionId} />
           </div>
         )}

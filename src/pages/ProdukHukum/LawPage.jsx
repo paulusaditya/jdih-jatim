@@ -7,7 +7,7 @@ import PopularDocument from "../../components/PopularDocument";
 import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
-import NewOldFilter from "../../components/common/NewOldFilter"; 
+import NewOldFilter from "../../components/common/NewOldFilter";
 
 const LawPage = ({
   apiUrl,
@@ -31,12 +31,8 @@ const LawPage = ({
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
 
-  const [filters, setFilters] = useState({
-    number: "",
-    year: "",
-    type: "",
-    searchQuery: "",
-  });
+
+  const [filters, setFilters] = useState({});
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
@@ -47,6 +43,7 @@ const LawPage = ({
 
   const handleSearch = () => {
     setCurrentPage(1);
+    fetchLaws();
   };
 
   const handleSortChange = (order) => {
@@ -56,7 +53,7 @@ const LawPage = ({
 
   useEffect(() => {
     fetchLaws();
-  }, [currentPage, filters, sortOrder]);
+  }, [currentPage, sortOrder]);
 
   const fetchLaws = async () => {
     setIsLoading(true);
@@ -67,12 +64,17 @@ const LawPage = ({
       params.append("webmaster_section_id", webmasterSectionId);
       params.append("sort_by", "created_at");
       params.append("sort_order", sortOrder);
-      params.append("section_id", sectionId);
 
-      if (filters.searchQuery) params.append("search", filters.searchQuery);
-      if (filters.number) params.append("classification", filters.number);
-      if (filters.type) params.append("type", filters.type);
-      if (filters.year) params.append("year", filters.year);
+      if (sectionId) {
+        params.append("section_id", sectionId);
+      }
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && value.trim() !== "") {
+          params.append("filter_type", key);
+          params.append("filter_value", value);
+        }
+      });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
       console.log("Fetching from:", fullUrl);
@@ -138,12 +140,6 @@ const LawPage = ({
       } else {
         rawLaws = result.data?.data || [];
 
-        if (filters.number) {
-          rawLaws = rawLaws.filter(
-            (item) => item.classification === filters.number
-          );
-        }
-
         mappedLaws = rawLaws.map((item) => {
           const fields = {};
           (item.fields || []).forEach((f) => (fields[f.title] = f.details));
@@ -181,10 +177,10 @@ const LawPage = ({
     <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
         <SearchFilter
+          webmasterSectionId={webmasterSectionId}
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
-          webmasterSectionId={webmasterSectionId}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
