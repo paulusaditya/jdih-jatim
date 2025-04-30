@@ -51,7 +51,6 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                   key={field.name}
                   className="flex flex-col grow shrink w-44"
                 >
-
                   <input
                     type={field.type === "number" ? "number" : "text"}
                     name={field.name}
