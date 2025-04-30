@@ -13,9 +13,14 @@ const PopularDocument = ({ sectionId }) => {
         const res = await fetch(
           `${API_BASE}/most-viewed-by-section-id/${sectionId}`
         );
-        const { data } = await res.json();
-        const topThree = data.slice(0, 3);
-        setDocuments(topThree);
+        const data = await res.json();
+
+        if (data && Array.isArray(data.data)) {
+          const topThree = data.data.slice(0, 3);
+          setDocuments(topThree);
+        } else {
+          console.error("Invalid data format:", data);
+        }
       } catch (err) {
         console.error("Failed to fetch popular documents:", err);
       } finally {

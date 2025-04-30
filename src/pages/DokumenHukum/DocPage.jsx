@@ -228,11 +228,10 @@ const DocPage = ({
       </div>
 
       <div className="w-full">
-        <Kategori />
         {customSidebar !== null ? (
           customSidebar
         ) : (
-          <div className="mt-6">
+          <div>
             <PopularDocument sectionId={sectionId} />
           </div>
         )}

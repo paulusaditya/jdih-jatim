@@ -162,7 +162,7 @@ export default function LegalStatsDashboard() {
                     className="text-3xl font-bold leading-10 text-white max-md:text-2xl max-md:leading-8 max-sm:text-xl max-sm:leading-7"
                     aria-label={`Over ${animatedCounts[item.key]} documents`}
                   >
-                    {animatedCounts[item.key]}+
+                    {animatedCounts[item.key]}
                   </span>
                 </div>
               </motion.div>

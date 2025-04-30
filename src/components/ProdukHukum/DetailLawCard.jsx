@@ -106,7 +106,7 @@ function DetailLawCard({ lawId }) {
             }`}
             onClick={() => handleButtonClick("Peraturan Lampiran")}
           >
-            Peraturan Lampiran
+            Dokumen Lampiran
           </button>
         )}
         <button
