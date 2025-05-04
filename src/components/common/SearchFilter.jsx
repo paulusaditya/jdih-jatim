@@ -34,6 +34,19 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
     fetchFilterOptions();
   }, [webmasterSectionId]);
 
+
+  const handleMultipleChange = (e) => {
+    const { name, value } = e.target;
+
+    onChange({
+      target: {
+        name,
+        value: value,
+        isMultiple: true,
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col p-8 w-full text-base bg-blue-50 rounded-xl max-md:px-5 max-md:max-w-full">
       <h2 className="text-lg font-semibold mb-4">Pencarian</h2>
@@ -54,8 +67,12 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                   <input
                     type={field.type === "number" ? "number" : "text"}
                     name={field.name}
-                    value={filters[field.name] || ""}
-                    onChange={onChange}
+                    value={
+                      Array.isArray(filters[field.name])
+                        ? filters[field.name][0] || ""
+                        : filters[field.name] || ""
+                    }
+                    onChange={handleMultipleChange}
                     placeholder={field.label}
                     className="px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
                   />
@@ -75,9 +92,14 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                       value: option,
                       label: option,
                     }))}
-                    value={filters[field.name] || ""}
-                    onChange={onChange}
+                    value={
+                      Array.isArray(filters[field.name])
+                        ? filters[field.name][0] || ""
+                        : filters[field.name] || ""
+                    }
+                    onChange={handleMultipleChange}
                     placeholder={field.label}
+                    isMultiple={true}
                   />
                 </div>
               );

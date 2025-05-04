@@ -1,11 +1,24 @@
 import React, { useState, useRef, useEffect } from "react";
 
-const CustomSelect = ({ options, value, onChange, name, placeholder }) => {
+const CustomSelect = ({
+  options,
+  value,
+  onChange,
+  name,
+  placeholder,
+  isMultiple = false,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const handleSelect = (option) => {
-    onChange({ target: { name, value: option } });
+  const handleSelect = (optionValue) => {
+    onChange({
+      target: {
+        name,
+        value: optionValue.value || optionValue,
+        isMultiple,
+      },
+    });
     setIsOpen(false);
   };
 
@@ -22,6 +35,9 @@ const CustomSelect = ({ options, value, onChange, name, placeholder }) => {
     };
   }, []);
 
+
+  const displayValue = value || placeholder;
+
   return (
     <div className="relative" ref={dropdownRef}>
       <div
@@ -29,7 +45,7 @@ const CustomSelect = ({ options, value, onChange, name, placeholder }) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className={`text-zinc-600 ${!value && "text-gray-400"}`}>
-          {value || placeholder}
+          {displayValue}
         </span>
         <span className="text-zinc-600">▼</span>
       </div>
@@ -41,7 +57,7 @@ const CustomSelect = ({ options, value, onChange, name, placeholder }) => {
               className="px-4 py-3 hover:bg-blue-100 hover:rounded-lg cursor-pointer hover:font-semibold"
               onClick={() => handleSelect(option)}
             >
-              {option}
+              {option.label || option}
             </div>
           ))}
         </div>

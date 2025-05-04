@@ -30,15 +30,40 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
-
-
   const [filters, setFilters] = useState({});
-
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
+    const { name, value, isMultiple } = e.target;
+
+    if (isMultiple) {
+      setFilters((prevFilters) => {
+        if (Array.isArray(prevFilters[name])) {
+          if (prevFilters[name].length > 0) {
+            return {
+              ...prevFilters,
+              [name]: [value],
+            };
+          } else {
+            return {
+              ...prevFilters,
+              [name]: [value],
+            };
+          }
+        } else {
+          return {
+            ...prevFilters,
+            [name]: [value],
+          };
+        }
+      });
+    } else {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSearch = () => {
@@ -58,25 +83,40 @@ const LawPage = ({
   const fetchLaws = async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
-      params.append("per_page", itemsPerPage);
-      params.append("page", currentPage);
-      params.append("webmaster_section_id", webmasterSectionId);
-      params.append("sort_by", "created_at");
-      params.append("sort_order", sortOrder);
+      let baseUrl = `${apiUrl}?per_page=${itemsPerPage}&page=${currentPage}&webmaster_section_id=${webmasterSectionId}&sort_by=created_at&sort_order=${sortOrder}`;
 
       if (sectionId) {
-        params.append("section_id", sectionId);
+        baseUrl += `&section_id=${sectionId}`;
       }
 
+      let filterPairs = [];
+
       Object.entries(filters).forEach(([key, value]) => {
-        if (value && value.trim() !== "") {
-          params.append("filter_type", key);
-          params.append("filter_value", value);
+        if (Array.isArray(value)) {
+          value.forEach((val) => {
+            if (val && val.trim() !== "") {
+              filterPairs.push({
+                type: key,
+                value: val,
+              });
+            }
+          });
+        } else if (value && value.trim() !== "") {
+          filterPairs.push({
+            type: key,
+            value: value,
+          });
         }
       });
 
-      const fullUrl = `${apiUrl}?${params.toString()}`;
+      let filterQueryString = "";
+      filterPairs.forEach((pair) => {
+        filterQueryString += `&filter_type=${encodeURIComponent(
+          pair.type
+        )}&filter_value=${encodeURIComponent(pair.value)}`;
+      });
+
+      const fullUrl = baseUrl + filterQueryString;
       console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
