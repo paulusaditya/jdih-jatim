@@ -39,6 +39,10 @@ const breadcrumbMap = {
     label: "Dokumen Langka",
     path: "/site-pages/dokumen-langka",
   },
+  "dokumen-populer": {
+    label: "Dokumen Populer",
+    path: "/site-pages/dokumen-populer",
+  },
 };
 
 const DocDetailPage = ({ customSidebar }) => {

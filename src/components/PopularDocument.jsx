@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 
 const API_BASE = "https://jdih.pisdev.my.id/api/v2";
 
+// Fungsi bantu untuk membuat slug dari title
+const generateSlug = (title) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "") // hapus karakter non-alphanumeric
+    .trim()
+    .replace(/\s+/g, "-"); // ganti spasi dengan -
+};
+
 const PopularDocument = ({ sectionId }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +55,9 @@ const PopularDocument = ({ sectionId }) => {
           <ul className="mt-3 space-y-3 text-sm md:text-base font-semibold leading-6">
             {documents.map((doc, idx) => (
               <li key={idx} className="break-words hover:underline">
-                <Link to={`/dokumen-populer/${doc.slug}`}>{doc.title}</Link>
+                <Link to={`/site-pages/dokumen-populer/${generateSlug(doc.title)}`}>
+                  {doc.title}
+                </Link>
               </li>
             ))}
           </ul>

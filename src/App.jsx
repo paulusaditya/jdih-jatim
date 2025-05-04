@@ -172,7 +172,7 @@ function App() {
                 element={<DocDetailPage />}
               />
               <Route
-                path="/dokumen-populer/:slug"
+                path="/site-pages/dokumen-populer/:slug"
                 element={<DocDetailPage />}
               />
               <Route
