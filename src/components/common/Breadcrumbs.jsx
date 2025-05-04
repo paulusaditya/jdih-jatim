@@ -9,7 +9,7 @@ const Breadcrumbs = ({ paths }) => {
           {index === 0 && <Home size={16} className="text-blue-600" />}
           {index > 0 && <ChevronRight size={14} className="text-gray-800" />}
 
-          {index === paths.length - 1 ? (
+          {index === paths.length - 1 || path.label === "Dokumen Populer" ? (
             <span className="text-black cursor-default">{path.label}</span>
           ) : (
             <Link
