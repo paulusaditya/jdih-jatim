@@ -7,10 +7,11 @@ const API_BASE = "https://jdih.pisdev.my.id/api/v2";
 const generateSlug = (title) => {
   return title
     .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, "") // hapus karakter non-alphanumeric
+    .replace(/[^a-z0-9\s-]/g, "") // pertahankan karakter '-' selain alphanumeric dan spasi
     .trim()
-    .replace(/\s+/g, "-"); // ganti spasi dengan -
+    .replace(/\s+/g, "-"); // ganti spasi dengan '-'
 };
+
 
 const PopularDocument = ({ sectionId }) => {
   const [documents, setDocuments] = useState([]);
