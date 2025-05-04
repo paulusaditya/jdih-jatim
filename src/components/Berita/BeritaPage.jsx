@@ -1,17 +1,16 @@
 "use client";
 
-import { Search, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner";
+import Pagination from "../../components/common/Pagination";
 
 export default function BeritaPage() {
   const navigate = useNavigate();
 
-  const [beritaList, setBeritaList] = useState([]);
+  const [allBeritaList, setAllBeritaList] = useState([]);
   const [filteredBeritaList, setFilteredBeritaList] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(9);
 
@@ -29,23 +28,32 @@ export default function BeritaPage() {
   useEffect(() => {
     filterBerita();
     setCurrentPage(1);
-  }, [searchQuery, selectedDate, beritaList]);
+  }, [searchQuery, selectedDate, allBeritaList]);
 
   const fetchAllBerita = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=9999`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      let currentPage = 1;
+      let fetchedData = [];
+      let hasMoreData = true;
+
+      while (hasMoreData) {
+        const response = await fetch(
+          `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=50&page=${currentPage}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch");
+
+        const data = await response.json();
+        if (data.status === "success") {
+          fetchedData = [...fetchedData, ...data.data.data];
+          hasMoreData = data.data.data.length > 0;
+          currentPage++;
+        } else {
+          hasMoreData = false;
+        }
       }
-      const data = await response.json();
-      if (data.status === "success") {
-        setBeritaList(data.data.data);
-      } else {
-        throw new Error("Failed to fetch data");
-      }
+
+      setAllBeritaList(fetchedData);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -54,19 +62,14 @@ export default function BeritaPage() {
   };
 
   const filterBerita = () => {
-    let filtered = beritaList;
-
-    if (searchQuery) {
-      filtered = filtered.filter((berita) =>
-        berita.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (selectedDate) {
-      filtered = filtered.filter(
-        (berita) => berita.date && berita.date.startsWith(selectedDate)
-      );
-    }
+    let filtered = allBeritaList.filter((berita) => {
+      const matchTitle =
+        berita.title &&
+        berita.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchDate =
+        !selectedDate || (berita.date && berita.date.startsWith(selectedDate));
+      return matchTitle && matchDate;
+    });
 
     setFilteredBeritaList(filtered);
   };
@@ -83,31 +86,16 @@ export default function BeritaPage() {
   const endIndex = startIndex + recordsPerPage;
   const currentBeritaList = filteredBeritaList.slice(startIndex, endIndex);
 
-  const startRecord = startIndex + 1;
-  const endRecord = Math.min(endIndex, totalRecords);
-
-  const getPageNumbers = () => {
-    const pages = [];
-    pages.push(1);
-    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-      if (i === 2 && currentPage > 3) {
-        pages.push("...");
-      } else if (i === totalPages - 1 && currentPage < totalPages - 2) {
-        pages.push("...");
-      } else {
-        pages.push(i);
-      }
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
     }
-    if (totalPages > 1) pages.push(totalPages);
-    return pages;
-  };
-
-  const changePage = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
   const handleCardClick = (seo_url_slug_id) => {
-    const slug = seo_url_slug_id.startsWith("./") ? seo_url_slug_id.substring(2) : seo_url_slug_id;
+    const slug = seo_url_slug_id.startsWith("./")
+      ? seo_url_slug_id.substring(2)
+      : seo_url_slug_id;
     navigate(`/news/detail-berita/${slug}`);
   };
 
@@ -134,7 +122,6 @@ export default function BeritaPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-
           <div className="relative">
             {!showDateInput ? (
               <button
@@ -227,46 +214,12 @@ export default function BeritaPage() {
         )}
       </div>
 
-      <div className="bg-blue-50 p-4 rounded-lg flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => changePage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="p-2 rounded-md text-gray-500 disabled:text-gray-300"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          {getPageNumbers().map((page, index) =>
-            page === "..." ? (
-              <span key={index} className="px-2 text-gray-500">
-                {page}
-              </span>
-            ) : (
-              <button
-                key={index}
-                onClick={() => changePage(page)}
-                className={`px-3 py-1 rounded-md ${
-                  currentPage === page
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </button>
-            )
-          )}
-          <button
-            onClick={() => changePage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="p-2 rounded-md text-gray-500 disabled:text-gray-300"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="text-sm text-gray-600">
-          {startRecord} - {endRecord} dari ({totalRecords}) record
-        </div>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalItems={totalRecords}
+        itemsPerPage={recordsPerPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

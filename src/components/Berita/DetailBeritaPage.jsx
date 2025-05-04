@@ -1,66 +1,72 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import {
   Calendar,
   Facebook,
   ChevronLeftCircle,
   Linkedin,
   Twitter,
-} from "lucide-react"
-import LoadingSpinner from "../common/LoadingSpinner"
+} from "lucide-react";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 function RelatedNews({ currentArticleId }) {
-  const [relatedArticles, setRelatedArticles] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [relatedArticles, setRelatedArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchRelatedArticles()
-  }, [currentArticleId])
+    fetchRelatedArticles();
+  }, [currentArticleId]);
 
   const fetchRelatedArticles = async () => {
     try {
       const response = await fetch(
         `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=10`
-      )
-      if (!response.ok) throw new Error("Network response was not ok")
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.status === "success") {
         const filteredArticles = data.data.data.filter(
           (article) => article.id !== currentArticleId
-        )
-        const shuffled = [...filteredArticles].sort(() => 0.5 - Math.random())
-        const randomArticles = shuffled.slice(0, 4)
-        setRelatedArticles(randomArticles)
+        );
+        const shuffled = [...filteredArticles].sort(() => 0.5 - Math.random());
+        const randomArticles = shuffled.slice(0, 4);
+        setRelatedArticles(randomArticles);
       }
     } catch (error) {
-      console.error("Error fetching related articles:", error)
+      console.error("Error fetching related articles:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const formatDate = (dateString) => {
-    if (!dateString) return ""
-    const date = new Date(dateString)
-    const day = date.getDate()
-    const month = new Intl.DateTimeFormat("id-ID", { month: "long" }).format(date)
-    const year = date.getFullYear()
-    return `${day} ${month} ${year}`
-  }
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = new Intl.DateTimeFormat("id-ID", { month: "long" }).format(
+      date
+    );
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
 
-  if (loading) return <LoadingSpinner />
-  if (relatedArticles.length === 0) return null
+  if (loading) return <LoadingSpinner />;
+  if (relatedArticles.length === 0) return null;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {relatedArticles.map((article) => (
         <Link
           key={article.id}
-          to={`/news/detail-berita/${article.seo_url_slug_id.startsWith("./") ? article.seo_url_slug_id.substring(2) : article.seo_url_slug_id}`}
+          to={`/news/detail-berita/${
+            article.link.startsWith("./")
+              ? article.link.substring(2)
+              : article.link
+          }`}
           className="block group"
         >
           <div className="overflow-hidden rounded-lg mb-3">
@@ -69,7 +75,7 @@ function RelatedNews({ currentArticleId }) {
               alt={article.title}
               className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
-                e.target.src = "/assets/berita/image113.png"
+                e.target.src = "/assets/berita/image113.png";
               }}
             />
           </div>
@@ -80,78 +86,108 @@ function RelatedNews({ currentArticleId }) {
             <span className="text-pink-500">Pendidikan</span>
           </div>
           <h3 className="text-base font-semibold leading-tight group-hover:text-blue-600 transition-colors">
-            {article.title.length > 60 ? article.title.substring(0, 60) + "..." : article.title}
+            {article.title.length > 60
+              ? article.title.substring(0, 60) + "..."
+              : article.title}
           </h3>
         </Link>
       ))}
     </div>
-  )
+  );
 }
 
 export default function DetailBeritaPage() {
-  const { slug } = useParams()
-  const [article, setArticle] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [copiedLink, setCopiedLink] = useState(false)
+  const { slug } = useParams();
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const shareToSocialMedia = (platform) => {
-    const url = window.location.href
-    const title = article.title
+    const url = window.location.href;
+    const title = article.title;
     switch (platform) {
       case "facebook":
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank")
-        break
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            url
+          )}`,
+          "_blank"
+        );
+        break;
       case "x":
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, "_blank")
-        break
+        window.open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+            title
+          )}&url=${encodeURIComponent(url)}`,
+          "_blank"
+        );
+        break;
       case "linkedin":
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, "_blank")
-        break
+        window.open(
+          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+            url
+          )}`,
+          "_blank"
+        );
+        break;
       case "whatsapp":
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + " " + url)}`, "_blank")
-        break
+        window.open(
+          `https://api.whatsapp.com/send?text=${encodeURIComponent(
+            title + " " + url
+          )}`,
+          "_blank"
+        );
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   useEffect(() => {
-    fetchArticleDetail(slug)
-  }, [slug])
+    fetchArticleDetail(slug);
+  }, [slug]);
 
   const fetchArticleDetail = async (slug) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const topicsResponse = await fetch(`https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3`)
-      if (!topicsResponse.ok) throw new Error("Network response was not ok")
+      const topicsResponse = await fetch(
+        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=9999`
+      );
+      if (!topicsResponse.ok) throw new Error("Network response was not ok");
 
-      const topicsData = await topicsResponse.json()
-      if (topicsData.status !== "success") throw new Error("Failed to fetch topics data")
+      const topicsData = await topicsResponse.json();
+      if (topicsData.status !== "success")
+        throw new Error("Failed to fetch topics data");
 
-      const allArticles = topicsData.data.data
+      const allArticles = topicsData.data.data;
       const matchingArticle = allArticles.find((article) => {
-        const articleSlug = article.seo_url_slug_id.startsWith("./") ? article.seo_url_slug_id.substring(2) : article.seo_url_slug_id
-        return articleSlug === slug
-      })
+        const articleSlug = article.seo_url_slug_id;
+        return articleSlug === slug;
+      });
 
-      if (!matchingArticle) throw new Error("Article not found")
+      if (!matchingArticle) throw new Error("Article not found");
 
-      setArticle(matchingArticle)
+      setArticle(matchingArticle);
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const formatDate = (dateString) => {
-    if (!dateString) return ""
-    const options = { weekday: "long", day: "numeric", month: "long", year: "numeric" }
-    return new Date(dateString).toLocaleDateString("id-ID", options)
-  }
+    if (!dateString) return "";
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+  };
 
-  if (loading) return <LoadingSpinner />
+  if (loading) return <LoadingSpinner />;
   if (error || !article) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-6 text-center">
@@ -160,15 +196,15 @@ export default function DetailBeritaPage() {
           Kembali ke daftar berita
         </Link>
       </div>
-    )
+    );
   }
 
   const placeholderContent = [
     "Figma ipsum component variant main layer...",
     "Background team background fill slice flatten group draft hand...",
     "Duis aute irure dolor in reprehenderit in voluptate...",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
-  ]
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+  ];
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
@@ -178,7 +214,7 @@ export default function DetailBeritaPage() {
           alt={article.title}
           className="w-full h-auto rounded-lg"
           onError={(e) => {
-            e.target.src = "/assets/berita/imageberita1.png"
+            e.target.src = "/assets/berita/imageberita1.png";
           }}
         />
       </div>
@@ -194,30 +230,30 @@ export default function DetailBeritaPage() {
       </div>
 
       <div className="prose max-w-none mb-8 text-gray-700">
-        {article.seo_description_id ? (
-          article.seo_description_id
-            .replace(/<[^>]*>/g, "")
-            .split(/\r?\n/)
-            .filter((para) => para.trim() !== "")
-            .map((paragraph, i) => (
-              <p key={i} className="mb-4">{paragraph.trim()}</p>
-            ))
-        ) : (
-          placeholderContent.map((p, i) => (
-            <p key={i} className="mb-4">
-              {i === 1 && (
-                <div className="my-6">
-                  <img
-                    src="/assets/berita/imageberita2.png"
-                    alt="Grafik"
-                    className="w-full h-auto rounded-lg"
-                  />
-                </div>
-              )}
-              {p}
-            </p>
-          ))
-        )}
+        {article.seo_description_id
+          ? article.seo_description_id
+              .replace(/<[^>]*>/g, "")
+              .split(/\r?\n/)
+              .filter((para) => para.trim() !== "")
+              .map((paragraph, i) => (
+                <p key={i} className="mb-4">
+                  {paragraph.trim()}
+                </p>
+              ))
+          : placeholderContent.map((p, i) => (
+              <p key={i} className="mb-4">
+                {i === 1 && (
+                  <div className="my-6">
+                    <img
+                      src="/assets/berita/imageberita2.png"
+                      alt="Grafik"
+                      className="w-full h-auto rounded-lg"
+                    />
+                  </div>
+                )}
+                {p}
+              </p>
+            ))}
       </div>
 
       <div className="flex items-center justify-between border-t pt-4 pb-4">
@@ -231,10 +267,10 @@ export default function DetailBeritaPage() {
                 navigator.clipboard
                   .writeText(window.location.href)
                   .then(() => {
-                    setCopiedLink(true)
-                    setTimeout(() => setCopiedLink(false), 2000)
+                    setCopiedLink(true);
+                    setTimeout(() => setCopiedLink(false), 2000);
                   })
-                  .catch(console.error)
+                  .catch(console.error);
               }}
             >
               <svg
@@ -252,17 +288,25 @@ export default function DetailBeritaPage() {
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
               </svg>
-              {copiedLink && <span className="text-xs ml-1">Link URL copy</span>}
+              {copiedLink && (
+                <span className="text-xs ml-1">Link URL copy</span>
+              )}
             </button>
 
             {/* Facebook */}
-            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("facebook")}>
+            <button
+              className="text-gray-600 hover:text-gray-900"
+              onClick={() => shareToSocialMedia("facebook")}
+            >
               <Facebook className="h-4 w-4" />
             </button>
 
             {/* WhatsApp */}
-            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("whatsapp")}>
-            <svg
+            <button
+              className="text-gray-600 hover:text-gray-900"
+              onClick={() => shareToSocialMedia("whatsapp")}
+            >
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -280,12 +324,18 @@ export default function DetailBeritaPage() {
             </button>
 
             {/* Twitter (X) */}
-            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("x")}>
+            <button
+              className="text-gray-600 hover:text-gray-900"
+              onClick={() => shareToSocialMedia("x")}
+            >
               <Twitter className="h-4 w-4" />
             </button>
 
             {/* LinkedIn */}
-            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("linkedin")}>
+            <button
+              className="text-gray-600 hover:text-gray-900"
+              onClick={() => shareToSocialMedia("linkedin")}
+            >
               <Linkedin className="h-4 w-4" />
             </button>
           </div>
@@ -293,16 +343,21 @@ export default function DetailBeritaPage() {
       </div>
 
       {/* Back button */}
-      <Link to="/news" className="inline-flex items-center text-blue-600 text-sm">
+      <Link
+        to="/news"
+        className="inline-flex items-center text-blue-600 text-sm"
+      >
         <ChevronLeftCircle className="h-4 w-4 mr-1" />
         Kembali
       </Link>
 
       {/* Related News */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Berita Lainnya</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Berita Lainnya
+        </h2>
         <RelatedNews currentArticleId={article.id} />
       </div>
     </div>
-  )
+  );
 }
