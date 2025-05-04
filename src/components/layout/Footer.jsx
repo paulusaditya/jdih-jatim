@@ -137,7 +137,7 @@ export default function Footer() {
                 <li><Link to="/peraturan">Produk Hukum</Link></li>
                 <li><Link to="/site-pages/staatsblad">Dokumen Hukum Lainnya</Link></li>
                 <li><Link to="/news">Berita</Link></li>
-                <li><Link to="/https://sukma.jatimprov.go.id/fe/survey">Survey</Link></li>
+                <li><Link to="https://sukma.jatimprov.go.id/fe/survey">Survey</Link></li>
               </ul>
             </div>
 
