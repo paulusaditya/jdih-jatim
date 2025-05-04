@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { Calendar, Instagram, Facebook, MessageCircle, ChevronLeftCircle } from "lucide-react"
-import LoadingSpinner from "../common/LoadingSpinner";
-
+import { Calendar, Instagram, Facebook, ChevronLeftCircle } from "lucide-react"
+import LoadingSpinner from "../common/LoadingSpinner"
 
 function RelatedNews({ currentArticleId }) {
   const [relatedArticles, setRelatedArticles] = useState([])
@@ -70,7 +69,7 @@ function RelatedNews({ currentArticleId }) {
         >
           <div className="overflow-hidden rounded-lg mb-3">
             <img
-              src={(article.image) || "/assets/berita/image113.png"}
+              src={article.image || "/assets/berita/image113.png"}
               alt={article.title}
               className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
@@ -98,6 +97,30 @@ export default function DetailBeritaPage() {
   const [article, setArticle] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const [copiedLink, setCopiedLink] = useState(false)
+
+  const shareToSocialMedia = (platform) => {
+    const url = window.location.href
+    const title = article.title
+
+    switch (platform) {
+      case "facebook":
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank")
+        break
+      case "instagram":
+        // Instagram doesn't have a direct share URL, but we can open Instagram
+        alert(
+          "Instagram tidak mendukung berbagi langsung melalui browser. Silakan salin link dan bagikan secara manual.",
+        )
+        break
+      case "whatsapp":
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + " " + url)}`, "_blank")
+        break
+      default:
+        break
+    }
+  }
 
   useEffect(() => {
     fetchArticleDetail(slug)
@@ -146,9 +169,7 @@ export default function DetailBeritaPage() {
   }
 
   if (loading) {
-    return (
-      <LoadingSpinner />
-    )
+    return <LoadingSpinner />
   }
 
   if (error) {
@@ -186,7 +207,7 @@ export default function DetailBeritaPage() {
       {/* Header Image */}
       <div className="mb-6">
         <img
-          src={(article.image) || "/assets/berita/imageberita1.png"}
+          src={article.image || "/assets/berita/imageberita1.png"}
           alt={article.title}
           className="w-full h-auto rounded-lg"
           onError={(e) => {
@@ -242,19 +263,70 @@ export default function DetailBeritaPage() {
         )}
       </div>
 
-      {/* Share Buttons - Simple version as in the image */}
+      {/* Share Buttons */}
       <div className="flex items-center justify-between border-t pt-4 pb-4">
         <div className="flex items-center">
           <span className="mr-2 text-sm">Bagikan:</span>
           <div className="flex space-x-2">
-            <button className="text-gray-600">
+            {/* Copy Link Button */}
+            <button
+              className="text-gray-600 hover:text-gray-900 flex items-center"
+              onClick={() => {
+                const url = window.location.href
+                navigator.clipboard
+                  .writeText(url)
+                  .then(() => {
+                    setCopiedLink(true)
+                    setTimeout(() => setCopiedLink(false), 2000)
+                  })
+                  .catch((err) => console.error("Failed to copy link: ", err))
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              {copiedLink && <span className="text-xs ml-1">Link URL copy</span>}
+            </button>
+
+            {/* Instagram Button */}
+            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("instagram")}>
               <Instagram className="h-4 w-4" />
             </button>
-            <button className="text-gray-600">
+
+            {/* Facebook Button */}
+            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("facebook")}>
               <Facebook className="h-4 w-4" />
             </button>
-            <button className="text-gray-600">
-              <MessageCircle className="h-4 w-4" />
+
+            {/* WhatsApp Button */}
+            <button className="text-gray-600 hover:text-gray-900" onClick={() => shareToSocialMedia("whatsapp")}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"></path>
+                <path d="M20.52 3.449C12.831-3.984.106 1.407.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.715 1.447h.006c9.6 0 16.028-9.174 16.028-16.012 0-4.23-1.986-8.072-5.565-10.334zm-5.518 22.311h-.005c-2.608-.001-5.17-.719-7.4-2.075l-.53-.315-5.49 1.434 1.46-5.328-.345-.552c-1.443-2.305-2.208-4.969-2.205-7.7.01-7.958 6.488-14.428 14.465-14.428 3.852.004 7.475 1.498 10.193 4.226 2.726 2.723 4.222 6.35 4.22 10.21-.006 7.953-6.48 14.428-14.453 14.428z"></path>
+              </svg>
             </button>
           </div>
         </div>
