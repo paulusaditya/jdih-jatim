@@ -136,7 +136,7 @@ export default function LegalStatsDashboard() {
               <motion.div
                 key={item.key}
                 role="region"
-                aria-label={`Statistik tes ${item.label}`}
+                aria-label={`Statistik tes ea ${item.label}`}
                 className="flex flex-col gap-3 items-start p-5 rounded-2xl flex-[1_0_0] max-md:p-4 max-sm:p-3"
                 style={{
                   backgroundImage:
