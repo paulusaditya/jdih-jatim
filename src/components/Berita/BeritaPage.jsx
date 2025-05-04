@@ -106,8 +106,8 @@ export default function BeritaPage() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  const handleCardClick = (link) => {
-    const slug = link.startsWith("./") ? link.substring(2) : link;
+  const handleCardClick = (seo_url_slug_id) => {
+    const slug = seo_url_slug_id.startsWith("./") ? seo_url_slug_id.substring(2) : seo_url_slug_id;
     navigate(`/news/detail-berita/${slug}`);
   };
 
@@ -180,7 +180,7 @@ export default function BeritaPage() {
               <div
                 key={berita.id}
                 className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-blue-600 hover:shadow-md transition duration-300 cursor-pointer flex flex-col"
-                onClick={() => handleCardClick(berita.link)}
+                onClick={() => handleCardClick(berita.seo_url_slug_id)}
               >
                 <img
                   src={berita.image || "/placeholder.svg"}
@@ -208,14 +208,14 @@ export default function BeritaPage() {
                   </div>
                   <Link
                     to={`/news/detail-berita/${
-                      berita.link.startsWith("./")
-                        ? berita.link.substring(2)
-                        : berita.link
+                      berita.seo_url_slug_id.startsWith("./")
+                        ? berita.seo_url_slug_id.substring(2)
+                        : berita.seo_url_slug_id
                     }`}
                     className="text-blue-600 text-sm font-semibold flex items-center mt-auto"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleCardClick(berita.link);
+                      handleCardClick(berita.seo_url_slug_id);
                     }}
                   >
                     Baca Selengkapnya <span className="ml-1">→</span>

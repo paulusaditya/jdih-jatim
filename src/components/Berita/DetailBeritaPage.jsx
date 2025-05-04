@@ -60,7 +60,7 @@ function RelatedNews({ currentArticleId }) {
       {relatedArticles.map((article) => (
         <Link
           key={article.id}
-          to={`/news/detail-berita/${article.link.startsWith("./") ? article.link.substring(2) : article.link}`}
+          to={`/news/detail-berita/${article.seo_url_slug_id.startsWith("./") ? article.seo_url_slug_id.substring(2) : article.seo_url_slug_id}`}
           className="block group"
         >
           <div className="overflow-hidden rounded-lg mb-3">
@@ -131,7 +131,7 @@ export default function DetailBeritaPage() {
 
       const allArticles = topicsData.data.data
       const matchingArticle = allArticles.find((article) => {
-        const articleSlug = article.link.startsWith("./") ? article.link.substring(2) : article.link
+        const articleSlug = article.seo_url_slug_id.startsWith("./") ? article.seo_url_slug_id.substring(2) : article.seo_url_slug_id
         return articleSlug === slug
       })
 
