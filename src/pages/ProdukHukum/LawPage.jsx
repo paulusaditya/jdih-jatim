@@ -37,33 +37,34 @@ const LawPage = ({
   const handleChange = (e) => {
     const { name, value, isMultiple } = e.target;
 
-    if (isMultiple) {
-      setFilters((prevFilters) => {
-        if (Array.isArray(prevFilters[name])) {
-          if (prevFilters[name].length > 0) {
-            return {
-              ...prevFilters,
-              [name]: [value],
-            };
-          } else {
-            return {
-              ...prevFilters,
-              [name]: [value],
-            };
-          }
-        } else {
-          return {
-            ...prevFilters,
-            [name]: [value],
-          };
+    setFilters((prevFilters) => {
+      if (isMultiple) {
+
+        if (value === "") {
+
+          const newFilters = { ...prevFilters };
+          delete newFilters[name];
+          return newFilters;
         }
-      });
-    } else {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        [name]: value,
-      }));
-    }
+
+        return {
+          ...prevFilters,
+          [name]: [value], 
+        };
+      } else {
+
+        if (value === "") {
+          const newFilters = { ...prevFilters };
+          delete newFilters[name];
+          return newFilters;
+        }
+
+        return {
+          ...prevFilters,
+          [name]: value,
+        };
+      }
+    });
   };
 
   const handleSearch = () => {
@@ -89,51 +90,64 @@ const LawPage = ({
         baseUrl += `&section_id=${sectionId}`;
       }
 
-      let filterPairs = [];
+
+      const filterParams = [];
 
       Object.entries(filters).forEach(([key, value]) => {
+
+        const fieldKey = key.startsWith("customField_")
+          ? key
+          : `customField_${key}`;
+
         if (Array.isArray(value)) {
           value.forEach((val) => {
             if (val && val.trim() !== "") {
-              filterPairs.push({
-                type: key,
+              const filterObj = {
+                key: fieldKey,
                 value: val,
-              });
+              };
+              filterParams.push(
+                `filters[]=${encodeURIComponent(JSON.stringify(filterObj))}`
+              );
             }
           });
         } else if (value && value.trim() !== "") {
-          filterPairs.push({
-            type: key,
+
+          const filterObj = {
+            key: fieldKey,
             value: value,
-          });
+          };
+          filterParams.push(
+            `filters[]=${encodeURIComponent(JSON.stringify(filterObj))}`
+          );
         }
       });
 
-      let filterQueryString = "";
-      filterPairs.forEach((pair) => {
-        filterQueryString += `&filter_type=${encodeURIComponent(
-          pair.type
-        )}&filter_value=${encodeURIComponent(pair.value)}`;
-      });
+      const fullUrl =
+        filterParams.length > 0
+          ? `${baseUrl}&${filterParams.join("&")}`
+          : baseUrl;
 
-      const fullUrl = baseUrl + filterQueryString;
       console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
-      const contentType = response.headers.get("content-type");
 
-      if (!response.ok || !contentType.includes("application/json")) {
+      if (!response.ok) {
         throw new Error(`Invalid response: ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Invalid content type: ${contentType}`);
       }
 
       const result = await response.json();
       console.log("API Response:", result);
 
-      let rawLaws = [];
       let mappedLaws = [];
 
       if (Array.isArray(result.data)) {
-        rawLaws = result.data;
+        const rawLaws = result.data;
 
         mappedLaws = await Promise.all(
           rawLaws.map(async (item) => {
@@ -141,8 +155,14 @@ const LawPage = ({
               const detailRes = await fetch(
                 `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
               );
+
+              if (!detailRes.ok) {
+                throw new Error(`Detail fetch failed: ${detailRes.status}`);
+              }
+
               const detailData = await detailRes.json();
               const fields = {};
+
               detailData.data?.fields?.forEach(
                 (f) => (fields[f.title] = f.details)
               );
@@ -178,7 +198,7 @@ const LawPage = ({
         setLaws(mappedLaws);
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
       } else {
-        rawLaws = result.data?.data || [];
+        const rawLaws = result.data?.data || [];
 
         mappedLaws = rawLaws.map((item) => {
           const fields = {};
@@ -204,6 +224,7 @@ const LawPage = ({
       }
     } catch (error) {
       console.error("Error fetching law data:", error);
+      setLaws([]);
     } finally {
       setIsLoading(false);
     }
@@ -211,11 +232,14 @@ const LawPage = ({
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    window.scrollTo(0, 0); 
   };
 
   return (
     <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
+        {/* {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />} */}
+
         <SearchFilter
           webmasterSectionId={webmasterSectionId}
           filters={filters}
@@ -230,14 +254,16 @@ const LawPage = ({
           {isLoading ? (
             <span className="text-sm text-gray-500">Loading...</span>
           ) : (
-            <div className="flex justify-between items-center mt-5">
+            <div className="flex justify-between items-center">
               <NewOldFilter onSortChange={handleSortChange} />
             </div>
           )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
-          {laws.length > 0 ? (
+          {isLoading ? (
+            <div className="text-center py-8 text-gray-500">Memuat data...</div>
+          ) : laws.length > 0 ? (
             laws.map((law) => (
               <LawCard
                 key={law.id}
@@ -245,27 +271,27 @@ const LawPage = ({
                 year={law.year}
                 number={law.number}
                 type={law.type}
-                status={law.status}
-                category={law.category}
+                status={includeStatus ? law.status : null}
+                category={includeCategory ? law.category : null}
                 image={law.image}
                 onDetailClick={() => navigate(`${detailPath}/${law.slug}`)}
               />
             ))
           ) : (
             <div className="text-center py-8 text-gray-500">
-              {isLoading
-                ? "Memuat data..."
-                : "Tidak ada dokumen hukum yang ditemukan"}
+              Tidak ada dokumen hukum yang ditemukan
             </div>
           )}
         </div>
 
-        <Pagination
-          currentPage={currentPage}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
+        {totalItems > itemsPerPage && (
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
 
       <div className="w-full">

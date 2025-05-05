@@ -34,7 +34,6 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
     fetchFilterOptions();
   }, [webmasterSectionId]);
 
-
   const handleMultipleChange = (e) => {
     const { name, value } = e.target;
 
@@ -66,6 +65,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                 >
                   <input
                     type={field.type === "number" ? "number" : "text"}
+                    id={field.name}
                     name={field.name}
                     value={
                       Array.isArray(filters[field.name])
@@ -74,33 +74,59 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                     }
                     onChange={handleMultipleChange}
                     placeholder={field.label}
-                    className="px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
+                    className="px-4 py-3 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
                   />
                 </div>
               );
             }
 
             if (field.type === "select" && field.options) {
+              const options = field.options.map((option) => ({
+                value: option,
+                label: option,
+              }));
+
+              const handleClearOption = () => {
+                onChange({
+                  target: {
+                    name: field.name,
+                    value: "",
+                    isMultiple: true,
+                  },
+                });
+              };
+
               return (
                 <div
                   key={field.name}
                   className="flex flex-col grow shrink w-44"
                 >
-                  <CustomSelect
-                    name={field.name}
-                    options={field.options.map((option) => ({
-                      value: option,
-                      label: option,
-                    }))}
-                    value={
-                      Array.isArray(filters[field.name])
-                        ? filters[field.name][0] || ""
-                        : filters[field.name] || ""
-                    }
-                    onChange={handleMultipleChange}
-                    placeholder={field.label}
-                    isMultiple={true}
-                  />
+                  <div className="flex items-center">
+                    <CustomSelect
+                      id={field.name}
+                      name={field.name}
+                      options={options}
+                      value={
+                        Array.isArray(filters[field.name])
+                          ? filters[field.name][0] || ""
+                          : filters[field.name] || ""
+                      }
+                      onChange={handleMultipleChange}
+                      placeholder={`Pilih ${field.label}`}
+                      isMultiple={true}
+                    />
+                    {filters[field.name] &&
+                      filters[field.name].length > 0 &&
+                      filters[field.name][0] !== "" && (
+                        <button
+                          type="button"
+                          onClick={handleClearOption}
+                          className="ml-1 text-xs text-blue-600 hover:text-blue-800"
+                        >
+                          Batalkan
+                        </button>
+                      )}
+                  </div>
                 </div>
               );
             }
@@ -108,11 +134,11 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
             return null;
           })}
 
-          <div className="flex flex-wrap gap-2 justify-center items-center px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-blue-600 rounded-xl max-md:max-w-full">
+          <div className="flex flex-col grow shrink w-full">
             <button
               type="button"
               onClick={onSearch}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer"
+              className="flex items-center justify-center gap-2 px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
             >
               <Search size={20} /> Cari Sekarang
             </button>
