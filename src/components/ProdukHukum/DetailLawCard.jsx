@@ -31,7 +31,7 @@ function DetailLawCard({ lawId }) {
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
-    setShowPdf(button === "Peraturan Lampiran");
+    setShowPdf(button === "Dokumen Lampiran");
   };
 
   const handleDownload = () => {
@@ -100,11 +100,11 @@ function DetailLawCard({ lawId }) {
         {lampiranField && (
           <button
             className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
-              selectedButton === "Peraturan Lampiran"
+              selectedButton === "Dokumen Lampiran"
                 ? "bg-red-500 text-white"
                 : ""
             }`}
-            onClick={() => handleButtonClick("Peraturan Lampiran")}
+            onClick={() => handleButtonClick("Dokumen Lampiran")}
           >
             Dokumen Lampiran
           </button>
@@ -119,16 +119,24 @@ function DetailLawCard({ lawId }) {
         </button>
       </div>
 
-      {selectedButton === "Peraturan Lampiran" && lampiranUrl ? (
+      {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
         <div className="mt-4">
-          <iframe
-            src={`https://docs.google.com/gview?url=${encodeURIComponent(
-              lampiranUrl
-            )}&embedded=true`}
-            width="100%"
-            height="500px"
-            title="Peraturan Lampiran"
-          />
+          {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
+            <img
+              src={lampiranUrl}
+              alt="Lampiran"
+              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow"
+            />
+          ) : (
+            <iframe
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(
+                lampiranUrl
+              )}&embedded=true`}
+              width="100%"
+              height="500px"
+              title="Dokumen Lampiran"
+            />
+          )}
         </div>
       ) : selectedButton === "Abstrak Lampiran" ? (
         <div className="text-base text-gray-700">

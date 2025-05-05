@@ -117,18 +117,26 @@ function DetailDocCard({ docId }) {
         </button>
       </div>
 
-      {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
-        <div className="mt-4">
-          <iframe
-            src={`https://docs.google.com/gview?url=${encodeURIComponent(
-              lampiranUrl
-            )}&embedded=true`}
-            width="100%"
-            height="500px"
-            title="Dokumen Lampiran"
-          />
-        </div>
-      ) : selectedButton === "Abstrak Lampiran" ? (
+{selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
+  <div className="mt-4">
+    {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
+      <img
+        src={lampiranUrl}
+        alt="Lampiran"
+        className="max-w-full max-h-[500px] mx-auto rounded-lg shadow"
+      />
+    ) : (
+      <iframe
+        src={`https://docs.google.com/gview?url=${encodeURIComponent(
+          lampiranUrl
+        )}&embedded=true`}
+        width="100%"
+        height="500px"
+        title="Dokumen Lampiran"
+      />
+    )}
+  </div>
+) : selectedButton === "Abstrak Lampiran" ? (
         <div className="text-base text-gray-700">
           <DetailItem
             label="Abstrak Lampiran"
