@@ -56,6 +56,7 @@ function RelatedNews({ currentArticleId }) {
 
   if (loading) return <LoadingSpinner />;
   if (relatedArticles.length === 0) return null;
+  
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -230,8 +231,8 @@ export default function DetailBeritaPage() {
       </div>
 
       <div className="prose max-w-none mb-8 text-gray-700">
-        {article.seo_description_id
-          ? article.seo_description_id
+        {article.details_id
+          ? article.details_id
               .replace(/<[^>]*>/g, "")
               .split(/\r?\n/)
               .filter((para) => para.trim() !== "")
@@ -340,8 +341,6 @@ export default function DetailBeritaPage() {
             </button>
           </div>
         </div>
-      </div>
-
       {/* Back button */}
       <Link
         to="/news"
@@ -350,6 +349,8 @@ export default function DetailBeritaPage() {
         <ChevronLeftCircle className="h-4 w-4 mr-1" />
         Kembali
       </Link>
+      </div>
+
 
       {/* Related News */}
       <div className="mt-12">
