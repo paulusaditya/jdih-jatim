@@ -64,15 +64,37 @@ const DocPage = ({
       params.append("sort_by", "created_at");
       params.append("sort_order", sortOrder);
 
-      // if (sectionId && !webmasterSectionId) {
-      //   params.append("section_id", sectionId);
-      // }
 
+      const filterArray = [];
       Object.entries(filters).forEach(([key, value]) => {
-        if (value && value.trim() !== "") {
-          params.append("filter_type", key);
-          params.append("filter_value", value);
+        if (
+          value &&
+          (typeof value === "string"
+            ? value.trim() !== ""
+            : Array.isArray(value) && value.length > 0)
+        ) {
+
+          if (Array.isArray(value)) {
+            value.forEach((val) => {
+              if (val && val.trim() !== "") {
+                filterArray.push({
+                  key: key,
+                  value: val,
+                });
+              }
+            });
+          } else {
+            filterArray.push({
+              key: key,
+              value: value,
+            });
+          }
         }
+      });
+
+
+      filterArray.forEach((filter, index) => {
+        params.append(`filters[]`, JSON.stringify(filter));
       });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
