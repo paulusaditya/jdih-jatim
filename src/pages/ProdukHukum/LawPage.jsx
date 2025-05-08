@@ -30,41 +30,14 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
+
   const [filters, setFilters] = useState({});
+
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, isMultiple } = e.target;
-
-    setFilters((prevFilters) => {
-      if (isMultiple) {
-
-        if (value === "") {
-
-          const newFilters = { ...prevFilters };
-          delete newFilters[name];
-          return newFilters;
-        }
-
-        return {
-          ...prevFilters,
-          [name]: [value], 
-        };
-      } else {
-
-        if (value === "") {
-          const newFilters = { ...prevFilters };
-          delete newFilters[name];
-          return newFilters;
-        }
-
-        return {
-          ...prevFilters,
-          [name]: value,
-        };
-      }
-    });
+    setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
   const handleSearch = () => {
@@ -84,50 +57,50 @@ const LawPage = ({
   const fetchLaws = async () => {
     setIsLoading(true);
     try {
-      let baseUrl = `${apiUrl}?per_page=${itemsPerPage}&page=${currentPage}&webmaster_section_id=${webmasterSectionId}&sort_by=created_at&sort_order=${sortOrder}`;
+      const params = new URLSearchParams();
+      params.append("per_page", itemsPerPage);
+      params.append("page", currentPage);
+      params.append("webmaster_section_id", webmasterSectionId);
+      params.append("sort_by", "created_at");
+      params.append("sort_order", sortOrder);
 
       if (sectionId) {
-        baseUrl += `&section_id=${sectionId}`;
+        params.append("section_id", sectionId);
       }
 
-
-      const filterParams = [];
-
+ 
+      const filterArray = [];
       Object.entries(filters).forEach(([key, value]) => {
-
-        const fieldKey = key.startsWith("customField_")
-          ? key
-          : `customField_${key}`;
-
-        if (Array.isArray(value)) {
-          value.forEach((val) => {
-            if (val && val.trim() !== "") {
-              const filterObj = {
-                key: fieldKey,
-                value: val,
-              };
-              filterParams.push(
-                `filters[]=${encodeURIComponent(JSON.stringify(filterObj))}`
-              );
-            }
-          });
-        } else if (value && value.trim() !== "") {
-
-          const filterObj = {
-            key: fieldKey,
-            value: value,
-          };
-          filterParams.push(
-            `filters[]=${encodeURIComponent(JSON.stringify(filterObj))}`
-          );
+        if (
+          value &&
+          (typeof value === "string"
+            ? value.trim() !== ""
+            : Array.isArray(value) && value.length > 0)
+        ) {
+          if (Array.isArray(value)) {
+            value.forEach((val) => {
+              if (val && val.trim() !== "") {
+                filterArray.push({
+                  key: key,
+                  value: val,
+                });
+              }
+            });
+          } else {
+            filterArray.push({
+              key: key,
+              value: value,
+            });
+          }
         }
       });
 
-      const fullUrl =
-        filterParams.length > 0
-          ? `${baseUrl}&${filterParams.join("&")}`
-          : baseUrl;
+ 
+      filterArray.forEach((filter) => {
+        params.append(`filters[]`, JSON.stringify(filter));
+      });
 
+      const fullUrl = `${apiUrl}?${params.toString()}`;
       console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
@@ -232,7 +205,7 @@ const LawPage = ({
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
   };
 
   return (
