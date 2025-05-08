@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import CustomSelect from "./CustomSelect";
 import axios from "axios";
+import CustomSelect from "./CustomSelect";
 
 const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
   const [filterFields, setFilterFields] = useState([]);
@@ -63,8 +63,8 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                   key={field.name}
                   className="flex flex-col grow shrink w-44"
                 >
-                  <input
-                    type={field.type === "number" ? "number" : "text"}
+                  <CustomSelect
+                    type={field.type}
                     id={field.name}
                     name={field.name}
                     value={
@@ -74,7 +74,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                     }
                     onChange={handleMultipleChange}
                     placeholder={field.label}
-                    className="px-4 py-3 w-full bg-white rounded-lg border border-blue-300 text-gray-800"
+                    isMultiple={true}
                   />
                 </div>
               );
@@ -86,47 +86,24 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
                 label: option,
               }));
 
-              const handleClearOption = () => {
-                onChange({
-                  target: {
-                    name: field.name,
-                    value: "",
-                    isMultiple: true,
-                  },
-                });
-              };
-
               return (
                 <div
                   key={field.name}
                   className="flex flex-col grow shrink w-44"
                 >
-                  <div className="flex items-center">
-                    <CustomSelect
-                      id={field.name}
-                      name={field.name}
-                      options={options}
-                      value={
-                        Array.isArray(filters[field.name])
-                          ? filters[field.name][0] || ""
-                          : filters[field.name] || ""
-                      }
-                      onChange={handleMultipleChange}
-                      placeholder={`Pilih ${field.label}`}
-                      isMultiple={true}
-                    />
-                    {filters[field.name] &&
-                      filters[field.name].length > 0 &&
-                      filters[field.name][0] !== "" && (
-                        <button
-                          type="button"
-                          onClick={handleClearOption}
-                          className="ml-1 text-xs text-blue-600 hover:text-blue-800"
-                        >
-                          Batalkan
-                        </button>
-                      )}
-                  </div>
+                  <CustomSelect
+                    id={field.name}
+                    name={field.name}
+                    options={options}
+                    value={
+                      Array.isArray(filters[field.name])
+                        ? filters[field.name][0] || ""
+                        : filters[field.name] || ""
+                    }
+                    onChange={handleMultipleChange}
+                    placeholder={`Pilih ${field.label}`}
+                    isMultiple={true}
+                  />
                 </div>
               );
             }
