@@ -168,13 +168,23 @@ const DocPage = ({
           return {
             id: item.id,
             title: fields["Judul Peraturan"] || item.title || "Unknown",
-            year: fields["Tahun Terbit"] || fields["Tahun"] || "-",
-            number: fields["Nomor"] || "-",
-            type: fields["Singkatan Jenis"] || "-",
+            year:
+              fields["Tahun Terbit"] ||
+              fields["Tahun"] ||
+              fields["Tahun Propemperda"],
+            number: fields["Nomor"] || fields["Nomor Panggil"],
+            type:
+              fields["Singkatan Jenis"],
             status:
-              fields["Keterangan Status"] || fields["Subjek Artikel"] || "-",
+              fields["Keterangan Status"] ||
+              fields["Subjek Artikel"] ||
+              fields["Subjek"] ||
+              fields["Subjek Statsblads"],
             category:
-              fields["Kategori"] || fields["T.E.U Badan/Pengarang"] || "-",
+              fields["Kategori"] ||
+              fields["Penerbit"] ||
+              fields["T.E.U Badan/Pengarang"] ||
+              fields["Tahapan Propemperda"],
             image: item.image,
             slug: item.seo_url_slug_id || item.id,
           };

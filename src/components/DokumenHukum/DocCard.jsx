@@ -21,8 +21,8 @@ function DocCard({
   year,
   status,
   category,
-  bidang,
-  nomorPutusan,
+  type,
+  number,
   onDetailClick,
   image,
 }) {
@@ -44,8 +44,8 @@ function DocCard({
           {status && <StatusBadge>{status}</StatusBadge>}
           {year && <StatusBadge>{year}</StatusBadge>}
           {category && <StatusBadge>{category}</StatusBadge>}
-          {bidang && <StatusBadge>{bidang}</StatusBadge>}
-          {nomorPutusan && <StatusBadge>{nomorPutusan}</StatusBadge>}
+          {type && <StatusBadge>{type}</StatusBadge>}
+          {number && <StatusBadge>{number}</StatusBadge>}
         </div>
       </div>
       <div
