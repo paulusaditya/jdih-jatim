@@ -31,7 +31,13 @@ export default function ContactPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    const { name, email, phone, subject, message } = formData;
+
+    const waMessage = `Halo, saya ingin menghubungi Anda.%0A%0ANama: ${name}%0AEmail: ${email}%0ANo Telp: ${phone}%0ASubject: ${subject}%0APesan: ${message}`;
+    const waUrl = `https://wa.me/6283850286066?text=${waMessage}`;
+
+    window.open(waUrl, "_blank");
 
     setFormData({
       name: "",
@@ -158,41 +164,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Recaptcha (dummy) */}
-              <div className="flex items-center">
-                <div
-                  className="g-recaptcha"
-                  data-sitekey="your_recaptcha_site_key"
-                >
-                  <div className="flex items-center border border-gray-300 rounded p-2 bg-white w-fit">
-                    <div className="w-5 h-5 border border-gray-400 rounded flex items-center justify-center mr-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-green-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </div>
-                    <span className="text-sm text-gray-700">
-                      I'm not a robot
-                    </span>
-                    <img
-                      src="/RecaptchaLogo.png?height=40&width=40"
-                      alt="reCAPTCHA logo"
-                      className="ml-4 h-10 w-10"
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Submit */}
               <button
                 type="submit"
@@ -270,6 +241,7 @@ export default function ContactPage() {
                 </p>
               </div>
             </div>
+
             {/* Map Section */}
             <div className="mt-12">
               <h2 className="text-blue-900 font-bold text-xl mb-6">
