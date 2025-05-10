@@ -12,7 +12,7 @@ export default function Main() {
   useEffect(() => {
     fetch(
       "https://api.allorigins.win/get?url=" +
-        encodeURIComponent("http://54.169.231.19/api/v2/home/banners")
+        encodeURIComponent("https://jdih.pisdev.my.id/api/v2/home/banners")
     )
       .then((res) => res.json())
       .then((data) => {
