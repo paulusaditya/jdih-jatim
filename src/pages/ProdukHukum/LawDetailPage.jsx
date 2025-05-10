@@ -9,7 +9,7 @@ const LawDetailPage = () => {
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: "Peraturan Terbaru", path: "/peraturan-terbaru" },
+    { label: "Peraturan", path: "/peraturan-terbaru" },
     { label: "Detail Produk Hukum", path: `/peraturan-terbaru/${slug}` },
   ];
 

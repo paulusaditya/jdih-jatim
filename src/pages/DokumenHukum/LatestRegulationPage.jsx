@@ -13,10 +13,10 @@ const LatestRegulationPage = () => {
   return (
     <LawPage
       apiUrl="https://jdih.pisdev.my.id/api/v2/home/latest-policy"
-      title="Peraturan Terbaru"
+      title="Peraturan"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },
-        { label: "Peraturan Terbaru", path: "/peraturan-terbaru" },
+        { label: "Peraturan", path: "/peraturan-terbaru" },
       ]}
       sectionId="10"
       years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
