@@ -61,6 +61,11 @@ function DetailDocCard({ docId }) {
   );
   const lampiranUrl = lampiranField?.details || "";
 
+  const abstrakField = fields.find((f) =>
+    f.title?.toLowerCase().includes("abstrak")
+  );
+  const hasAbstrak = abstrakField?.details?.trim();
+
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
       <div className="mb-2 text-2xl font-semibold text-zinc-800">{judul}</div>
@@ -73,7 +78,7 @@ function DetailDocCard({ docId }) {
           <Eye size={24} />
           <div>Visits : {visits}</div>
         </div>
-        {lampiranField && (
+        {lampiranUrl && (
           <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
             <a
               onClick={handleDownload}
@@ -95,7 +100,7 @@ function DetailDocCard({ docId }) {
         >
           Detail
         </button>
-        {lampiranField && (
+        {lampiranUrl && (
           <button
             className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
               selectedButton === "Dokumen Lampiran"
@@ -107,44 +112,40 @@ function DetailDocCard({ docId }) {
             Dokumen Lampiran
           </button>
         )}
-        <button
-          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
-            selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
-          }`}
-          onClick={() => handleButtonClick("Abstrak Lampiran")}
-        >
-          Abstrak Lampiran
-        </button>
+        {hasAbstrak && (
+          <button
+            className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
+              selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
+            }`}
+            onClick={() => handleButtonClick("Abstrak Lampiran")}
+          >
+            Abstrak Lampiran
+          </button>
+        )}
       </div>
 
-{selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
-  <div className="mt-4">
-    {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
-      <img
-        src={lampiranUrl}
-        alt="Lampiran"
-        className="max-w-full max-h-[500px] mx-auto rounded-lg shadow"
-      />
-    ) : (
-      <iframe
-        src={`https://docs.google.com/gview?url=${encodeURIComponent(
-          lampiranUrl
-        )}&embedded=true`}
-        width="100%"
-        height="500px"
-        title="Dokumen Lampiran"
-      />
-    )}
-  </div>
-) : selectedButton === "Abstrak Lampiran" ? (
+      {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
+        <div className="mt-4">
+          {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
+            <img
+              src={lampiranUrl}
+              alt="Lampiran"
+              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow"
+            />
+          ) : (
+            <iframe
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(
+                lampiranUrl
+              )}&embedded=true`}
+              width="100%"
+              height="500px"
+              title="Dokumen Lampiran"
+            />
+          )}
+        </div>
+      ) : selectedButton === "Abstrak Lampiran" && hasAbstrak ? (
         <div className="text-base text-gray-700">
-          <DetailItem
-            label="Abstrak Lampiran"
-            value={
-              fields.find((f) => f.title?.toLowerCase().includes("abstrak"))
-                ?.details || "-"
-            }
-          />
+          <DetailItem label="Abstrak Lampiran" value={hasAbstrak} />
         </div>
       ) : (
         <div className="flex flex-col">
