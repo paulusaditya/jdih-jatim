@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Twitter, Instagram, Youtube } from "lucide-react";
+import { Instagram, Youtube } from "lucide-react";
 import { FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -23,6 +23,15 @@ export default function Footer() {
         console.error("Error fetching visitor analytics:", error);
       });
   }, []);
+
+  const shareToSocialMedia = (platform) => {
+    const urls = {
+      x: "https://twitter.com/jdihjatimprov",
+    };
+    if (urls[platform]) {
+      window.open(urls[platform], "_blank");
+    }
+  };
 
   return (
     <footer className="md:pt-80 pt-40">
@@ -95,14 +104,22 @@ export default function Footer() {
                 >
                   <FaFacebook size={24} />
                 </a>
-                <a
-                  href="https://twitter.com/jdihjatimprov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-blue-300"
+                <button
+                  className="text-white hover:text-blue-300"
+                  onClick={() => shareToSocialMedia("x")}
+                  aria-label="Share to X"
                 >
-                  <Twitter size={24} />
-                </a>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-6 w-6"
+                  >
+                    <path d="M18.365 2h3.067l-7.486 8.533 8.801 11.467h-6.921l-5.417-7.114-6.2 7.114H.143l8.229-9.45L.143 2h7.067l4.857 6.6L18.365 2z" />
+                  </svg>
+                </button>
                 <a
                   href="https://www.instagram.com/jdihjatim"
                   target="_blank"
@@ -117,7 +134,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-blue-300"
                 >
-                  <Youtube size={24} />
+                  <Youtube size={25} />
                 </a>
               </div>
             </div>
@@ -132,12 +149,26 @@ export default function Footer() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Sitemap</h3>
               <ul className="space-y-2">
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/site-pages/about">Profil</Link></li>
-                <li><Link to="/peraturan">Produk Hukum</Link></li>
-                <li><Link to="/site-pages/staatsblad">Dokumen Hukum Lainnya</Link></li>
-                <li><Link to="/news">Berita</Link></li>
-                <li><Link to="https://sukma.jatimprov.go.id/fe/survey">Survey</Link></li>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/site-pages/about">Profil</Link>
+                </li>
+                <li>
+                  <Link to="/peraturan">Produk Hukum</Link>
+                </li>
+                <li>
+                  <Link to="/site-pages/staatsblad">Dokumen Hukum Lainnya</Link>
+                </li>
+                <li>
+                  <Link to="/news">Berita</Link>
+                </li>
+                <li>
+                  <Link to="https://sukma.jatimprov.go.id/fe/survey">
+                    Survey
+                  </Link>
+                </li>
               </ul>
             </div>
 
