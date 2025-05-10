@@ -61,7 +61,7 @@ export default function LegalDocumentsSection() {
     {
       title: "Kerja Sama Daerah",
       description: "Kerja sama provinsi Jawa Timur dengan para Stakeholder.",
-      url: "/site-pages/dokumen-kerja-sama",
+      url: "/site-pages/dokumen-kerjasama",
     },
     {
       title: "Surat Edaran",
@@ -72,7 +72,7 @@ export default function LegalDocumentsSection() {
     {
       title: "Rancangan Peraturan Daerah",
       description: "Dokumen rancangan peraturan daerah yang ada di Jawa Timur",
-      url: "/site-pages/rancangan-peraturan-daerah",
+      url: "/site-pages/rancangan-perda",
     },
   ];
 
