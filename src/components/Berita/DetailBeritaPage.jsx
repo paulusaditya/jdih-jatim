@@ -56,7 +56,6 @@ function RelatedNews({ currentArticleId }) {
 
   if (loading) return <LoadingSpinner />;
   if (relatedArticles.length === 0) return null;
-  
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -230,32 +229,39 @@ export default function DetailBeritaPage() {
         <div>Oleh: Biro Humas Provinsi Jawa Timur</div>
       </div>
 
-      <div className="prose max-w-none mb-8 text-gray-700">
-        {article.details_id
-          ? article.details_id
-              .replace(/<[^>]*>/g, "")
-              .split(/\r?\n/)
-              .filter((para) => para.trim() !== "")
-              .map((paragraph, i) => (
-                <p key={i} className="mb-4">
-                  {paragraph.trim()}
-                </p>
-              ))
-          : placeholderContent.map((p, i) => (
-              <p key={i} className="mb-4">
-                {i === 1 && (
-                  <div className="my-6">
-                    <img
-                      src="/assets/berita/imageberita2.png"
-                      alt="Grafik"
-                      className="w-full h-auto rounded-lg"
-                    />
-                  </div>
-                )}
-                {p}
-              </p>
-            ))}
-      </div>
+      {article.details_id ? (
+        <div
+          className="prose max-w-none mb-8 text-gray-700"
+          dangerouslySetInnerHTML={{
+            __html: article.details_id.replace(
+              /<img\s+[^>]*src=["']([^"']+)["']/gi,
+              (match, src) => {
+                const newSrc = src.startsWith("http")
+                  ? src
+                  : `http://files.jdih.jatimprov.go.id/jdih-dev${src}`;
+                return match.replace(src, newSrc);
+              }
+            ),
+          }}
+        />
+      ) : (
+        <div className="prose max-w-none mb-8 text-gray-700">
+          {placeholderContent.map((p, i) => (
+            <p key={i} className="mb-4">
+              {i === 1 && (
+                <div className="my-6">
+                  <img
+                    src="/assets/berita/imageberita2.png"
+                    alt="Grafik"
+                    className="w-full h-auto rounded-lg"
+                  />
+                </div>
+              )}
+              {p}
+            </p>
+          ))}
+        </div>
+      )}
 
       <div className="flex items-center justify-between border-t pt-4 pb-4">
         <div className="flex items-center">
@@ -341,16 +347,15 @@ export default function DetailBeritaPage() {
             </button>
           </div>
         </div>
-      {/* Back button */}
-      <Link
-        to="/news"
-        className="inline-flex items-center text-blue-600 text-sm"
-      >
-        <ChevronLeftCircle className="h-4 w-4 mr-1" />
-        Kembali
-      </Link>
+        {/* Back button */}
+        <Link
+          to="/news"
+          className="inline-flex items-center text-blue-600 text-sm"
+        >
+          <ChevronLeftCircle className="h-4 w-4 mr-1" />
+          Kembali
+        </Link>
       </div>
-
 
       {/* Related News */}
       <div className="mt-12">
