@@ -2,44 +2,35 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-function shuffleArray(array) {
-  return array
-    .map((item) => ({ item, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ item }) => item);
-}
-
 export default function LatestRegulations() {
   const [regulations, setRegulations] = useState([]);
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionDesc, setSectionDesc] = useState("");
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/home/latest-policy")
+    fetch(
+      "https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=10&sort_by=created_at&sort_order=desc"
+    )
       .then((res) => res.json())
-      .then(async (data) => {
-        setSectionTitle(data.title);
-        setSectionDesc(data.description);
+      .then((data) => {
+        if (data.status === "success" && data.data) {
+          setSectionTitle(data.data.title || "Dokumen Peraturan Terbaru");
+          setSectionDesc(
+            data.data.description || "Dokumen peraturan terbaru di Jawa Timur."
+          );
 
-        const shuffled = shuffleArray(data.data || []).slice(0, 3);
+          const allRegulations = data.data.data || [];
+          const latestRegulations = allRegulations.slice(0, 3);
 
-        const regulationsWithSlugs = await Promise.all(
-          shuffled.map(async (reg) => {
-            try {
-              const res = await fetch(
-                `https://jdih.pisdev.my.id/api/v2/topics/${reg.id}`
-              );
-              const topicData = await res.json();
-              const slug = topicData?.data?.seo_url_slug_id || "default-slug";
-              return { ...reg, slug };
-            } catch (error) {
-              console.error("Failed to fetch slug for id:", reg.id);
-              return { ...reg, slug: "default-slug" };
-            }
-          })
-        );
+          const regulationsWithSlugs = latestRegulations.map((reg) => {
+            return {
+              ...reg,
+              slug: reg.seo_url_slug_id || "default-slug",
+            };
+          });
 
-        setRegulations(regulationsWithSlugs);
+          setRegulations(regulationsWithSlugs);
+        }
       })
       .catch((err) => console.error("Failed to fetch data:", err));
   }, []);
