@@ -273,7 +273,7 @@ const LawPage = ({
           customSidebar
         ) : (
           <div className="mt-6">
-            <PopularDocument sectionId={sectionId} />
+            <PopularDocument/>
           </div>
         )}
       </div>
