@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
+import Seo from "../../components/common/Seo";
 
 function DetailLawCard({ lawId }) {
   const [selectedButton, setSelectedButton] = useState("Detail");
@@ -11,10 +12,10 @@ function DetailLawCard({ lawId }) {
     const fetchData = async () => {
       try {
         const url = `https://jdih.pisdev.my.id/api/v2/topics/by-slug/${lawId}`;
-        console.log("Fetching data from:", url); 
+        console.log("Fetching data from:", url);
         const response = await fetch(url);
         const result = await response.json();
-        console.log("📦 Response API by-slug:", result); 
+        console.log("📦 Response API by-slug:", result);
 
         if (result.status === "success") {
           setData(result.data);
@@ -65,6 +66,12 @@ function DetailLawCard({ lawId }) {
 
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
+      <Seo
+        seoTitle={data?.seo_title_id}
+        seoDescription={data?.seo_description_id}
+        seoKeywords={data?.seo_keywords_id}
+      />
+
       <div className="mb-2 text-2xl font-semibold text-zinc-800">{judul}</div>
       <div className="mb-4 text-sm text-gray-600">
         Tanggal: {data?.date || "-"}

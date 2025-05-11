@@ -10,6 +10,7 @@ import {
   Twitter,
 } from "lucide-react";
 import LoadingSpinner from "../common/LoadingSpinner";
+import Seo from "../../components/common/Seo";
 
 function RelatedNews({ currentArticleId }) {
   const [relatedArticles, setRelatedArticles] = useState([]);
@@ -208,6 +209,12 @@ export default function DetailBeritaPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
+      <Seo
+        seoTitle={article.seo_title_id || article.title}
+        seoDescription={article.seo_description_id || article.title}
+        seoKeywords={article.seo_keywords_id || "berita, Jawa Timur, JDIH"}
+      />
+
       <div className="mb-6">
         <img
           src={article.image || "/assets/berita/imageberita1.png"}
@@ -313,7 +320,6 @@ export default function DetailBeritaPage() {
               <Facebook className="h-4 w-4" />
             </button>
 
-            {/* WhatsApp */}
             {/* WhatsApp */}
             <button
               className="text-gray-600 hover:text-gray-900"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
+import Seo from "../../components/common/Seo";
 
 function DetailDocCard({ docId }) {
   const [selectedButton, setSelectedButton] = useState("Detail");
@@ -20,7 +21,7 @@ function DetailDocCard({ docId }) {
           setData(result.data);
         }
       } catch (error) {
-        console.error("❌ Error :", error);
+        console.error("❌ Error:", error);
       }
     };
 
@@ -68,6 +69,12 @@ function DetailDocCard({ docId }) {
 
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
+      <Seo
+        seoTitle={data?.seo_title_id}
+        seoDescription={data?.seo_description_id}
+        seoKeywords={data?.seo_keywords_id}
+      />
+
       <div className="mb-2 text-2xl font-semibold text-zinc-800">{judul}</div>
       <div className="mb-4 text-sm text-gray-600">
         Tanggal: {data?.date || "-"}
@@ -76,7 +83,7 @@ function DetailDocCard({ docId }) {
       <div className="flex justify-between items-center px-4 py-3 mb-5 rounded-lg bg-zinc-100 max-sm:flex-col max-sm:gap-3">
         <div className="flex gap-3 items-center text-base text-black">
           <Eye size={24} />
-          <div>Visits : {visits}</div>
+          <div>Visits: {visits}</div>
         </div>
         {lampiranUrl && (
           <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
@@ -115,7 +122,9 @@ function DetailDocCard({ docId }) {
         {hasAbstrak && (
           <button
             className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
-              selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
+              selectedButton === "Abstrak Lampiran"
+                ? "bg-red-500 text-white"
+                : ""
             }`}
             onClick={() => handleButtonClick("Abstrak Lampiran")}
           >
