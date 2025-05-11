@@ -239,7 +239,12 @@ export default function DetailBeritaPage() {
                 const newSrc = src.startsWith("http")
                   ? src
                   : `http://files.jdih.jatimprov.go.id/jdih-dev${src}`;
-                return match.replace(src, newSrc);
+                return match
+                  .replace(src, newSrc)
+                  .replace(
+                    /<img/gi,
+                    '<img class="w-full h-auto rounded-lg my-4 mx-auto block"'
+                  );
               }
             ),
           }}
