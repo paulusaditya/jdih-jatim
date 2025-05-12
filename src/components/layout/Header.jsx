@@ -55,21 +55,21 @@ export default function Header() {
               className="w-auto h-8 sm:h-10"
               src="/assets/nav-logo/logo1.png"
               alt="Logo 1"
-              width={32} 
-              height={32} 
+              width={32}
+              height={32}
             />
             <img
               className="w-auto h-8 sm:h-10"
               src="/assets/nav-logo/logo2.png"
               alt="Logo 2"
-              width={32} 
-              height={32} 
+              width={32}
+              height={32}
             />
             <img
               className="w-auto h-8 sm:h-10"
               src="/assets/nav-logo/logo3.png"
               alt="Logo 3"
-              width={32} 
+              width={32}
               height={32}
             />
             <div>
@@ -104,17 +104,6 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
-  const closeDropdown = (e) => {
-    if (!e.target.closest(".dropdown-container")) {
-      setActiveDropdown(null);
-    }
-  };
-
-  React.useEffect(() => {
-    document.addEventListener("click", closeDropdown);
-    return () => document.removeEventListener("click", closeDropdown);
-  }, []);
-
   const cleanLink = (link) => (link.startsWith("/") ? link.slice(1) : link);
 
   const buildLink = (parentLink, subLink) => {
@@ -128,15 +117,11 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
 
   return (
     <>
-      {/* Desktop Navbar */}
       <div className="hidden md:flex space-x-10 text-blue-800">
         {navItems.map((item, index) => (
-          <div key={index} className="relative dropdown-container">
+          <div key={index} className="relative dropdown-container group">
             {item.sub_menus.length > 0 ? (
-              <span
-                onClick={() => toggleDropdown(index)}
-                className="hover:font-semibold cursor-pointer"
-              >
+              <span className="hover:font-semibold cursor-pointer inline-block py-2">
                 {item.title}
               </span>
             ) : isExternalLink(item.link) ? (
@@ -144,25 +129,30 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
                 href={item.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:font-semibold"
+                className="hover:font-semibold inline-block py-2"
               >
                 {item.title}
               </a>
             ) : (
               <Link
                 to={`/${cleanLink(item.link)}`}
-                className="hover:font-semibold"
+                className="hover:font-semibold inline-block py-2"
               >
                 {item.title}
               </Link>
             )}
-            {item.sub_menus.length > 0 && activeDropdown === index && (
-              <div className="absolute left-0 top-full mt-1 z-50 w-max min-w-[250px] shadow-lg rounded-md bg-white">
-                <DropdownMenu
-                  subMenus={item.sub_menus}
-                  parentLink={item.link}
-                  buildLink={buildLink}
-                />
+
+            {item.sub_menus.length > 0 && (
+              <div className="absolute left-0 top-full z-50 w-max min-w-[250px] hidden group-hover:block">
+
+                <div className="h-3"></div>
+                <div className="shadow-lg rounded-md bg-white">
+                  <DropdownMenu
+                    subMenus={item.sub_menus}
+                    parentLink={item.link}
+                    buildLink={buildLink}
+                  />
+                </div>
               </div>
             )}
           </div>
