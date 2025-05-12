@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/banners",
-      "destination": "http://103.183.92.163/api/v2/home/banners"
+      "source": "/(.*)",
+      "destination": "http://103.183.92.163/$1"
     },
     {
       "source": "/(.*)",
