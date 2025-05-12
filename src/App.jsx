@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil/Profil";
 import ContactPage from "./pages/Profil/Contact";
@@ -33,6 +38,69 @@ import SuratEdaranPage from "./pages/DokumenHukum/SuratEdaranPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import PopularDocumentMonography from "./components/PopularDocumentMonography";
 
+function TitleUpdater({ menuData }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+    let pageTitle = "JDIH Provinsi Jawa Timur"; 
+
+
+    if (path === "/") {
+      document.title = "Beranda | JDIH Provinsi Jawa Timur";
+      return;
+    }
+
+
+    if (path === "*") {
+      document.title = "Halaman Tidak Ditemukan | JDIH Provinsi Jawa Timur";
+      return;
+    }
+
+
+    if (menuData && menuData.length > 0) {
+      for (const menu of menuData) {
+        if (path === `/${menu.link}`) {
+          pageTitle = menu.title;
+          break;
+        }
+
+
+        if (menu.sub_menus && menu.sub_menus.length > 0) {
+          for (const sub of menu.sub_menus) {
+            const subPath = `/${menu.link}${
+              sub.link.startsWith("/") ? sub.link : `/${sub.link}`
+            }`;
+            if (path === subPath) {
+              pageTitle = sub.title;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (path.includes("/peraturan/") && path.split("/").length > 3) {
+      pageTitle = "Detail Peraturan";
+    } else if (path.includes("/news/detail-berita/")) {
+      pageTitle = "Detail Berita";
+    } else if (path.includes("/site-pages/")) {
+      const docType = path.split("/")[2];
+      if (docType) {
+        const formattedDocType = docType
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+        pageTitle = `${formattedDocType}`;
+      }
+    }
+
+    document.title = `${pageTitle} | JDIH Provinsi Jawa Timur`;
+  }, [location, menuData]);
+
+  return null;
+}
+
 function App() {
   const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +122,7 @@ function App() {
     <div className="flex flex-col min-h-screen bg-white">
       <Router>
         <ScrollToTop />
+        <TitleUpdater menuData={menuData} />
         <Header />
         <main className="flex-grow">
           {loading ? (
