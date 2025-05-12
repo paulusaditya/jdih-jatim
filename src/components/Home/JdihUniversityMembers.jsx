@@ -11,7 +11,7 @@ export default function JDIHUniversityMembers() {
 
   useEffect(() => {
     axios
-      .get("${baseUrl}/home/partner-universities")
+      .get(`${baseUrl}/home/partner-universities`)
       .then((response) => {
         setMembers(response.data.data || []);
       })
