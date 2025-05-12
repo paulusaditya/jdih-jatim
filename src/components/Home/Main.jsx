@@ -11,10 +11,7 @@ export default function Main() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    fetch(
-      "https://api.allorigins.win/get?url=" +
-        encodeURIComponent(`${baseUrl}/home/banners`)
-    )
+    fetch(`${baseUrl}/home/banners`)
       .then((res) => res.json())
       .then((data) => {
         const parsed = JSON.parse(data.contents);
