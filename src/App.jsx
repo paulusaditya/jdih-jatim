@@ -37,26 +37,24 @@ import RancanganPerdaPage from "./pages/DokumenHukum/RancanganPerdaPage";
 import SuratEdaranPage from "./pages/DokumenHukum/SuratEdaranPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import PopularDocumentMonography from "./components/PopularDocumentMonography";
+import baseUrl from "./config/api";
 
 function TitleUpdater({ menuData }) {
   const location = useLocation();
 
   useEffect(() => {
     const path = location.pathname;
-    let pageTitle = "JDIH Provinsi Jawa Timur"; 
-
+    let pageTitle = "JDIH Provinsi Jawa Timur";
 
     if (path === "/") {
       document.title = "Beranda | JDIH Provinsi Jawa Timur";
       return;
     }
 
-
     if (path === "*") {
       document.title = "Halaman Tidak Ditemukan | JDIH Provinsi Jawa Timur";
       return;
     }
-
 
     if (menuData && menuData.length > 0) {
       for (const menu of menuData) {
@@ -64,7 +62,6 @@ function TitleUpdater({ menuData }) {
           pageTitle = menu.title;
           break;
         }
-
 
         if (menu.sub_menus && menu.sub_menus.length > 0) {
           for (const sub of menu.sub_menus) {
@@ -106,7 +103,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/menus")
+    fetch(`${baseUrl}/menus`)
       .then((response) => response.json())
       .then((data) => {
         setMenuData(data);

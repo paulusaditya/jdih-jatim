@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "../common/LoadingSpinner";
+import baseUrl from "../../config/api";
 
 export default function JDIHUniversityMembers() {
   const [members, setMembers] = useState([]);
@@ -10,7 +11,7 @@ export default function JDIHUniversityMembers() {
 
   useEffect(() => {
     axios
-      .get("https://jdih.pisdev.my.id/api/v2/home/partner-universities")
+      .get("${baseUrl}/home/partner-universities")
       .then((response) => {
         setMembers(response.data.data || []);
       })

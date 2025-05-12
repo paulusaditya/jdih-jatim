@@ -1,8 +1,9 @@
 import DocPage from "./DocPage";
+import baseUrl from "../../config/api";
 
 const ArticlePage = () => (
   <DocPage
-    apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+    apiUrl={`${baseUrl}/topics`}
     title="Dokumen Artikel"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },

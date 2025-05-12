@@ -8,6 +8,7 @@ import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 import NewOldFilter from "../../components/common/NewOldFilter";
+import baseUrl from "../../config/api";
 
 const DocPage = ({
   apiUrl,
@@ -119,9 +120,7 @@ const DocPage = ({
         mappedDocuments = await Promise.all(
           rawDocuments.map(async (item) => {
             try {
-              const detailRes = await fetch(
-                `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
-              );
+              const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
               const detailData = await detailRes.json();
               const fields = {};
               detailData.data?.fields?.forEach(

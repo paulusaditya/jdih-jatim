@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import baseUrl from "../../config/api";
 
 export default function Main() {
   const [banners, setBanners] = useState([]);
@@ -12,7 +13,7 @@ export default function Main() {
   useEffect(() => {
     fetch(
       "https://api.allorigins.win/get?url=" +
-        encodeURIComponent("https://jdih.pisdev.my.id/api/v2/home/banners")
+        encodeURIComponent(`${baseUrl}/home/banners`)
     )
       .then((res) => res.json())
       .then((data) => {

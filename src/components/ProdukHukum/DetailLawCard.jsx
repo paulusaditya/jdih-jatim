@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
 import Seo from "../../components/common/Seo";
+import baseUrl from "../../config/api";
 
 function DetailLawCard({ lawId }) {
   const [selectedButton, setSelectedButton] = useState("Detail");
@@ -11,7 +12,7 @@ function DetailLawCard({ lawId }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://jdih.pisdev.my.id/api/v2/topics/by-slug/${lawId}`;
+        const url = `${baseUrl}/topics/by-slug/${lawId}`;
         console.log("Fetching data from:", url);
         const response = await fetch(url);
         const result = await response.json();

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import axios from "axios";
 import CustomSelect from "./CustomSelect";
+import baseUrl from "../../config/api";
 
 const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
   const [filterFields, setFilterFields] = useState([]);
@@ -14,7 +15,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://jdih.pisdev.my.id/api/v2/topics/filter-options?webmaster_section_id=${webmasterSectionId}`
+          `${baseUrl}/topics/filter-options?webmaster_section_id=${webmasterSectionId}`
         );
 
         if (response.data && response.data.status === "success") {

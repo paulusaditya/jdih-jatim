@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
+import baseUrl from "../config/api";
 
 function Kategori() {
   const [kategoriList, setKategoriList] = useState([]);
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/overview-by-id/10")
+    fetch(`${baseUrl}/overview-by-id/10`)
       .then((res) => res.json())
       .then((data) => setKategoriList(data))
       .catch((err) => console.error("Failed to fetch kategori:", err));

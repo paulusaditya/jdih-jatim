@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
 import Seo from "../../components/common/Seo";
+import baseUrl from "../../config/api";
 
 function DetailDocCard({ docId }) {
   const [selectedButton, setSelectedButton] = useState("Detail");
@@ -11,9 +12,7 @@ function DetailDocCard({ docId }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://jdih.pisdev.my.id/api/v2/topics/by-slug/${docId}`
-        );
+        const response = await fetch(`${baseUrl}/topics/by-slug/${docId}`);
         const result = await response.json();
         console.log("📦 Response API by-slug:", result);
 

@@ -1,9 +1,10 @@
 import DocPage from "./DocPage";
 import PopularDocumentMonography from "../../components/PopularDocumentMonography";
+import baseUrl from "../../config/api";
 
 const MonographyPage = () => (
   <DocPage
-    apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+    apiUrl={`${baseUrl}/topics`}
     title="Dokumen Monografi"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },

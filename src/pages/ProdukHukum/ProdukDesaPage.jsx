@@ -1,4 +1,5 @@
 import LawPage from "./LawPage";
+import baseUrl from "../../config/api";
 
 const ProdukDesaPage = () => {
   const typeToSectionId = {
@@ -8,7 +9,7 @@ const ProdukDesaPage = () => {
 
   return (
     <LawPage
-      apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+      apiUrl={`${baseUrl}/topics`}
       title="Produk Hukum Desa"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },

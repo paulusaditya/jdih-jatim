@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import baseUrl from "../../config/api";
 
 function shuffleArray(array) {
   return array
@@ -15,7 +16,7 @@ export default function PropemperdaRegulations() {
   const [sectionDesc, setSectionDesc] = useState("");
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/home/propemperda")
+    fetch(`${baseUrl}/home/propemperda`)
       .then((res) => res.json())
       .then(async (data) => {
         setSectionTitle(data.title);
@@ -26,9 +27,7 @@ export default function PropemperdaRegulations() {
         const regulationsWithSlugs = await Promise.all(
           shuffled.map(async (reg) => {
             try {
-              const res = await fetch(
-                `https://jdih.pisdev.my.id/api/v2/topics/${reg.id}`
-              );
+              const res = await fetch(`${baseUrl}/topics/${reg.id}`);
               const topicData = await res.json();
               const slug = topicData?.data?.seo_url_slug_id || "default-slug";
               return { ...reg, slug };

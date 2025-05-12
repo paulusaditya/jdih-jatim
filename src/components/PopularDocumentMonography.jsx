@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import baseUrl from "../config/api";
 
 export default function PopularDocumentMonography() {
   const [books, setBooks] = useState([]);
@@ -11,9 +12,7 @@ export default function PopularDocumentMonography() {
   useEffect(() => {
     const fetchMostViewedDocuments = async () => {
       try {
-        const response = await fetch(
-          "https://jdih.pisdev.my.id/api/v2/most-viewed-by-section-id/11"
-        );
+        const response = await fetch(`${baseUrl}/most-viewed-by-section-id/11`);
         if (!response.ok) throw new Error("Gagal fetch dokumen terpopuler");
         const data = await response.json();
 
@@ -22,9 +21,7 @@ export default function PopularDocumentMonography() {
         const booksWithDetails = await Promise.all(
           mostViewedBooks.slice(0, 2).map(async (book) => {
             try {
-              const detailRes = await fetch(
-                `https://jdih.pisdev.my.id/api/v2/topics/${book.id}`
-              );
+              const detailRes = await fetch(`${baseUrl}/topics/${book.id}`);
               const detailData = await detailRes.json();
               const detail = detailData.data;
 

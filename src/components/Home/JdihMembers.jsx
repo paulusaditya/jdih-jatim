@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import LoadingSpinner from "../common/LoadingSpinner";
+import baseUrl from "../../config/api";
 
 export default function JDIHNetworkMembers() {
   const [members, setMembers] = useState([]);
@@ -22,7 +23,7 @@ export default function JDIHNetworkMembers() {
       try {
         while (currentPage <= lastPage) {
           const response = await fetch(
-            `https://jdih.pisdev.my.id/api/v2/home/partner-affiliates?page=${currentPage}`
+            `${baseUrl}/home/partner-affiliates?page=${currentPage}`
           );
           if (!response.ok) {
             throw new Error("Gagal mengambil data anggota JDIH");

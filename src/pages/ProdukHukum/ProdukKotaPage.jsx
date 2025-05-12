@@ -1,4 +1,5 @@
 import LawPage from "./LawPage";
+import baseUrl from "../../config/api";
 
 const ProdukKotaPage = () => {
   const typeToSectionId = {
@@ -11,7 +12,7 @@ const ProdukKotaPage = () => {
 
   return (
     <LawPage
-      apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+      apiUrl={`${baseUrl}/topics`}
       title="Produk Hukum Kota/Kabupaten"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },

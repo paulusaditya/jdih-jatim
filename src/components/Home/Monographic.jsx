@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 import LoadingSpinner from "../common/LoadingSpinner"
+import baseUrl from "../../config/api"
 
 export default function Monographic() {
   const [books, setBooks] = useState([])
@@ -23,7 +24,7 @@ export default function Monographic() {
   useEffect(() => {
     const fetchMonographs = async () => {
       try {
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/home/monography")
+        const response = await fetch(`${baseUrl}/home/monography`);
         if (!response.ok) throw new Error("Gagal fetch monografi")
         const data = await response.json()
 
@@ -33,7 +34,7 @@ export default function Monographic() {
         const booksWithSlugs = await Promise.all(
           randomFiveBooks.map(async (book) => {
             try {
-              const detailRes = await fetch(`https://jdih.pisdev.my.id/api/v2/topics/${book.id}`)
+              const detailRes = await fetch(`${baseUrl}/topics/${book.id}`);
               const detailData = await detailRes.json()
               return {
                 ...book,

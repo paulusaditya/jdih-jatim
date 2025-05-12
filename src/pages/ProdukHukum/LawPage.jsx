@@ -8,6 +8,7 @@ import Kategori from "../../components/Kategori";
 import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 import NewOldFilter from "../../components/common/NewOldFilter";
+import baseUrl from "../../config/api";
 
 const LawPage = ({
   apiUrl,
@@ -30,7 +31,6 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
-
   const [filters, setFilters] = useState({});
 
   const itemsPerPage = 10;
@@ -68,7 +68,6 @@ const LawPage = ({
         params.append("section_id", sectionId);
       }
 
- 
       const filterArray = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (
@@ -80,37 +79,27 @@ const LawPage = ({
           if (Array.isArray(value)) {
             value.forEach((val) => {
               if (val && val.trim() !== "") {
-                filterArray.push({
-                  key: key,
-                  value: val,
-                });
+                filterArray.push({ key, value: val });
               }
             });
           } else {
-            filterArray.push({
-              key: key,
-              value: value,
-            });
+            filterArray.push({ key, value });
           }
         }
       });
 
- 
       filterArray.forEach((filter) => {
-        params.append(`filters[]`, JSON.stringify(filter));
+        params.append("filters[]", JSON.stringify(filter));
       });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
       console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
-
-      if (!response.ok) {
-        throw new Error(`Invalid response: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Invalid response: ${response.status}`);
 
       const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
+      if (!contentType.includes("application/json")) {
         throw new Error(`Invalid content type: ${contentType}`);
       }
 
@@ -125,17 +114,12 @@ const LawPage = ({
         mappedLaws = await Promise.all(
           rawLaws.map(async (item) => {
             try {
-              const detailRes = await fetch(
-                `https://jdih.pisdev.my.id/api/v2/topics/${item.id}`
-              );
-
-              if (!detailRes.ok) {
+              const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
+              if (!detailRes.ok)
                 throw new Error(`Detail fetch failed: ${detailRes.status}`);
-              }
 
               const detailData = await detailRes.json();
               const fields = {};
-
               detailData.data?.fields?.forEach(
                 (f) => (fields[f.title] = f.details)
               );
@@ -273,7 +257,7 @@ const LawPage = ({
           customSidebar
         ) : (
           <div className="mt-6">
-            <PopularDocument/>
+            <PopularDocument />
           </div>
         )}
       </div>

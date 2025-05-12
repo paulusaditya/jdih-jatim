@@ -1,8 +1,9 @@
 import DocPage from "./DocPage";
+import baseUrl from "../../config/api";
 
 const SuratEdaranPage = () => (
   <DocPage
-    apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+    apiUrl={`${baseUrl}/topics`}
     title="Surat Edaran"
     breadcrumbPaths={[
       { label: "Beranda", path: "/" },

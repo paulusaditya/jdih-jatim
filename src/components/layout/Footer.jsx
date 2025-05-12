@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Instagram, Youtube } from "lucide-react";
 import { FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import baseUrl from "../../config/api";
 
 export default function Footer() {
   const [visitorStats, setVisitorStats] = useState({
@@ -12,7 +13,7 @@ export default function Footer() {
   });
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/analytics/visitors")
+    fetch(`${baseUrl}/analytics/visitors`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "success") {

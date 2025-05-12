@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DetailBeritaPage from "../../components/Berita/DetailBeritaPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
+import baseUrl from "../../config/api";
 
 const DetailBerita = () => {
   const { slug } = useParams();
@@ -11,7 +12,7 @@ const DetailBerita = () => {
     const fetchTitle = async () => {
       try {
         const response = await fetch(
-          "https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3"
+          `${baseUrl}/topics?webmaster_section_id=3`
         );
         const data = await response.json();
         if (data.status === "success") {

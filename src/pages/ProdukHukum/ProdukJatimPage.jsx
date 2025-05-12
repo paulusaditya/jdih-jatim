@@ -1,4 +1,5 @@
 import LawPage from "./LawPage";
+import baseUrl from "../../config/api";
 
 const ProdukJatimPage = () => {
   const typeToSectionId = {
@@ -12,7 +13,7 @@ const ProdukJatimPage = () => {
 
   return (
     <LawPage
-      apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+      apiUrl={`${baseUrl}/topics`}
       title="Produk Hukum Jawa Timur"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },
@@ -32,7 +33,7 @@ const ProdukJatimPage = () => {
       includeStatus={true}
       includeCategory={true}
       detailPath="/peraturan/produk-hukum-jatim"
-      typeToSectionId={typeToSectionId} 
+      typeToSectionId={typeToSectionId}
     />
   );
 };

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { FileText, Scale, FileSpreadsheet, Book } from "lucide-react";
+import baseUrl from "../../config/api";
 
 export default function LegalStatsDashboard() {
   const controls = useAnimation();
@@ -23,13 +24,17 @@ export default function LegalStatsDashboard() {
   });
 
   useEffect(() => {
-    fetch("https://jdih.pisdev.my.id/api/v2/sections/active-topics-count")
+    fetch(`${baseUrl}/sections/active-topics-count`)
       .then((response) => response.json())
       .then((data) => {
-        const produkHukum = data.data.find((item) => item.title === "Produk Hukum");
+        const produkHukum = data.data.find(
+          (item) => item.title === "Produk Hukum"
+        );
         const monografi = data.data.find((item) => item.title === "Monografi");
         const artikel = data.data.find((item) => item.title === "Artikel");
-        const staatsblad = data.data.find((item) => item.title === "Staatsblad");
+        const staatsblad = data.data.find(
+          (item) => item.title === "Staatsblad"
+        );
 
         setCounts({
           produkHukum: produkHukum?.count || 0,

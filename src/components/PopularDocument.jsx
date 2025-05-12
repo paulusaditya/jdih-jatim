@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-const API_BASE = "https://jdih.pisdev.my.id/api/v2";
+import baseUrl from "../config/api";
 
 // Fungsi bantu untuk membuat slug dari title
 const generateSlug = (title) => {
@@ -21,8 +20,8 @@ const PopularDocument = ({ sectionId }) => {
     const getPopularDocuments = async () => {
       try {
         const url = sectionId
-          ? `${API_BASE}/most-viewed-by-section-id/${sectionId}`
-          : `${API_BASE}/topics/most-viewed?limit=3`;
+          ? `${baseUrl}/most-viewed-by-section-id/${sectionId}`
+          : `${baseUrl}/topics/most-viewed?limit=3`;
 
         const res = await fetch(url);
         const data = await res.json();

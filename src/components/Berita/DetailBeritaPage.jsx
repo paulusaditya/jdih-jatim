@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Seo from "../../components/common/Seo";
+import baseUrl from "../../config/api";
 
 function RelatedNews({ currentArticleId }) {
   const [relatedArticles, setRelatedArticles] = useState([]);
@@ -23,7 +24,7 @@ function RelatedNews({ currentArticleId }) {
   const fetchRelatedArticles = async () => {
     try {
       const response = await fetch(
-        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=10`
+        `${baseUrl}/topics?webmaster_section_id=3&per_page=10`
       );
       if (!response.ok) throw new Error("Network response was not ok");
 
@@ -153,7 +154,7 @@ export default function DetailBeritaPage() {
     setLoading(true);
     try {
       const topicsResponse = await fetch(
-        `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=9999`
+        `${baseUrl}/topics?webmaster_section_id=3&per_page=9999`
       );
       if (!topicsResponse.ok) throw new Error("Network response was not ok");
 

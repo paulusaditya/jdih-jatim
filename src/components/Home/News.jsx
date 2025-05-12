@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react"
 import { Link } from "react-router-dom"
 import LoadingSpinner from "../common/LoadingSpinner";
+import baseUrl from "../../config/api"
 
 
 export default function NewsSection() {
@@ -17,7 +18,7 @@ export default function NewsSection() {
     const fetchNews = async () => {
       try {
         setLoading(true)
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3")
+        const response = await fetch(`${baseUrl}/topics?webmaster_section_id=3`)
 
         if (!response.ok) {
           throw new Error("Failed to fetch news data")

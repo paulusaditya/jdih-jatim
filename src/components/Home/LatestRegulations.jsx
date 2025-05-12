@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import baseUrl from "../../config/api";
 
 export default function LatestRegulations() {
   const [regulations, setRegulations] = useState([]);
@@ -9,7 +10,7 @@ export default function LatestRegulations() {
 
   useEffect(() => {
     fetch(
-      "https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=10&sort_by=created_at&sort_order=desc"
+      `${baseUrl}/topics?webmaster_section_id=10&sort_by=created_at&sort_order=desc`
     )
       .then((res) => res.json())
       .then((data) => {

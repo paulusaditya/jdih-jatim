@@ -1,4 +1,5 @@
 import LawPage from "../ProdukHukum/LawPage";
+import baseUrl from "../../config/api";
 
 const LatestRegulationPage = () => {
   const typeToSectionId = {
@@ -12,7 +13,7 @@ const LatestRegulationPage = () => {
 
   return (
     <LawPage
-      apiUrl="https://jdih.pisdev.my.id/api/v2/topics"
+      apiUrl={`${baseUrl}/topics`}
       title="Peraturan"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },

@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Mail, Phone } from "lucide-react";
 import axios from "axios";
+import baseUrl from "../../config/api";
 
 export default function Header() {
   const [isSidebarOpen, setSidebarOpen] = React.useState(false);
@@ -10,9 +11,7 @@ export default function Header() {
   React.useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const response = await axios.get(
-          "https://jdih.pisdev.my.id/api/v2/menus"
-        );
+        const response = await axios.get(`${baseUrl}/menus`);
         setNavItems(response.data);
       } catch (error) {
         console.error("Error fetching menu data:", error);
