@@ -13,10 +13,8 @@ function DetailLawCard({ lawId }) {
     const fetchData = async () => {
       try {
         const url = `${baseUrl}/topics/by-slug/${lawId}`;
-        console.log("Fetching data from:", url);
         const response = await fetch(url);
         const result = await response.json();
-        console.log("📦 Response API by-slug:", result);
 
         if (result.status === "success") {
           setData(result.data);

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/banners",
-      "destination": "https://jdih.pisdev.my.id/api/v2/home/banners"
+      "destination": "http://103.183.92.163/api/v2/home/banners"
     },
     {
       "source": "/(.*)",

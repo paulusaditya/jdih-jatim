@@ -99,7 +99,6 @@ const DocPage = ({
       });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
-      console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
       const contentType = response.headers.get("content-type");
@@ -109,7 +108,6 @@ const DocPage = ({
       }
 
       const result = await response.json();
-      console.log("API Response:", result);
 
       let rawDocuments = [];
       let mappedDocuments = [];

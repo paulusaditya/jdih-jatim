@@ -14,8 +14,6 @@ function DetailDocCard({ docId }) {
       try {
         const response = await fetch(`${baseUrl}/topics/by-slug/${docId}`);
         const result = await response.json();
-        console.log("📦 Response API by-slug:", result);
-
         if (result.status === "success") {
           setData(result.data);
         }

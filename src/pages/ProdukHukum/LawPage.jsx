@@ -31,6 +31,7 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
+
   const [filters, setFilters] = useState({});
 
   const itemsPerPage = 10;
@@ -68,6 +69,7 @@ const LawPage = ({
         params.append("section_id", sectionId);
       }
 
+ 
       const filterArray = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (
@@ -79,32 +81,40 @@ const LawPage = ({
           if (Array.isArray(value)) {
             value.forEach((val) => {
               if (val && val.trim() !== "") {
-                filterArray.push({ key, value: val });
+                filterArray.push({
+                  key: key,
+                  value: val,
+                });
               }
             });
           } else {
-            filterArray.push({ key, value });
+            filterArray.push({
+              key: key,
+              value: value,
+            });
           }
         }
       });
 
+ 
       filterArray.forEach((filter) => {
-        params.append("filters[]", JSON.stringify(filter));
+        params.append(`filters[]`, JSON.stringify(filter));
       });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
-      console.log("Fetching from:", fullUrl);
 
       const response = await fetch(fullUrl);
-      if (!response.ok) throw new Error(`Invalid response: ${response.status}`);
+
+      if (!response.ok) {
+        throw new Error(`Invalid response: ${response.status}`);
+      }
 
       const contentType = response.headers.get("content-type");
-      if (!contentType.includes("application/json")) {
+      if (!contentType || !contentType.includes("application/json")) {
         throw new Error(`Invalid content type: ${contentType}`);
       }
 
       const result = await response.json();
-      console.log("API Response:", result);
 
       let mappedLaws = [];
 
@@ -115,11 +125,14 @@ const LawPage = ({
           rawLaws.map(async (item) => {
             try {
               const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
-              if (!detailRes.ok)
+
+              if (!detailRes.ok) {
                 throw new Error(`Detail fetch failed: ${detailRes.status}`);
+              }
 
               const detailData = await detailRes.json();
               const fields = {};
+
               detailData.data?.fields?.forEach(
                 (f) => (fields[f.title] = f.details)
               );
@@ -257,7 +270,7 @@ const LawPage = ({
           customSidebar
         ) : (
           <div className="mt-6">
-            <PopularDocument />
+            <PopularDocument/>
           </div>
         )}
       </div>
