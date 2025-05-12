@@ -11,11 +11,11 @@ export default function Main() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+
     fetch(`${baseUrl}/home/banners`)
       .then((res) => res.json())
       .then((data) => {
-        const parsed = JSON.parse(data.contents);
-        setBanners(parsed.data || []);
+        setBanners(data.data || []);
       })
       .catch((error) => {
         console.error("Error fetching banners:", error);
