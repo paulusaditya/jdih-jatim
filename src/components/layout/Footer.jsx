@@ -38,7 +38,7 @@ export default function Footer() {
     <footer className="md:pt-80 pt-40">
       {/* Main Footer */}
       <div className="relative">
-        <div className="absolute inset-x-4 md:inset-x-0 -top-20 md:-top-60 flex justify-center">
+        <div className="absolute inset-x-4 md:inset-x-0 -top-30 md:-top-60 flex justify-center">
           <img src="/assets/Group380mobile.png" alt="" className="md:hidden" />
           <img src="/assets/Group 380.png" alt="" className="hidden md:block" />
         </div>
