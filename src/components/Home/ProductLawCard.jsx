@@ -4,22 +4,22 @@ import { motion } from "framer-motion";
 const cards = [
   {
     title: "Produk Hukum Provinsi Jawa Timur",
-    description: "Monografi hukum JDIH Jatim: referensi mendalam tentang peraturan dan kebijakan.",
+    description: "Dapatkan semua produk hukum Provinsi Jawa Timur disini.",
     path: "/peraturan/produk-hukum-jatim",
   },
   {
     title: "Produk Hukum Kabupaten / Kota",
-    description: "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
+    description: "Tersedia produk hukum Kab/Kota yang ada di Jawa Timur.",
     path: "/peraturan/produk-hukum-kabupatenkota",
   },
   {
     title: "Produk Hukum Desa",
-    description: "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
+    description: "Pedesaan juga memiliki hukumnya tersendiri, cek disini sekarang.",
     path: "/peraturan/produk-hukum-desa",
   },
   {
     title: "Peraturan Alih Bahasa",
-    description: "JDIH Jatim menyediakan Staatsblad sebagai referensi hukum bersejarah.",
+    description: "Dengan bahasa yang mudah dipahami versi Internasional.",
     path: "/peraturan/peraturan-alih-bahasa",
   },
 ];
@@ -63,10 +63,13 @@ function Card({ title, description, path }) {
     >
       <Link
         to={path}
-        className="block p-6 rounded-2xl border border-gray-200 hover:border-[#0065FF] hover:shadow-md transition-all"
+        className="block h-full p-6 rounded-2xl border border-gray-200 hover:border-[#0065FF] hover:shadow-md transition-all
+                   min-h-[160px] flex flex-col justify-between"
       >
-        <h2 className="font-bold mb-2 text-l">{title}</h2>
-        <p className="text-gray-500 text-sm">{description}</p>
+        <div>
+          <h2 className="font-bold mb-2 text-l">{title}</h2>
+          <p className="text-gray-500 text-sm">{description}</p>
+        </div>
       </Link>
     </motion.div>
   );
