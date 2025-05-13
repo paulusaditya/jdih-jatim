@@ -39,8 +39,22 @@ export default function Footer() {
       {/* Main Footer */}
       <div className="relative">
         <div className="absolute inset-x-4 md:inset-x-0 -top-30 md:-top-60 flex justify-center">
-          <img src="/assets/Group380mobile.png" alt="" className="md:hidden" />
-          <img src="/assets/Group 380.png" alt="" className="hidden md:block" />
+          <a
+            href="https://play.google.com/store/apps/details?id=com.jatimprov.jdihjatim&pcampaignid=web_share"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/assets/Group380mobile.png"
+              alt="Download JDIH Jatim"
+              className="md:hidden"
+            />
+            <img
+              src="/assets/Group 380.png"
+              alt="Download JDIH Jatim"
+              className="hidden md:block"
+            />
+          </a>
         </div>
       </div>
 
