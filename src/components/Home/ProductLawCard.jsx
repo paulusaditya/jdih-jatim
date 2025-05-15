@@ -6,21 +6,25 @@ const cards = [
     title: "Produk Hukum Provinsi Jawa Timur",
     description: "Dapatkan semua produk hukum Provinsi Jawa Timur disini.",
     path: "/peraturan/produk-hukum-jatim",
+    icon: "/assets/icn/icn.png",
   },
   {
     title: "Produk Hukum Kabupaten / Kota",
     description: "Tersedia produk hukum Kab/Kota yang ada di Jawa Timur.",
     path: "/peraturan/produk-hukum-kabupatenkota",
+    icon: "/assets/icn/icn1.png",
   },
   {
     title: "Produk Hukum Desa",
     description: "Pedesaan juga memiliki hukumnya tersendiri, cek disini sekarang.",
     path: "/peraturan/produk-hukum-desa",
+    icon: "/assets/icn/icn2.png",
   },
   {
     title: "Peraturan Alih Bahasa",
     description: "Dengan bahasa yang mudah dipahami versi Internasional.",
     path: "/peraturan/peraturan-alih-bahasa",
+    icon: "/assets/icn/icn3.png",
   },
 ];
 
@@ -46,6 +50,7 @@ export default function LegalPortal() {
             title={card.title}
             description={card.description}
             path={card.path}
+            icon={card.icon}
           />
         ))}
       </motion.div>
@@ -53,7 +58,7 @@ export default function LegalPortal() {
   );
 }
 
-function Card({ title, description, path }) {
+function Card({ title, description, path, icon }) {
   return (
     <motion.div
       whileHover={{ scale: 1.05 }}
@@ -67,8 +72,9 @@ function Card({ title, description, path }) {
                    min-h-[160px] flex flex-col justify-between"
       >
         <div>
+          <img src={icon} alt={title} className="w-12 h-12 mb-4" />
           <h2 className="font-bold mb-2 text-l">{title}</h2>
-          <p className="text-gray-500 text-sm">{description}</p>
+          <p className="text-gray-500 text-xs">{description}</p>
         </div>
       </Link>
     </motion.div>
