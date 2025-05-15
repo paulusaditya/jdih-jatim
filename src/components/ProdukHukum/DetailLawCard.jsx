@@ -3,10 +3,12 @@ import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
 import Seo from "../../components/common/Seo";
 import baseUrl from "../../config/api";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 function DetailLawCard({ lawId }) {
   const [selectedButton, setSelectedButton] = useState("Detail");
   const [showPdf, setShowPdf] = useState(false);
+  const [isLoadingAttachment, setIsLoadingAttachment] = useState(false);
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -32,6 +34,10 @@ function DetailLawCard({ lawId }) {
   const handleButtonClick = (button) => {
     setSelectedButton(button);
     setShowPdf(button === "Dokumen Lampiran");
+
+    if (button === "Dokumen Lampiran") {
+      setIsLoadingAttachment(true);
+    }
   };
 
   const handleDownload = () => {
@@ -62,6 +68,11 @@ function DetailLawCard({ lawId }) {
     f.title?.toLowerCase().includes("lampiran")
   );
   const lampiranUrl = lampiranField?.details || "";
+
+  const abstrakField = fields.find((f) =>
+    f.title?.toLowerCase().includes("abstrak")
+  );
+  const hasAbstrak = abstrakField?.details?.trim();
 
   return (
     <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
@@ -115,23 +126,32 @@ function DetailLawCard({ lawId }) {
             Dokumen Lampiran
           </button>
         )}
-        <button
-          className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
-            selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
-          }`}
-          onClick={() => handleButtonClick("Abstrak Lampiran")}
-        >
-          Abstrak Lampiran
-        </button>
+        {hasAbstrak && (
+          <button
+            className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
+              selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
+            }`}
+            onClick={() => handleButtonClick("Abstrak Lampiran")}
+          >
+            Abstrak Lampiran
+          </button>
+        )}
       </div>
 
       {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
-        <div className="mt-4">
+        <div className="mt-4 relative">
+          {isLoadingAttachment && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+              <LoadingSpinner />
+            </div>
+          )}
+
           {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
             <img
               src={lampiranUrl}
               alt="Lampiran"
-              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow"
+              onLoad={() => setIsLoadingAttachment(false)}
+              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow relative z-0"
             />
           ) : (
             <iframe
@@ -141,18 +161,14 @@ function DetailLawCard({ lawId }) {
               width="100%"
               height="500px"
               title="Dokumen Lampiran"
+              onLoad={() => setIsLoadingAttachment(false)}
+              className="relative z-0"
             />
           )}
         </div>
-      ) : selectedButton === "Abstrak Lampiran" ? (
+      ) : selectedButton === "Abstrak Lampiran" && hasAbstrak ? (
         <div className="text-base text-gray-700">
-          <DetailItem
-            label="Abstrak Lampiran"
-            value={
-              fields.find((f) => f.title?.toLowerCase().includes("abstrak"))
-                ?.details || "-"
-            }
-          />
+          <DetailItem label="Abstrak Lampiran" value={hasAbstrak} />
         </div>
       ) : (
         <div className="flex flex-col">
@@ -170,3 +186,4 @@ function DetailLawCard({ lawId }) {
 }
 
 export default DetailLawCard;
+  

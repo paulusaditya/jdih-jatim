@@ -3,10 +3,12 @@ import { Eye, Download } from "lucide-react";
 import DetailItem from "./DetailItem";
 import Seo from "../../components/common/Seo";
 import baseUrl from "../../config/api";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 function DetailDocCard({ docId }) {
   const [selectedButton, setSelectedButton] = useState("Detail");
   const [showPdf, setShowPdf] = useState(false);
+  const [isLoadingAttachment, setIsLoadingAttachment] = useState(false);
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -28,6 +30,9 @@ function DetailDocCard({ docId }) {
   const handleButtonClick = (button) => {
     setSelectedButton(button);
     setShowPdf(button === "Dokumen Lampiran");
+    if (button === "Dokumen Lampiran") {
+      setIsLoadingAttachment(true);
+    }
   };
 
   const handleDownload = () => {
@@ -131,12 +136,19 @@ function DetailDocCard({ docId }) {
       </div>
 
       {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
-        <div className="mt-4">
+        <div className="mt-4 relative">
+          {isLoadingAttachment && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+              <LoadingSpinner />
+            </div>
+          )}
+
           {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
             <img
               src={lampiranUrl}
               alt="Lampiran"
-              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow"
+              onLoad={() => setIsLoadingAttachment(false)}
+              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow relative z-0"
             />
           ) : (
             <iframe
@@ -146,6 +158,8 @@ function DetailDocCard({ docId }) {
               width="100%"
               height="500px"
               title="Dokumen Lampiran"
+              onLoad={() => setIsLoadingAttachment(false)}
+              className="relative z-0"
             />
           )}
         </div>
