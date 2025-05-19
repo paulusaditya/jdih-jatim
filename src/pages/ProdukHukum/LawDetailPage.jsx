@@ -16,7 +16,7 @@ const LawDetailPage = () => {
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="p-16 bg-white flex flex-col md:flex-row gap-6">
+      <div className="px-4 p-16 bg-white flex flex-col md:flex-row gap-6">
         <div className="flex-1">
           <DetailLawCard lawId={slug} />{" "}
         </div>

@@ -63,7 +63,7 @@ const DocDetailPage = ({ customSidebar }) => {
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="px-4 p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
             <DetailDocCard docId={slug} onTitleFetched={setDocumentTitle} />
         </div>
