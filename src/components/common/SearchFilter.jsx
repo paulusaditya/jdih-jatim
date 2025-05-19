@@ -48,7 +48,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
   };
 
   return (
-    <div className="flex flex-col p-8 w-full text-base bg-blue-50 rounded-xl max-md:px-5 max-md:max-w-full">
+<div className="flex flex-col px-8 py-8 w-full text-base bg-blue-50 rounded-xl max-md:px-4 max-md:max-w-full">
       <h2 className="text-lg font-semibold mb-4">Pencarian</h2>
 
       {isLoading ? (
