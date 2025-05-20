@@ -3,6 +3,7 @@ import { Instagram, Youtube } from "lucide-react";
 import { FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import baseUrl from "../../config/api";
+import PlaystoreBanner from "../common/PlaystoreBanner.jsx";
 
 export default function Footer() {
   const [visitorStats, setVisitorStats] = useState({
@@ -38,22 +39,20 @@ export default function Footer() {
     <footer className="md:pt-80 pt-40">
       {/* Main Footer */}
       <div className="relative">
-        <div className="absolute inset-x-4 md:inset-x-0 -top-30 md:-top-60 flex justify-center">
+        <div className="absolute inset-x-4 top-[-10.75rem] md:inset-x-0 md:top-[-15rem] flex justify-center">
+          {/* Mobile View: Show PlaystoreBanner Component */}
+          <div className="md:hidden w-full">
+            <PlaystoreBanner />
+          </div>
+
+          {/* Desktop View: Show Static Image */}
           <a
             href="https://play.google.com/store/apps/details?id=com.jatimprov.jdihjatim&pcampaignid=web_share"
             target="_blank"
             rel="noopener noreferrer"
+            className="hidden md:block"
           >
-            <img
-              src="/assets/Group380mobile.png"
-              alt="Download JDIH Jatim"
-              className="md:hidden"
-            />
-            <img
-              src="/assets/Group 380.png"
-              alt="Download JDIH Jatim"
-              className="hidden md:block"
-            />
+            <img src="/assets/Group 380.png" alt="Download JDIH Jatim" />
           </a>
         </div>
       </div>
