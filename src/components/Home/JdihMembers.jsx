@@ -110,7 +110,7 @@ function MemberCard({ logo, link, className = "", style = {} }) {
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`aspect-[4/3] w-full max-w-[150px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] rounded-2xl p-4 bg-white border border-gray-200 hover:bg-[#F0F6FF] hover:border-blue-600 hover:shadow-md transition-all flex items-center justify-center ${className}`}
+      className={`aspect-[4/3] w-full max-w-[185px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] rounded-2xl p-4 bg-white border border-gray-200 hover:bg-[#F0F6FF] hover:border-blue-600 hover:shadow-md transition-all flex items-center justify-center ${className}`}
       style={style}
     >
       <img
