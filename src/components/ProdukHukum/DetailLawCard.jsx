@@ -88,21 +88,23 @@ function DetailLawCard({ lawId }) {
       </div>
 
       <div className="flex justify-between items-center px-4 py-3 mb-5 rounded-lg bg-zinc-100 max-sm:flex-col max-sm:gap-3">
-        <div className="flex gap-3 items-center text-base text-black">
-          <Eye size={24} />
-          <div>Visits : {visits}</div>
-        </div>
-        {lampiranField && (
-          <div className="flex gap-2 items-center px-5 py-3 text-sm font-semibold text-zinc-800">
-            <a
-              onClick={handleDownload}
-              className="flex items-center cursor-pointer"
-            >
-              <div className="mr-2">Download</div>
-              <Download size={24} className="text-green-500" />
-            </a>
+        <div className="w-full flex justify-between items-center max-sm:flex">
+          <div className="flex gap-2 items-center text-base text-black">
+            <Eye size={24} />
+            <div>Visits : {visits}</div>
           </div>
-        )}
+          {lampiranField && (
+            <div className="flex gap-2 items-center text-sm font-semibold text-zinc-800">
+              <a
+                onClick={handleDownload}
+                className="flex items-center cursor-pointer"
+              >
+                <div className="mr-2">Download</div>
+                <Download size={24} className="text-green-500" />
+              </a>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex gap-3 mb-5 max-sm:flex-wrap">
@@ -129,7 +131,9 @@ function DetailLawCard({ lawId }) {
         {hasAbstrak && (
           <button
             className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 ${
-              selectedButton === "Abstrak Lampiran" ? "bg-red-500 text-white" : ""
+              selectedButton === "Abstrak Lampiran"
+                ? "bg-red-500 text-white"
+                : ""
             }`}
             onClick={() => handleButtonClick("Abstrak Lampiran")}
           >
@@ -186,4 +190,3 @@ function DetailLawCard({ lawId }) {
 }
 
 export default DetailLawCard;
-  
