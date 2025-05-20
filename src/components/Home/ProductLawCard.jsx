@@ -16,7 +16,8 @@ const cards = [
   },
   {
     title: "Produk Hukum Desa",
-    description: "Pedesaan juga memiliki hukumnya tersendiri, cek disini sekarang.",
+    description:
+      "Pedesaan juga memiliki hukumnya tersendiri, cek disini sekarang.",
     path: "/peraturan/produk-hukum-desa",
     icon: "/assets/icn/icn2.png",
   },
@@ -38,8 +39,8 @@ export default function LegalPortal() {
         Akses Dokumen Hukum Provinsi Jawa Timur.
       </p>
 
-      <motion.div 
-        className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10"
+      <motion.div
+        className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -68,8 +69,7 @@ function Card({ title, description, path, icon }) {
     >
       <Link
         to={path}
-        className="block h-full p-6 rounded-2xl border border-gray-200 hover:border-[#0065FF] hover:shadow-md transition-all
-                   min-h-[160px] flex flex-col justify-between"
+        className="w-full sm:w-auto max-w-[300px] h-full min-h-[200px] p-4 rounded-2xl border border-gray-200 hover:border-[#0065FF] hover:shadow-md transition-all flex flex-col justify-between"
       >
         <div>
           <img src={icon} alt={title} className="w-12 h-12 mb-4" />
