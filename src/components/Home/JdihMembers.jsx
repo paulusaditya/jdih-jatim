@@ -94,7 +94,7 @@ export default function JDIHNetworkMembers() {
                 width: showAll ? "287px" : "182px",
                 height: showAll ? "188px" : "212px",
                 borderRadius: showAll ? "16px" : "2xl",
-                padding: showAll ? "20px" : "15px",
+                padding: showAll ? "5px" : "15px",
               }}
             />
           ))}
@@ -110,13 +110,13 @@ function MemberCard({ logo, link, className = "", style = {} }) {
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`border border-gray-200 rounded-2xl p-5 flex items-center justify-center hover:bg-[#F0F6FF] hover:border-blue-600 hover:shadow-md transition-all cursor-pointer bg-white ${className}`}
+      className={`aspect-[4/3] w-full max-w-[150px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] rounded-2xl p-4 bg-white border border-gray-200 hover:bg-[#F0F6FF] hover:border-blue-600 hover:shadow-md transition-all flex items-center justify-center ${className}`}
       style={style}
     >
       <img
         src={logo || "/placeholder.svg"}
         alt="Logo Kabupaten"
-        className="object-contain w-full h-full"
+        className="object-contain max-h-full max-w-full"
         onError={(e) => (e.target.src = "/placeholder.svg")}
       />
     </a>
