@@ -50,7 +50,6 @@ const DocDetailPage = ({ customSidebar }) => {
   const type = window.location.pathname.split("/")[2];
   const [documentTitle, setDocumentTitle] = useState("");
 
-
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
     breadcrumbMap[type] || { label: "Dokumen", path: `/site-pages/${type}` },
@@ -63,9 +62,9 @@ const DocDetailPage = ({ customSidebar }) => {
   return (
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <div className="px-4 p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="px-4 md:px-16 py-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-            <DetailDocCard docId={slug} onTitleFetched={setDocumentTitle} />
+          <DetailDocCard docId={slug} onTitleFetched={setDocumentTitle} />
         </div>
         <div className="w-full">
           {customSidebar ? customSidebar : <PopularDocument />}

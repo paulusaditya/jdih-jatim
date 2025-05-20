@@ -69,7 +69,6 @@ const LawPage = ({
         params.append("section_id", sectionId);
       }
 
- 
       const filterArray = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (
@@ -96,7 +95,6 @@ const LawPage = ({
         }
       });
 
- 
       filterArray.forEach((filter) => {
         params.append(`filters[]`, JSON.stringify(filter));
       });
@@ -206,7 +204,7 @@ const LawPage = ({
   };
 
   return (
-    <div className="px-4 p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="px-4 py-16 md:p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
         {/* {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />} */}
 
@@ -270,7 +268,7 @@ const LawPage = ({
           customSidebar
         ) : (
           <div className="mt-6">
-            <PopularDocument/>
+            <PopularDocument />
           </div>
         )}
       </div>

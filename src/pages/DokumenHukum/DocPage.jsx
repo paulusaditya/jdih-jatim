@@ -65,7 +65,6 @@ const DocPage = ({
       params.append("sort_by", "created_at");
       params.append("sort_order", sortOrder);
 
-
       const filterArray = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (
@@ -74,7 +73,6 @@ const DocPage = ({
             ? value.trim() !== ""
             : Array.isArray(value) && value.length > 0)
         ) {
-
           if (Array.isArray(value)) {
             value.forEach((val) => {
               if (val && val.trim() !== "") {
@@ -92,7 +90,6 @@ const DocPage = ({
           }
         }
       });
-
 
       filterArray.forEach((filter, index) => {
         params.append(`filters[]`, JSON.stringify(filter));
@@ -170,8 +167,7 @@ const DocPage = ({
               fields["Tahun"] ||
               fields["Tahun Propemperda"],
             number: fields["Nomor"] || fields["Nomor Panggil"],
-            type:
-              fields["Singkatan Jenis"],
+            type: fields["Singkatan Jenis"],
             status:
               fields["Keterangan Status"] ||
               fields["Subjek Artikel"] ||

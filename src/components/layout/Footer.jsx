@@ -156,7 +156,7 @@ export default function Footer() {
           </div>
 
           {/* Bagian Bawah: Sitemap dan Analytics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
             {/* Empty Column untuk menjaga struktur */}
             <div></div>
 
