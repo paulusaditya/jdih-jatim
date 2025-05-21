@@ -41,7 +41,7 @@ export default function Footer() {
     <footer className="md:pt-80 pt-40">
       {/* Main Footer */}
       <div className="relative">
-        <div className="absolute inset-x-0 top-[-10.75rem] md:top-[-15rem] flex justify-center px-4 sm:px-6">
+        <div className="absolute inset-x-0 top-[-10.75rem] md:top-[-12rem] flex justify-center px-6 md:px-20">
           <div className="w-full">
             <PlaystoreBanner />
           </div>
