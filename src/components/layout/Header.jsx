@@ -169,7 +169,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${
+        className={`fixed inset-y-0 left-0 w-85 bg-white shadow-lg transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-50 p-4 overflow-y-auto md:hidden`}
       >
