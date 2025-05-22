@@ -24,7 +24,7 @@ function RelatedNews({ currentArticleId }) {
   const fetchRelatedArticles = async () => {
     try {
       const response = await fetch(
-        `${baseUrl}/topics?webmaster_section_id=3&per_page=10`
+        `${baseUrl}/topics?webmaster_section_id=3&per_page=99`
       );
       if (!response.ok) throw new Error("Network response was not ok");
 
@@ -65,9 +65,9 @@ function RelatedNews({ currentArticleId }) {
         <Link
           key={article.id}
           to={`/news/detail-berita/${
-            article.link.startsWith("./")
-              ? article.link.substring(2)
-              : article.link
+            article.seo_url_slug_id.startsWith("./")
+              ? article.seo_url_slug_id.substring(2)
+              : article.seo_url_slug_id
           }`}
           className="block group"
         >

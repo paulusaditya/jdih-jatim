@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Pagination from "../../components/common/Pagination";
+import baseUrl from "../../config/api";
 
 export default function BeritaPage() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function BeritaPage() {
 
       while (hasMoreData) {
         const response = await fetch(
-          `https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=3&per_page=50&page=${currentPage}`
+          `${baseUrl}/topics?webmaster_section_id=3&per_page=50&page=${currentPage}`
         );
         if (!response.ok) throw new Error("Failed to fetch");
 
