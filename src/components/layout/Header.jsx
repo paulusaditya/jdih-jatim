@@ -4,6 +4,7 @@ import * as React from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Menu, X, Mail, Phone } from "lucide-react"
 import axios from "axios"
+import GoogleTranslate from "../Home/Translate"
 import baseUrl from "../../config/api"
 
 export default function Header() {
@@ -38,6 +39,7 @@ export default function Header() {
               <span>support@jdih.jatimprov.go.id</span>
             </div>
           </div>
+          <GoogleTranslate />
           <a
             className="bg-blue-800 px-2 py-1 rounded text-xs"
             href="https://majadigi.jatimprov.go.id"
