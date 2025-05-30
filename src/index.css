@@ -65,3 +65,14 @@ body {
 .hover-bold:hover {
   font-weight: bold;
 }
+
+.goog-logo-link {
+  display: none !important;
+  transform: scale(0.8);
+  opacity: 0.5;
+  margin-left: 8px;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
+}
