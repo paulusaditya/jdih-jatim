@@ -9,9 +9,10 @@ import PlaystoreBanner from "../common/PlaystoreBanner";
 
 export default function Footer() {
   const [visitorStats, setVisitorStats] = useState({
+    yesterday: 0,
     today: 0,
-    last_week: 0,
-    last_month: 0,
+    this_month: 0,
+    this_year: 0,
     total: 0,
   });
 
@@ -39,7 +40,6 @@ export default function Footer() {
 
   return (
     <footer className="md:pt-80 pt-40">
-      {/* Main Footer */}
       <div className="relative">
         <div className="absolute inset-x-0 top-[-10.75rem] md:top-[-12rem] flex justify-center px-6 md:px-20">
           <div className="w-full">
@@ -50,9 +50,7 @@ export default function Footer() {
 
       <div className="bg-blue-950 text-white py-15 px-4 md:px-8 md:pt-60 pt-20">
         <div className="max-w-7xl mx-auto">
-          {/* Bagian Atas: Info Kantor, Support, Media Sosial */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            {/* Logo dan Identitas */}
             <div>
               <div className="flex items-center space-x-2 mb-1">
                 <img
@@ -77,7 +75,6 @@ export default function Footer() {
               <h3 className="text-xl font-bold">PROVINSI JAWA TIMUR</h3>
             </div>
 
-            {/* Kantor Biro Hukum */}
             <div>
               <h3 className="text-lg font-semibold mb-4">
                 Kantor Biro Hukum Jawa Timur
@@ -88,7 +85,6 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Customer Support */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Customer Support</h3>
               <p className="text-sm mb-2">
@@ -97,7 +93,6 @@ export default function Footer() {
               <p className="text-sm">support@jdih.jatimprov.go.id</p>
             </div>
 
-            {/* Media Sosial */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Media Sosial</h3>
               <div className="flex space-x-4 gap-4">
@@ -145,12 +140,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Bagian Bawah: Sitemap dan Analytics */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-            {/* Empty Column untuk menjaga struktur */}
             <div></div>
 
-            {/* Sitemap */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Sitemap</h3>
               <ul className="space-y-2">
@@ -177,18 +169,20 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Analytics */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Analytics</h3>
               <ul className="space-y-2">
                 <li className="text-sm">
+                  Pengunjung Kemarin : {visitorStats.yesterday}
+                </li>
+                <li className="text-sm">
                   Pengunjung Hari Ini : {visitorStats.today}
                 </li>
                 <li className="text-sm">
-                  Pengunjung Minggu Lalu : {visitorStats.last_week}
+                  Pengunjung Bulan Ini : {visitorStats.this_month}
                 </li>
                 <li className="text-sm">
-                  Pengunjung Bulan Lalu : {visitorStats.last_month}
+                  Pengunjung Tahun Ini : {visitorStats.this_year}
                 </li>
                 <li className="text-sm">
                   Total Pengunjung : {visitorStats.total}
@@ -197,7 +191,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="border-t border-blue-900 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-sm">
