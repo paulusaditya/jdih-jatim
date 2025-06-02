@@ -87,7 +87,7 @@ function RelatedNews({ currentArticleId }) {
             <span className="mx-2">•</span>
             <span className="text-pink-500">Pendidikan</span>
           </div>
-          <h3 className="text-base font-semibold leading-tight group-hover:text-blue-600 transition-colors">
+          <h3 className="text-base font-semibold leading-tight group-hover:text-green-600 transition-colors">
             {article.title.length > 60
               ? article.title.substring(0, 60) + "..."
               : article.title}
@@ -194,7 +194,7 @@ export default function DetailBeritaPage() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-6 text-center">
         <p className="text-red-500">{error || "Artikel tidak ditemukan"}</p>
-        <Link to="/news" className="text-blue-600 mt-4 inline-block">
+        <Link to="/news" className="text-green-600 mt-4 inline-block">
           Kembali ke daftar berita
         </Link>
       </div>
@@ -369,7 +369,7 @@ export default function DetailBeritaPage() {
         {/* Back button */}
         <Link
           to="/news"
-          className="inline-flex items-center text-blue-600 text-sm"
+          className="inline-flex items-center text-green-600 text-sm"
         >
           <ChevronLeftCircle className="h-4 w-4 mr-1" />
           Kembali

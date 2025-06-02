@@ -85,7 +85,7 @@ export default function LegalDocumentsSection() {
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-green-900">
             Dokumen Hukum Lainnya
           </h2>
           <button
@@ -93,7 +93,7 @@ export default function LegalDocumentsSection() {
             className={`flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors ${
               showAll
                 ? "bg-pink-100 text-pink-600 border-pink-300"
-                : "text-blue-600 border-blue-600 hover:text-blue-800"
+                : "text-green-600 border-green-600 hover:text-green-800"
             }`}
           >
             <span className="hidden md:inline">
@@ -140,7 +140,7 @@ export default function LegalDocumentsSection() {
 function DocumentCard({ title, description, url, className = "" }) {
   return (
     <motion.div
-      className={`border border-gray-200 rounded-lg p-6 hover:border-blue-600 hover:shadow-md transition-all ease-in-out cursor-pointer ${className}`}
+      className={`border border-gray-200 rounded-lg p-6 hover:border-green-600 hover:shadow-md transition-all ease-in-out cursor-pointer ${className}`}
       whileHover={{ scale: 1.05 }}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}

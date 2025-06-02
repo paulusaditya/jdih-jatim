@@ -72,7 +72,7 @@ export default function NewsSection() {
       <section className="py-8 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-green-900">
               Berita Biro Hukum Sekretariat Daerah Jawa Timur
             </h2>
           </div>
@@ -89,7 +89,7 @@ export default function NewsSection() {
       <section className="py-8 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-green-900">
               Berita Biro Hukum Sekretariat Daerah Jawa Timur
             </h2>
           </div>
@@ -106,7 +106,7 @@ export default function NewsSection() {
       <section className="py-8 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-green-900">
               Berita Biro Hukum Sekretariat Daerah Jawa Timur
             </h2>
           </div>
@@ -122,12 +122,12 @@ export default function NewsSection() {
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-green-900">
             Berita Biro Hukum Sekretariat Daerah Jawa Timur
           </h2>
           <Link
             to="/news"
-            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
+            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-green-600 border-green-600 hover:text-green-800"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>
             <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />

@@ -38,7 +38,7 @@ const Pagination = ({
           className={`cursor-pointer transition ${
             currentPage === 1
               ? "text-gray-400"
-              : "text-blue-600 hover:text-blue-800"
+              : "text-green-600 hover:text-green-800"
           }`}
           onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
         />
@@ -60,7 +60,7 @@ const Pagination = ({
             key={page}
             className={`px-2 py-1 rounded-md cursor-pointer transition ${
               currentPage === page
-                ? "bg-blue-100 font-bold text-blue-600"
+                ? "bg-green-100 font-bold text-green-600"
                 : "text-zinc-800 hover:bg-zinc-200"
             }`}
             onClick={() => onPageChange(page)}
@@ -87,7 +87,7 @@ const Pagination = ({
           className={`cursor-pointer transition ${
             currentPage === totalPages
               ? "text-gray-400"
-              : "text-blue-600 hover:text-blue-800"
+              : "text-green-600 hover:text-green-800"
           }`}
           onClick={() =>
             currentPage < totalPages && onPageChange(currentPage + 1)

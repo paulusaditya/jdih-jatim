@@ -53,8 +53,8 @@ export default function ContactPage() {
     <div className="container mx-auto py-12 px-4 space-y-12">
       <div className="grid md:grid-cols-2 gap-8">
         {/* Contact Form */}
-        <div className="bg-blue-50 rounded-lg p-6 md:p-8">
-          <h2 className="text-blue-900 font-bold text-xl mb-6">
+        <div className="bg-green-50 rounded-lg p-6 md:p-8">
+          <h2 className="text-green-900 font-bold text-xl mb-6">
             Hubungi kami dengan mengisi formulir kontak di bawah ini
           </h2>
 
@@ -75,7 +75,7 @@ export default function ContactPage() {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Masukkan nama Anda..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
               </div>
@@ -95,7 +95,7 @@ export default function ContactPage() {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Masukkan email Anda..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
               </div>
@@ -115,7 +115,7 @@ export default function ContactPage() {
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="Masukkan nomor telp Anda..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
               </div>
@@ -135,7 +135,7 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={handleInputChange}
                   placeholder="Masukkan subject Anda..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
               </div>
@@ -156,7 +156,7 @@ export default function ContactPage() {
                   placeholder="Tuliskan pesan yang ingin Anda tuliskan..."
                   rows={5}
                   maxLength={maxChars}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
                   required
                 />
                 <div className="text-right text-xs text-gray-500 mt-1">
@@ -167,7 +167,7 @@ export default function ContactPage() {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
               >
                 Kirim Pesan
               </button>
@@ -177,7 +177,7 @@ export default function ContactPage() {
 
         {/* Contact Info */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8">
-          <h2 className="text-blue-900 font-bold text-xl mb-6">Kontak Kami</h2>
+          <h2 className="text-green-900 font-bold text-xl mb-6">Kontak Kami</h2>
 
           <div className="space-y-6">
             {/* Alamat */}
@@ -244,7 +244,7 @@ export default function ContactPage() {
 
             {/* Map Section */}
             <div className="mt-12">
-              <h2 className="text-blue-900 font-bold text-xl mb-6">
+              <h2 className="text-green-900 font-bold text-xl mb-6">
                 Lokasi Kantor Gubernur Jawa Timur
               </h2>
               <Gmaps />

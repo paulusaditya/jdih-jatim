@@ -48,12 +48,12 @@ export default function PropemperdaRegulations() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-blue-900">{sectionTitle}</h2>
+            <h2 className="text-2xl font-bold text-green-900">{sectionTitle}</h2>
             <p className="text-gray-600">{sectionDesc}</p>
           </div>
           <Link
             to="/site-pages/propemperda"
-            className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-600 rounded px-4 py-2 transition-colors md:px-4 md:py-2"
+            className="flex items-center text-green-600 hover:text-green-800 font-medium text-sm border border-green-600 rounded px-4 py-2 transition-colors md:px-4 md:py-2"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>
             <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
@@ -108,7 +108,7 @@ function RegulationCard({ regulation }) {
       <div className="mt-auto pt-2">
         <Link
           to={regulation.slug ? `/site-pages/propemperda/${regulation.slug}` : "#"}
-          className={`flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm ${
+          className={`flex items-center text-green-600 hover:text-green-800 font-medium text-sm ${
             !regulation.slug && "pointer-events-none opacity-50"
           }`}
         >

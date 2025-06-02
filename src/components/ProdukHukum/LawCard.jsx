@@ -21,7 +21,7 @@ function StatusBadge({ children }) {
 
 function LawCard({ number, title, year, status, type, onDetailClick }) {
   return (
-    <div className="flex flex-wrap gap-10 items-center p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5">
+    <div className="flex flex-wrap gap-10 items-center p-6 mt-5 w-full rounded-xl border border-green-600 border-solid max-md:px-5">
       <div className="flex flex-col flex-1 shrink self-stretch my-auto basis-full sm:basis-1/2 md:basis-1/3 min-w-0 md:min-w-[240px] max-w-full">
         <div className="text-base font-bold leading-6 text-zinc-800">
           {title}
@@ -35,7 +35,7 @@ function LawCard({ number, title, year, status, type, onDetailClick }) {
       </div>
 
       <div
-        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
+        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-green-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
         onClick={onDetailClick}
       >
         <span className="self-stretch my-auto">Detail</span>

@@ -27,7 +27,7 @@ function DocCard({
   image,
 }) {
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-blue-600 border-solid max-md:px-5 max-md:max-w-full">
+    <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-green-600 border-solid max-md:px-5 max-md:max-w-full">
       <img
         src={
           image ||
@@ -40,7 +40,7 @@ function DocCard({
         <div className="text-base font-bold leading-6 text-zinc-800 max-md:max-w-full mb-16">
           {title}
         </div>
-        <div className="flex flex-wrap gap-2 justify-start items-center self-start text-sm text-left text-blue-950">
+        <div className="flex flex-wrap gap-2 justify-start items-center self-start text-sm text-left text-green-950">
           {status && <StatusBadge>{status}</StatusBadge>}
           {year && <StatusBadge>{year}</StatusBadge>}
           {category && <StatusBadge>{category}</StatusBadge>}
@@ -49,7 +49,7 @@ function DocCard({
         </div>
       </div>
       <div
-        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-blue-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
+        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-green-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
         onClick={onDetailClick}
       >
         <div className="self-stretch my-auto">Detail</div>

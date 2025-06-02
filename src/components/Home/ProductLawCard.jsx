@@ -32,7 +32,7 @@ const cards = [
 export default function LegalPortal() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center text-blue-800 mb-2">
+      <h1 className="text-3xl font-bold text-center text-green-800 mb-2">
         Produk Hukum Jawa Timur
       </h1>
       <p className="text-center text-gray-800 mb-8">

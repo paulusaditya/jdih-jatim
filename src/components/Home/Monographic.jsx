@@ -66,12 +66,12 @@ export default function Monographic() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-blue-900">Dokumen Monografi</h2>
+            <h2 className="text-3xl font-bold text-green-900">Dokumen Monografi</h2>
             <p className="text-gray-600 mt-1">Koleksi dokumen Monografi terbaru milik Biro Hukum Provinsi Jawa Timur</p>
           </div>
           <Link
             to="/site-pages/monografi"
-            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-blue-600 border-blue-600 hover:text-blue-800"
+            className="flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors text-green-600 border-green-600 hover:text-green-800"
           >
             <span className="hidden md:inline">LIHAT SEMUA</span>
             <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />

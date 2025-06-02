@@ -46,6 +46,14 @@ export default function LegalStatsDashboard() {
       .catch((error) => {
         console.error("Error fetching active topics count:", error);
       });
+
+    // Mock data untuk demo
+    // setCounts({
+    //   produkHukum: 7000,
+    //   monografi: 1800,
+    //   artikel: 100,
+    //   staatsblad: 80,
+    // });
   }, []);
 
   useEffect(() => {
@@ -118,9 +126,8 @@ export default function LegalStatsDashboard() {
   return (
     <div className="w-full">
       <div
-        className="text-white w-full relative"
+        className="text-white w-full relative bg-green-700"
         style={{
-          backgroundImage: "url('/assets/image 48.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
@@ -145,7 +152,7 @@ export default function LegalStatsDashboard() {
                 className="flex flex-col gap-3 items-start p-5 rounded-2xl flex-[1_0_0] max-md:p-4 max-sm:p-3"
                 style={{
                   backgroundImage:
-                    "linear-gradient(to right, rgba(0, 101, 255, 1) 0%, rgba(0, 101, 255, 0.70) 48%, rgba(0, 101, 255, 0.20) 81%, rgba(0, 5, 255, 0) 100%)",
+                    "linear-gradient(to right, rgba(34, 197, 94, 0.8) 0%, rgba(34, 197, 94, 0.6) 40%, rgba(34, 197, 94, 0.3) 70%, rgba(34, 197, 94, 0) 100%)",
                 }}
                 initial="hidden"
                 animate={controls}
@@ -167,7 +174,7 @@ export default function LegalStatsDashboard() {
                     className="text-3xl font-bold leading-10 text-white max-md:text-2xl max-md:leading-8 max-sm:text-xl max-sm:leading-7"
                     aria-label={`Over ${animatedCounts[item.key]} documents`}
                   >
-                    {animatedCounts[item.key]}
+                    {animatedCounts[item.key]}+
                   </span>
                 </div>
               </motion.div>
@@ -175,32 +182,6 @@ export default function LegalStatsDashboard() {
           </div>
         </div>
       </div>
-
-      <div className="w-full bg-blue-50 p-6 md:p-20 flex justify-center">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 max-w-4xl">
-          <div className="flex-shrink-0">
-            <img
-              src="/assets/nav-logo/logo3.png"
-              alt="JDIH Jawa Timur Mascot"
-              width={70}
-              height={150}
-              className="object-contain"
-            />
-          </div>
-          <div>
-            <h2 className="text-blue-800 text-4xl font-bold mb-3 text-center md:text-left pb-6">
-              JDIH JAWA TIMUR
-            </h2>
-            <p className="text-gray-700 text-l leading-relaxed">
-              Situs ini merupakan situs resmi JDIH Biro Hukum Provinsi Jawa
-              Timur. Situs ini memuat data dan informasi mengenai produk hukum
-              baik produk hukum pusat maupun daerah. Disamping itu, situs ini
-              memuat pula informasi mengenai buku-buku referensi tentang hukum
-              yang dimiliki oleh Biro Hukum Provinsi Jawa Timur.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
-}
+} 

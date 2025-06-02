@@ -84,7 +84,7 @@ const CustomSelect = ({
             onChange={handleInputChange}
             onFocus={() => setIsOpen(true)}
             placeholder={placeholder}
-            className="px-4 py-3 w-full bg-white rounded-lg border border-blue-300 text-zinc-600 pr-10"
+            className="px-4 py-3 w-full bg-white rounded-lg border border-green-300 text-zinc-600 pr-10"
           />
           {inputValue && (
             <button
@@ -98,7 +98,7 @@ const CustomSelect = ({
         </div>
 
         {isOpen && history.length > 0 && (
-          <div className="absolute z-10 w-full bg-blue-50 border text-blue-800 border-blue-300 rounded-lg mt-1 max-h-40 overflow-y-auto">
+          <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1 max-h-40 overflow-y-auto">
             {history
               .filter((item) =>
                 item.toLowerCase().includes(inputValue.toLowerCase())
@@ -106,7 +106,7 @@ const CustomSelect = ({
               .map((item, idx) => (
                 <div
                   key={idx}
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:font-semibold"
+                  className="px-4 py-2 cursor-pointer hover:bg-green-100 hover:font-semibold"
                   onClick={() => {
                     handleSelect(item);
                     setIsOpen(false);
@@ -124,7 +124,7 @@ const CustomSelect = ({
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <div
-        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-blue-300 cursor-pointer"
+        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-green-300 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span
@@ -150,12 +150,12 @@ const CustomSelect = ({
         </div>
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full bg-blue-50 border text-blue-800 border-blue-300 rounded-lg mt-1">
+        <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1">
           {options && options.length > 0 ? (
             options.map((option, index) => (
               <div
                 key={index}
-                className="px-4 py-3 hover:bg-blue-100 hover:rounded-lg cursor-pointer hover:font-semibold"
+                className="px-4 py-3 hover:bg-green-100 hover:rounded-lg cursor-pointer hover:font-semibold"
                 onClick={() => handleSelect(option)}
               >
                 {option.label || option}

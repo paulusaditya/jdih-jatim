@@ -48,7 +48,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
   };
 
   return (
-<div className="flex flex-col px-8 py-8 w-full text-base bg-blue-50 rounded-xl max-md:px-4 max-md:max-w-full">
+<div className="flex flex-col px-8 py-8 w-full text-base bg-green-50 rounded-xl max-md:px-4 max-md:max-w-full">
       <h2 className="text-lg font-semibold mb-4">Pencarian</h2>
 
       {isLoading ? (
@@ -116,7 +116,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
             <button
               type="button"
               onClick={onSearch}
-              className="flex items-center justify-center gap-2 px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center gap-2 px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors"
             >
               <Search size={20} /> Cari Sekarang
             </button>

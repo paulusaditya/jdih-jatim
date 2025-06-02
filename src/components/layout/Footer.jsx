@@ -48,7 +48,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="bg-blue-950 text-white py-15 px-4 md:px-8 md:pt-60 pt-20">
+      <div className="bg-green-800 text-white py-15 px-4 md:px-8 md:pt-60 pt-20">
         <div className="max-w-7xl mx-auto">
           {/* Bagian Atas: Info Kantor, Support, Media Sosial */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
@@ -105,12 +105,12 @@ export default function Footer() {
                   href="https://www.facebook.com/JDIH-Jatimprov-607856333021401/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-blue-300"
+                  className="hover:text-green-300"
                 >
                   <FaFacebook size={24} />
                 </a>
                 <button
-                  className="text-white hover:text-blue-300"
+                  className="text-white hover:text-green-300"
                   onClick={() => shareToSocialMedia("x")}
                   aria-label="Share to X"
                 >
@@ -129,7 +129,7 @@ export default function Footer() {
                   href="https://www.instagram.com/jdihjatim"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-blue-300"
+                  className="hover:text-green-300"
                 >
                   <Instagram size={24} />
                 </a>
@@ -137,7 +137,7 @@ export default function Footer() {
                   href="https://www.youtube.com/channel/UCqVqELJZYASq8_1RckTKCnw"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-blue-300"
+                  className="hover:text-green-300"
                 >
                   <Youtube size={25} />
                 </a>
@@ -198,7 +198,7 @@ export default function Footer() {
           </div>
 
           {/* Copyright */}
-          <div className="border-t border-blue-900 pt-6">
+          <div className="border-t border-green-900 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-sm">
                 © 2025 Provinsi Jawa Timur. All Rights Reserved.

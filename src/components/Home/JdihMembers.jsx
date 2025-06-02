@@ -58,7 +58,7 @@ export default function JDIHNetworkMembers() {
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-green-900">
             Anggota Jaringan JDIH Provinsi Jawa Timur
           </h2>
           <button
@@ -66,7 +66,7 @@ export default function JDIHNetworkMembers() {
             className={`flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors ${
               showAll
                 ? "bg-pink-100 text-pink-600 border-pink-300"
-                : "text-blue-600 border-blue-600 hover:text-blue-800"
+                : "text-green-600 border-green-600 hover:text-green-800"
             }`}
           >
             <span className="hidden md:inline">
@@ -110,7 +110,7 @@ function MemberCard({ logo, link, className = "", style = {} }) {
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`aspect-[4/3] w-full max-w-[185px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] rounded-2xl p-4 bg-white border border-gray-200 hover:bg-[#F0F6FF] hover:border-blue-600 hover:shadow-md transition-all flex items-center justify-center ${className}`}
+      className={`aspect-[4/3] w-full max-w-[185px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] rounded-2xl p-4 bg-white border border-gray-200 hover:bg-[#F0F6FF] hover:border-green-600 hover:shadow-md transition-all flex items-center justify-center ${className}`}
       style={style}
     >
       <img

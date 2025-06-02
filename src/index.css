@@ -49,6 +49,11 @@
   }
 }
 
+.bg-custom-green {
+  background-color: #25AC63;
+}
+
+
 body {
   font-family: 'Onest', sans-serif;
 }

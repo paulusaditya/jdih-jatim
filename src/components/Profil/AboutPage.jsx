@@ -3,11 +3,11 @@ export default function AboutPage() {
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-8 py-12">
         {/* Judul Halaman */}
-        <h1 className="text-2xl font-bold text-blue-900 mb-6">Tentang Kami</h1>
+        <h1 className="text-2xl font-bold text-green-900 mb-6">Tentang Kami</h1>
 
         {/* Pengantar */}
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-blue-800 mb-2">Pengantar</h2>
+          <h2 className="text-lg font-bold text-green-800 mb-2">Pengantar</h2>
           <p className="text-gray-700 leading-relaxed">
             Dalam rangka mewujudkan tujuan JDIH dalam menciptakan suatu kemampuan (unit dan aparatur) menyediakan 
             peraturan dan dokumen hukum yang tepat dalam waktu yang singkat dengan biaya serendah mungkin serta 
@@ -20,7 +20,7 @@ export default function AboutPage() {
 
         {/* Visi dan Misi */}
         <section className="bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-lg font-bold text-blue-800 mb-2">Visi dan Misi</h2>
+          <h2 className="text-lg font-bold text-green-800 mb-2">Visi dan Misi</h2>
           <p className="mb-3 text-gray-700">
             Layanan informasi hukum yang mudah, cepat dan akurat menuju masyarakat sadar hukum
           </p>

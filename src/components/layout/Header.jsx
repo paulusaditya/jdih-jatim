@@ -27,7 +27,7 @@ export default function Header() {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-blue-600 text-white text-xs py-2 hidden sm:block">
+      <div className="bg-custom-green text-white text-xs py-2 hidden sm:block">
         <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1">
@@ -41,7 +41,7 @@ export default function Header() {
           </div>
           <GoogleTranslate />
           <a
-            className="bg-blue-800 px-2 py-1 rounded text-xs"
+            className="bg-green-700 px-2 py-1 rounded text-xs"
             href="https://majadigi.jatimprov.go.id"
             target="_blank"
             rel="noopener noreferrer"
@@ -59,15 +59,15 @@ export default function Header() {
             <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo2.png" alt="Logo 2" width={32} height={32} />
             <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo3.png" alt="Logo 3" width={32} height={32} />
             <div>
-              <div className="text-blue-900 text-[10px] sm:text-xs">Jaringan Dokumentasi dan Informasi Hukum</div>
-              <div className="text-blue-900 font-bold text-base sm:text-lg md:text-2xl font-jakarta">
+              <div className="text-green-900 text-[10px] sm:text-xs">Jaringan Dokumentasi dan Informasi Hukum</div>
+              <div className="text-green-900 font-bold text-base sm:text-lg md:text-2xl font-jakarta">
                 PROVINSI JAWA TIMUR
               </div>
             </div>
           </div>
           <div className="md:hidden">
             <button onClick={() => setSidebarOpen(true)}>
-              <Menu size={28} className="text-blue-800" />
+              <Menu size={28} className="text-green-800" />
             </button>
           </div>
           <NavBar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} navItems={navItems} />
@@ -124,7 +124,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
 
   return (
     <>
-      <div className="hidden md:flex space-x-10 text-blue-800">
+      <div className="hidden md:flex space-x-10 text-green-800">
         {navItems.map((item, index) => (
           <div key={index} className="relative dropdown-container group">
             {item.sub_menus.length > 0 ? (
@@ -181,9 +181,9 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
         } transition-transform duration-300 ease-in-out z-50 p-4 overflow-y-auto md:hidden`}
       >
         <div className="flex justify-between border-b pb-2">
-          <span className="text-blue-900 font-bold text-lg">Menu</span>
+          <span className="text-green-900 font-bold text-lg">Menu</span>
           <button onClick={() => setSidebarOpen(false)}>
-            <X size={24} className="text-blue-800" />
+            <X size={24} className="text-green-800" />
           </button>
         </div>
         <div className="flex flex-col space-y-4 mt-4">
@@ -193,7 +193,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
                 <>
                   <span
                     onClick={() => toggleDropdown(index)}
-                    className={`block text-blue-800 cursor-pointer ${isActive(item.link) ? "font-bold" : "font-semibold"}`}
+                    className={`block text-green-800 cursor-pointer ${isActive(item.link) ? "font-bold" : "font-semibold"}`}
                   >
                     {item.title}
                   </span>
@@ -214,14 +214,14 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-blue-800 break-words"
+                  className="block text-green-800 break-words"
                 >
                   {item.title}
                 </a>
               ) : (
                 <Link
                   to={`/${cleanLink(item.link)}`}
-                  className={`block text-blue-800 break-words ${isActive(item.link) ? "font-bold" : ""}`}
+                  className={`block text-green-800 break-words ${isActive(item.link) ? "font-bold" : ""}`}
                 >
                   {item.title}
                 </Link>
@@ -272,7 +272,7 @@ function DropdownMenu({ subMenus, parentLink, buildLink, currentPath, navItems }
             href={subMenu.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-blue-800 py-2 px-3 hover:bg-gray-100 rounded break-words"
+            className="block text-green-800 py-2 px-3 hover:bg-gray-100 rounded break-words"
           >
             {subMenu.title}
           </a>
@@ -280,7 +280,7 @@ function DropdownMenu({ subMenus, parentLink, buildLink, currentPath, navItems }
           <Link
             key={index}
             to={fullLink}
-            className={`block text-blue-800 py-2 px-3 hover:bg-gray-100 rounded break-words ${isSubMenuActive(fullLink) ? "font-bold" : ""}`}
+            className={`block text-green-800 py-2 px-3 hover:bg-gray-100 rounded break-words ${isSubMenuActive(fullLink) ? "font-bold" : ""}`}
           >
             {subMenu.title}
           </Link>

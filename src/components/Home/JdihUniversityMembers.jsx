@@ -26,7 +26,7 @@ export default function JDIHUniversityMembers() {
   return (
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-8 text-center mt-10">
+        <h2 className="text-2xl md:text-3xl font-bold text-green-900 mb-8 text-center mt-10">
           Anggota Jaringan JDIH Provinsi Jawa Timur Perguruan Tinggi
         </h2>
 
@@ -55,7 +55,7 @@ function MemberCard({ name, logo, link }) {
       href={link !== "#" ? link : undefined}
       target={link !== "#" ? "_blank" : "_self"}
       rel="noopener noreferrer"
-      className="border border-gray-200 rounded-2xl p-5 flex flex-col items-center justify-center hover:border-blue-600 hover:bg-[#F0F6FF] transition-all cursor-pointer bg-white"
+      className="border border-gray-200 rounded-2xl p-5 flex flex-col items-center justify-center hover:border-green-600 hover:bg-[#F0F6FF] transition-all cursor-pointer bg-white"
       style={{ width: "182px", height: "212px", padding: "15px" }}
     >
       <div className="text-xl mb-3 w-full h-full">

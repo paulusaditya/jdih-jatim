@@ -2,7 +2,7 @@ const PlaystoreBanner = () => {
   return (
     <div className="relative w-full">
       <div
-        className="w-full px-4 sm:px-6 py-8 md:py-20 text-white rounded-[20px] bg-blue-600"
+        className="w-full px-4 sm:px-6 py-8 md:py-20 text-white rounded-[20px] green-600"
         style={{
           backgroundImage: "url('/assets/cta.png')",
           backgroundSize: "cover",

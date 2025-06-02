@@ -103,13 +103,13 @@ export default function BeritaPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <div className="text-center mb-6">
-        <h1 className="text-xl font-semibold text-blue-800">
+        <h1 className="text-xl font-semibold text-green-800">
           Seputar JDIH Jawa Timur
         </h1>
       </div>
 
-      <div className="bg-blue-50 p-4 rounded-lg mb-8">
-        <h2 className="text-sm font-semibold text-blue-800 px-1 mb-3">
+      <div className="bg-green-50 p-4 rounded-lg mb-8">
+        <h2 className="text-sm font-semibold text-green-800 px-1 mb-3">
           Pencarian
         </h2>
         <div className="flex items-center gap-2">
@@ -118,7 +118,7 @@ export default function BeritaPage() {
             <input
               type="text"
               placeholder="Cari berita disini.."
-              className="bg-white w-full pl-10 pr-4 py-2 border border-blue-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-800"
+              className="bg-white w-full pl-10 pr-4 py-2 border border-green-600 rounded-md focus:outline-none focus:ring-1 focus:ring-green-800"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -127,7 +127,7 @@ export default function BeritaPage() {
             {!showDateInput ? (
               <button
                 type="button"
-                className="bg-white px-4 py-2 border border-blue-600 rounded-md flex items-center justify-center gap-2"
+                className="bg-white px-4 py-2 border border-green-600 rounded-md flex items-center justify-center gap-2"
                 onClick={() => setShowDateInput(true)}
               >
                 <span>Tanggal</span>
@@ -148,7 +148,7 @@ export default function BeritaPage() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-3xl text-blue-800 font-semibold mb-6">Berita</h2>
+        <h2 className="text-3xl text-green-800 font-semibold mb-6">Berita</h2>
 
         {loading ? (
           <div className="text-center py-8">
@@ -167,7 +167,7 @@ export default function BeritaPage() {
             {currentBeritaList.map((berita) => (
               <div
                 key={berita.id}
-                className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-blue-600 hover:shadow-md transition duration-300 cursor-pointer flex flex-col"
+                className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-green-600 hover:shadow-md transition duration-300 cursor-pointer flex flex-col"
                 onClick={() => handleCardClick(berita.seo_url_slug_id)}
               >
                 <img
@@ -200,7 +200,7 @@ export default function BeritaPage() {
                         ? berita.seo_url_slug_id.substring(2)
                         : berita.seo_url_slug_id
                     }`}
-                    className="text-blue-600 text-sm font-semibold flex items-center mt-auto"
+                    className="text-green-600 text-sm font-semibold flex items-center mt-auto"
                     onClick={(e) => {
                       e.preventDefault();
                       handleCardClick(berita.seo_url_slug_id);
