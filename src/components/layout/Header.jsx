@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Link, useLocation } from "react-router-dom"
-import { Menu, X, Mail, Phone } from "lucide-react"
-import axios from "axios"
-import GoogleTranslate from "../Home/Translate"
-import baseUrl from "../../config/api"
+import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Mail, Phone, ExternalLink } from "lucide-react";
+import axios from "axios";
+import GoogleTranslate from "../Home/Translate";
+import baseUrl from "../../config/api";
 
 export default function Header() {
-  const [isSidebarOpen, setSidebarOpen] = React.useState(false)
-  const [navItems, setNavItems] = React.useState([])
+  const [isSidebarOpen, setSidebarOpen] = React.useState(false);
+  const [navItems, setNavItems] = React.useState([]);
 
   React.useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/menus`)
-        setNavItems(response.data)
+        const response = await axios.get(`${baseUrl}/menus`);
+        setNavItems(response.data);
       } catch (error) {
-        console.error("Error fetching menu data:", error)
+        console.error("Error fetching menu data:", error);
       }
-    }
+    };
 
-    fetchMenuData()
-  }, [])
+    fetchMenuData();
+  }, []);
 
   return (
     <>
@@ -39,15 +39,19 @@ export default function Header() {
               <span>support@jdih.jatimprov.go.id</span>
             </div>
           </div>
-          <GoogleTranslate />
-          <a
-            className="bg-green-700 px-2 py-1 rounded text-xs"
-            href="https://majadigi.jatimprov.go.id"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            majadigi.jatimprov.go.id
-          </a>
+
+          <div className="flex items-center space-x-3">
+            <GoogleTranslate />
+            <a
+              href="https://majadigi.jatimprov.go.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center bg-green-800 text-white text-xs px-2 py-2.5 rounded space-x-1"
+            >
+              <span className="leading-none">majadigi.jatimprov.go.id</span>
+              <ExternalLink size={12} className="mt-[1px]" />
+            </a>
+          </div>
         </div>
       </div>
 
@@ -55,11 +59,31 @@ export default function Header() {
       <div className="bg-white py-4">
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center space-x-4">
-            <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo1.png" alt="Logo 1" width={32} height={32} />
-            <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo2.png" alt="Logo 2" width={32} height={32} />
-            <img className="w-auto h-8 sm:h-10" src="/assets/nav-logo/logo3.png" alt="Logo 3" width={32} height={32} />
+            <img
+              className="w-auto h-8 sm:h-10"
+              src="/assets/nav-logo/logo1.png"
+              alt="Logo 1"
+              width={32}
+              height={32}
+            />
+            <img
+              className="w-auto h-8 sm:h-10"
+              src="/assets/nav-logo/logo2.png"
+              alt="Logo 2"
+              width={32}
+              height={32}
+            />
+            <img
+              className="w-auto h-8 sm:h-10"
+              src="/assets/nav-logo/logo3.png"
+              alt="Logo 3"
+              width={32}
+              height={32}
+            />
             <div>
-              <div className="text-green-900 text-[10px] sm:text-xs">Jaringan Dokumentasi dan Informasi Hukum</div>
+              <div className="text-green-900 text-[10px] sm:text-xs">
+                Jaringan Dokumentasi dan Informasi Hukum
+              </div>
               <div className="text-green-900 font-bold text-base sm:text-lg md:text-2xl font-jakarta">
                 PROVINSI JAWA TIMUR
               </div>
@@ -70,57 +94,63 @@ export default function Header() {
               <Menu size={28} className="text-green-800" />
             </button>
           </div>
-          <NavBar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} navItems={navItems} />
+          <NavBar
+            isSidebarOpen={isSidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+            navItems={navItems}
+          />
         </div>
       </div>
     </>
-  )
+  );
 }
 
 function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
-  const [activeDropdown, setActiveDropdown] = React.useState(null)
-  const location = useLocation()
+  const [activeDropdown, setActiveDropdown] = React.useState(null);
+  const location = useLocation();
 
   const toggleDropdown = (index) => {
-    setActiveDropdown(activeDropdown === index ? null : index)
-  }
+    setActiveDropdown(activeDropdown === index ? null : index);
+  };
 
-  const cleanLink = (link) => (link.startsWith("/") ? link.slice(1) : link)
+  const cleanLink = (link) => (link.startsWith("/") ? link.slice(1) : link);
 
   const buildLink = (parentLink, subLink) => {
-    const cleanParent = cleanLink(parentLink)
-    const cleanSubLink = cleanLink(subLink)
-    return cleanParent ? `/${cleanParent}/${cleanSubLink}` : `/${cleanSubLink}`
-  }
+    const cleanParent = cleanLink(parentLink);
+    const cleanSubLink = cleanLink(subLink);
+    return cleanParent ? `/${cleanParent}/${cleanSubLink}` : `/${cleanSubLink}`;
+  };
 
-  const isExternalLink = (link) => link.startsWith("http://") || link.startsWith("https://")
+  const isExternalLink = (link) =>
+    link.startsWith("http://") || link.startsWith("https://");
 
   const isActive = (link) => {
-    if (!link || isExternalLink(link)) return false
-    const path = `/${cleanLink(link)}`
+    if (!link || isExternalLink(link)) return false;
+    const path = `/${cleanLink(link)}`;
 
     // Exact match for top-level paths
     if (path.split("/").length <= 2) {
-      return location.pathname === path
+      return location.pathname === path;
     }
 
     // For deeper paths, check if it starts with the path
     return (
       location.pathname === path ||
-      (location.pathname.startsWith(`${path}/`) && !isOtherTopLevelPath(path, location.pathname))
-    )
-  }
+      (location.pathname.startsWith(`${path}/`) &&
+        !isOtherTopLevelPath(path, location.pathname))
+    );
+  };
 
   const isOtherTopLevelPath = (currentPath, locationPath) => {
     // Get all top-level paths from navItems
     const topLevelPaths = navItems
       .filter((item) => item.link && !isExternalLink(item.link))
       .map((item) => `/${cleanLink(item.link)}`)
-      .filter((path) => path !== currentPath)
+      .filter((path) => path !== currentPath);
 
     // Check if the location path starts with any other top-level path
-    return topLevelPaths.some((path) => locationPath.startsWith(path))
-  }
+    return topLevelPaths.some((path) => locationPath.startsWith(path));
+  };
 
   return (
     <>
@@ -129,7 +159,9 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
           <div key={index} className="relative dropdown-container group">
             {item.sub_menus.length > 0 ? (
               <span
-                className={`hover:font-semibold cursor-pointer inline-block py-2 ${isActive(item.link) ? "font-bold" : ""}`}
+                className={`hover:font-semibold cursor-pointer inline-block py-2 ${
+                  isActive(item.link) ? "font-bold" : ""
+                }`}
               >
                 {item.title}
               </span>
@@ -145,7 +177,9 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
             ) : (
               <Link
                 to={`/${cleanLink(item.link)}`}
-                className={`hover:font-semibold inline-block py-2 ${isActive(item.link) ? "font-bold" : ""}`}
+                className={`hover:font-semibold inline-block py-2 ${
+                  isActive(item.link) ? "font-bold" : ""
+                }`}
               >
                 {item.title}
               </Link>
@@ -171,7 +205,10 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
 
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50" onClick={() => setSidebarOpen(false)}></div>
+        <div
+          className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
       )}
 
       {/* Mobile Sidebar */}
@@ -193,7 +230,9 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
                 <>
                   <span
                     onClick={() => toggleDropdown(index)}
-                    className={`block text-green-800 cursor-pointer ${isActive(item.link) ? "font-bold" : "font-semibold"}`}
+                    className={`block text-green-800 cursor-pointer ${
+                      isActive(item.link) ? "font-bold" : "font-semibold"
+                    }`}
                   >
                     {item.title}
                   </span>
@@ -221,7 +260,9 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
               ) : (
                 <Link
                   to={`/${cleanLink(item.link)}`}
-                  className={`block text-green-800 break-words ${isActive(item.link) ? "font-bold" : ""}`}
+                  className={`block text-green-800 break-words ${
+                    isActive(item.link) ? "font-bold" : ""
+                  }`}
                 >
                   {item.title}
                 </Link>
@@ -231,41 +272,51 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-function DropdownMenu({ subMenus, parentLink, buildLink, currentPath, navItems }) {
-  const isExternalLink = (link) => link.startsWith("http://") || link.startsWith("https://")
+function DropdownMenu({
+  subMenus,
+  parentLink,
+  buildLink,
+  currentPath,
+  navItems,
+}) {
+  const isExternalLink = (link) =>
+    link.startsWith("http://") || link.startsWith("https://");
 
-  const cleanLink = (link) => (link.startsWith("/") ? link.slice(1) : link)
+  const cleanLink = (link) => (link.startsWith("/") ? link.slice(1) : link);
 
   const isOtherTopLevelPath = (currentPath, locationPath) => {
-    if (!navItems) return false
+    if (!navItems) return false;
 
     // Get all top-level paths from navItems
     const topLevelPaths = navItems
       .filter((item) => item.link && !isExternalLink(item.link))
       .map((item) => `/${cleanLink(item.link)}`)
-      .filter((path) => path !== currentPath)
+      .filter((path) => path !== currentPath);
 
     // Check if the location path starts with any other top-level path
-    return topLevelPaths.some((path) => locationPath.startsWith(path))
-  }
+    return topLevelPaths.some((path) => locationPath.startsWith(path));
+  };
 
   const isSubMenuActive = (fullLink) => {
-    if (!fullLink || isExternalLink(fullLink) || !currentPath) return false
+    if (!fullLink || isExternalLink(fullLink) || !currentPath) return false;
 
     // Exact match
-    if (currentPath === fullLink) return true
+    if (currentPath === fullLink) return true;
 
     // Check if it's a child path but not part of another top-level path
-    return currentPath.startsWith(`${fullLink}/`) && !isOtherTopLevelPath(fullLink, currentPath)
-  }
+    return (
+      currentPath.startsWith(`${fullLink}/`) &&
+      !isOtherTopLevelPath(fullLink, currentPath)
+    );
+  };
 
   return (
     <div className="bg-white rounded-lg p-2 w-full">
       {subMenus.map((subMenu, index) => {
-        const fullLink = buildLink(parentLink, subMenu.link)
+        const fullLink = buildLink(parentLink, subMenu.link);
         return isExternalLink(subMenu.link) ? (
           <a
             key={index}
@@ -280,12 +331,14 @@ function DropdownMenu({ subMenus, parentLink, buildLink, currentPath, navItems }
           <Link
             key={index}
             to={fullLink}
-            className={`block text-green-800 py-2 px-3 hover:bg-gray-100 rounded break-words ${isSubMenuActive(fullLink) ? "font-bold" : ""}`}
+            className={`block text-green-800 py-2 px-3 hover:bg-gray-100 rounded break-words ${
+              isSubMenuActive(fullLink) ? "font-bold" : ""
+            }`}
           >
             {subMenu.title}
           </Link>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

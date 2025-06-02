@@ -29,20 +29,22 @@ const GoogleTranslate = () => {
     };
 
     const applyCustomStyling = () => {
-      // Style the existing Google Translate button (don't hide it!)
+      // Style the existing Google Translate button to match the green design
       const translateGadget = document.querySelector('.goog-te-gadget-simple');
       if (translateGadget) {
-        // Style the container
+        // Style the container with green background
         translateGadget.style.cssText = `
-          background: #4285f4 !important;
+          background: #4CAF50 !important;
           border: none !important;
-          border-radius: 6px !important;
+          border-radius: 4px !important;
           padding: 0 !important;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
           display: inline-flex !important;
           align-items: center !important;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
           cursor: pointer !important;
+          height: 36px !important;
+          min-width: 120px !important;
         `;
       }
 
@@ -54,12 +56,12 @@ const GoogleTranslate = () => {
           text-decoration: none !important;
           display: flex !important;
           align-items: center !important;
-          padding: 6px 10px !important;
-          font-size: 13px !important;
+          justify-content: space-between !important;
+          padding: 8px 12px !important;
+          font-size: 14px !important;
           font-weight: 500 !important;
-          gap: 6px !important;
-          min-width: 100px !important;
-          height: 28px !important;
+          width: 100% !important;
+          height: 100% !important;
           box-sizing: border-box !important;
         `;
       }
@@ -69,54 +71,44 @@ const GoogleTranslate = () => {
       if (menuValue) {
         menuValue.style.cssText = `
           color: white !important;
-          font-size: 13px !important;
+          font-size: 14px !important;
           font-weight: 500 !important;
           display: flex !important;
           align-items: center !important;
-          gap: 6px !important;
+          justify-content: space-between !important;
+          width: 100% !important;
         `;
         
-        // Add Indonesia flag and modify text
-        const currentText = menuValue.textContent;
-        if (!currentText.includes('🇮🇩')) {
-          // Find the language text span
-          const textSpan = menuValue.querySelector('span:not([style*="border"])');
-          if (textSpan) {
-            // Replace or modify the text
-            if (textSpan.textContent.includes('Indonesia') || textSpan.textContent.includes('Indonesian')) {
-              textSpan.innerHTML = '🇮🇩 Indonesia';
-            } else {
-              textSpan.innerHTML = '🇮🇩 Indonesia';
-            }
-            textSpan.style.cssText = `
-              color: white !important;
-              font-size: 13px !important;
-              font-weight: 500 !important;
-              display: flex !important;
-              align-items: center !important;
-              gap: 6px !important;
-            `;
-          }
+        // Replace with "Pilih Bahasa" text
+        const textSpan = menuValue.querySelector('span:not([style*="border"])');
+        if (textSpan) {
+          textSpan.innerHTML = 'Pilih Bahasa';
+          textSpan.style.cssText = `
+            color: white !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            flex: 1 !important;
+          `;
         }
       }
 
-      // Hide "Powered by" text but keep the functional parts
+      // Hide "Powered by" text
       const poweredBy = document.querySelector('.goog-te-gadget-simple .goog-te-menu-value span:first-child');
       if (poweredBy && (poweredBy.textContent.includes('Powered by') || poweredBy.textContent.includes('Select Language'))) {
         poweredBy.style.display = 'none';
       }
 
-      // Style the dropdown arrow
+      // Style the dropdown arrow to match the design
       const arrow = document.querySelector('.goog-te-gadget-simple .goog-te-menu-value span[style*="border"]');
       if (arrow) {
         arrow.style.cssText = `
           display: inline-block !important;
           width: 0 !important;
           height: 0 !important;
-          margin-left: 6px !important;
-          border-left: 4px solid transparent !important;
-          border-right: 4px solid transparent !important;
-          border-top: 4px solid white !important;
+          margin-left: 8px !important;
+          border-left: 5px solid transparent !important;
+          border-right: 5px solid transparent !important;
+          border-top: 5px solid white !important;
           border-bottom: none !important;
           vertical-align: middle !important;
         `;
@@ -130,27 +122,27 @@ const GoogleTranslate = () => {
           display: inline-block !important;
           width: 0 !important;
           height: 0 !important;
-          margin-left: 6px !important;
-          border-left: 4px solid transparent !important;
-          border-right: 4px solid transparent !important;
-          border-top: 4px solid white !important;
+          margin-left: 8px !important;
+          border-left: 5px solid transparent !important;
+          border-right: 5px solid transparent !important;
+          border-top: 5px solid white !important;
           border-bottom: none !important;
           vertical-align: middle !important;
         `;
         menuValue.appendChild(customArrow);
       }
 
-      // Add hover effects
+      // Add hover effects with darker green
       if (translateGadget) {
         translateGadget.addEventListener('mouseenter', () => {
-          translateGadget.style.background = '#3367d6 !important';
-          translateGadget.style.boxShadow = '0 2px 6px rgba(66, 133, 244, 0.3) !important';
+          translateGadget.style.background = '#45a049 !important';
+          translateGadget.style.boxShadow = '0 3px 6px rgba(76, 175, 80, 0.3) !important';
           translateGadget.style.transition = 'all 0.2s ease !important';
         });
         
         translateGadget.addEventListener('mouseleave', () => {
-          translateGadget.style.background = '#4285f4 !important';
-          translateGadget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1) !important';
+          translateGadget.style.background = '#4CAF50 !important';
+          translateGadget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1) !important';
         });
       }
 
@@ -159,24 +151,26 @@ const GoogleTranslate = () => {
         const dropdown = document.querySelector('.goog-te-menu-frame');
         if (dropdown) {
           dropdown.style.cssText = `
-            border-radius: 8px !important;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid #dadce0 !important;
+            border-radius: 4px !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid #e0e0e0 !important;
             overflow: hidden !important;
+            margin-top: 2px !important;
           `;
           
           // Style dropdown items
           const items = dropdown.querySelectorAll('.goog-te-menu2-item');
           items.forEach(item => {
             item.style.cssText = `
-              padding: 12px 16px !important;
+              padding: 10px 16px !important;
               font-size: 14px !important;
               transition: background-color 0.2s ease !important;
-              border-bottom: 1px solid #f1f3f4 !important;
+              border-bottom: 1px solid #f5f5f5 !important;
+              color: #333 !important;
             `;
             
             item.addEventListener('mouseenter', () => {
-              item.style.backgroundColor = '#f8f9fa !important';
+              item.style.backgroundColor = '#f0f8f0 !important';
             });
             
             item.addEventListener('mouseleave', () => {
@@ -223,6 +217,11 @@ const GoogleTranslate = () => {
 
         .goog-te-gadget-simple > span {
           font-size: 14px !important;
+        }
+
+        /* Custom styling for the green button */
+        .goog-te-gadget-simple:hover {
+          transform: translateY(-1px) !important;
         }
       `}</style>
     </div>
