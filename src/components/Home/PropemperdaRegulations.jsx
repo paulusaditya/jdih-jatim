@@ -82,10 +82,10 @@ function RegulationCard({ regulation }) {
     <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full">
       <div>
         <h3 className="text-lg font-bold text-gray-900 mb-4">
-          {regulation.title}
+          {regulation.title.toUpperCase()}
         </h3>
 
-        <div className="space-y-2 mb-6 text-sm">
+        {/* <div className="space-y-2 mb-6 text-sm">
           <RegulationDetail
             label="Tahun Propemperda"
             value={getField("Tahun")}
@@ -102,7 +102,7 @@ function RegulationCard({ regulation }) {
             label="Tahapan"
             value={getField("Tahapan")}
           />
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-auto pt-2">
