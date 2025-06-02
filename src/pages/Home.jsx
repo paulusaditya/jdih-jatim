@@ -10,21 +10,23 @@ import PropemperdaRegulations from "../components/Home/PropemperdaRegulations";
 import Monographic from "../components/Home/Monographic";
 import ProfileVideo from "../components/Home/ProfileVideo";
 import WhatsAppButton from "../components/common/ChatWaButton";
+import LinkTerkait from "../components/Home/LinkTerkait";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <Main />
-      <ProfileVideo/>
-      <LegalStatsDashboard/>
-      <LegalPortal/>
-      <LegalDocumentsSection/>
-      <JDIHNetworkMembers/>
-      <JDIHUniversityMembers/>
-      <NewsSection/>
-      <LatestRegulations/>
-      <PropemperdaRegulations/>
-      <Monographic/>
+      <ProfileVideo />
+      <LegalStatsDashboard />
+      <LegalPortal />
+      <LegalDocumentsSection />
+      <JDIHNetworkMembers />
+      <JDIHUniversityMembers />
+      <NewsSection />
+      <LatestRegulations />
+      <PropemperdaRegulations />
+      <Monographic />
+      <LinkTerkait />
       <WhatsAppButton />
     </div>
   );
