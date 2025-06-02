@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import DetailLawCard from "../../components/ProdukHukum/DetailLawCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
+import WhatsAppButton from "../../components/common/ChatWaButton";
 
 const LawDetailPage = () => {
   const { slug } = useParams();
@@ -26,6 +27,7 @@ const LawDetailPage = () => {
           </div>
         </div>
       </div>
+      <WhatsAppButton />
     </>
   );
 };

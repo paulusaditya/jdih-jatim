@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DetailBeritaPage from "../../components/Berita/DetailBeritaPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import baseUrl from "../../config/api";
+import WhatsAppButton from "../../components/common/ChatWaButton";
 
 const DetailBerita = () => {
   const { slug } = useParams();
@@ -41,6 +42,7 @@ const DetailBerita = () => {
     <>
       <Breadcrumbs paths={breadcrumbPaths} />
       <DetailBeritaPage slug={slug} />
+      <WhatsAppButton />
     </>
   );
 };

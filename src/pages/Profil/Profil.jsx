@@ -1,5 +1,6 @@
 import AboutPage from "../../components/Profil/AboutPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
+import WhatsAppButton from "../../components/common/ChatWaButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -12,6 +13,7 @@ export default function Profil() {
     <div className="min-h-screen bg-white">
       <Breadcrumbs paths={breadcrumbPaths} />
       <AboutPage />
+      <WhatsAppButton />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import SearchFilter from "../../components/common/SearchFilter";
 import Pagination from "../../components/common/Pagination";
 import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
+import WhatsAppButton from "../../components/common/ChatWaButton";
 
 const LawPage = ({
   apiUrl,
@@ -272,6 +273,7 @@ const LawPage = ({
           </div>
         )}
       </div>
+      <WhatsAppButton />
     </div>
   );
 };

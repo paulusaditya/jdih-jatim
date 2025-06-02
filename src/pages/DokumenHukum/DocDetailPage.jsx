@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import DetailDocCard from "../../components/DokumenHukum/DetailDocCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
+import WhatsAppButton from "../../components/common/ChatWaButton";
 
 // Fungsi untuk konversi slug jadi judul fallback
 const formatSlug = (slug) => {
@@ -70,6 +71,7 @@ const DocDetailPage = ({ customSidebar }) => {
           {customSidebar ? customSidebar : <PopularDocument />}
         </div>
       </div>
+      <WhatsAppButton />
     </>
   );
 };

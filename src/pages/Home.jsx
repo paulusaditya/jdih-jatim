@@ -8,6 +8,7 @@ import NewsSection from "../components/Home/News";
 import LatestRegulations from "../components/Home/LatestRegulations";
 import PropemperdaRegulations from "../components/Home/PropemperdaRegulations";
 import Monographic from "../components/Home/Monographic";
+import WhatsAppButton from "../components/common/ChatWaButton";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <LatestRegulations/>
       <PropemperdaRegulations/>
       <Monographic/>
+      <WhatsAppButton />
     </div>
   );
 }

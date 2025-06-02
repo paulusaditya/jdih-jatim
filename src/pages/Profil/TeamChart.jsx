@@ -1,5 +1,6 @@
 import TeamChartPage from "../../components/Profil/TeamChartPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
+import WhatsAppButton from "../../components/common/ChatWaButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -15,6 +16,7 @@ export default function TeamChart() {
     <div className="min-h-screen bg-white">
       <Breadcrumbs paths={breadcrumbPaths} />
       <TeamChartPage />
+      <WhatsAppButton />
     </div>
   );
 }
