@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import baseUrl from "../../config/api";
+import SearchComponent from "./FloatingSearchComponent";
 
 export default function Main() {
   const [banners, setBanners] = useState([]);
