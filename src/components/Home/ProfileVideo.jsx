@@ -9,7 +9,7 @@ export default function ProfileVideo() {
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return (
-    <div className="max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 p-20 bg-green-50">
+    <div className="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-20 bg-green-100 pt-120">
       <div className="relative bg-gray-200 rounded-lg overflow-hidden aspect-video">
         {isPlaying ? (
           <iframe

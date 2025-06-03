@@ -12,7 +12,6 @@ export default function Main() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-
     fetch(`${baseUrl}/home/banners`)
       .then((res) => res.json())
       .then((data) => {
@@ -49,7 +48,7 @@ export default function Main() {
 
   return (
     <div
-      className="w-full relative overflow-hidden"
+      className="w-full relative overflow-visible"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -104,6 +103,11 @@ export default function Main() {
             onClick={() => setActiveIndex(index)}
           />
         ))}
+      </div>
+
+      {/* Floating SearchComponent */}
+      <div className="absolute top-100 left-1/2 transform -translate-x-1/2 z-50">
+        <SearchComponent />
       </div>
     </div>
   );

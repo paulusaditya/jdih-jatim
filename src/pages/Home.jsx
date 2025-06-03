@@ -15,18 +15,20 @@ import LinkTerkait from "../components/Home/LinkTerkait";
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      <Main />
-      <ProfileVideo />
-      <LegalStatsDashboard />
-      <LegalPortal />
-      <LegalDocumentsSection />
-      <JDIHNetworkMembers />
-      <JDIHUniversityMembers />
-      <NewsSection />
-      <LatestRegulations />
-      <PropemperdaRegulations />
-      <Monographic />
-      <LinkTerkait />
+      <main>
+        <Main />
+        <ProfileVideo />
+        <LegalStatsDashboard />
+        <LegalPortal />
+        <LegalDocumentsSection />
+        <JDIHNetworkMembers />
+        <JDIHUniversityMembers />
+        <NewsSection />
+        <LatestRegulations />
+        <PropemperdaRegulations />
+        <Monographic />
+        <LinkTerkait />
+      </main>
       <WhatsAppButton />
     </div>
   );
