@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { useState } from "react"
+import { ExternalLink } from "lucide-react"
 
 export default function ProfileVideo() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const videoId = "7paQODa7iDA";
-  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  const [isPlaying, setIsPlaying] = useState(false)
+  const videoId = "7paQODa7iDA"
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
 
   return (
     <div className="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-20 bg-green-100 pt-120">
@@ -23,7 +23,7 @@ export default function ProfileVideo() {
         ) : (
           <>
             <img
-              src={thumbnailUrl}
+              src={thumbnailUrl || "/placeholder.svg"}
               alt="Thumbnail video"
               className="w-full h-full object-cover"
             />
@@ -59,26 +59,22 @@ export default function ProfileVideo() {
       </div>
 
       <div className="flex flex-col justify-center">
-        <h2 className="text-2xl font-bold text-green-700 mb-4">
-          Profile JDIH Jawa Timur
-        </h2>
+        <h2 className="text-2xl font-bold text-green-700 mb-4">Profile JDIH Jawa Timur</h2>
         <p className="text-gray-700 mb-4">
-          Situs ini merupakan situs resmi JDIH Biro Hukum Provinsi Jawa Timur.
-          Situs ini memuat data dan informasi produk hukum baik produk hukum
-          maupun lainnya. Disamping itu, situs ini memuat pula informasi
-          mengenai buku-buku referensi hukum yang dimiliki oleh Biro Hukum
-          Provinsi Jawa Timur.
+          Situs ini merupakan situs resmi JDIH Biro Hukum Provinsi Jawa Timur. Situs ini memuat data dan informasi
+          produk hukum baik produk hukum maupun lainnya. Disamping itu, situs ini memuat pula informasi mengenai
+          buku-buku referensi hukum yang dimiliki oleh Biro Hukum Provinsi Jawa Timur.
         </p>
         <a
           href="https://www.youtube.com/@JDIHProvJatim"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center bg-green-100 text-green-700 px-4 py-2 rounded-md self-start hover:bg-green-200 transition-colors"
+          className="inline-flex items-center bg-green-600 text-white px-4 py-2 rounded-md self-start hover:bg-green-700 transition-colors font-medium"
         >
           <ExternalLink className="h-4 w-4 mr-2" />
           Buka Channel Youtube
         </a>
       </div>
     </div>
-  );
+  )
 }
