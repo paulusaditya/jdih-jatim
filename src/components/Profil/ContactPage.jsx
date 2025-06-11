@@ -54,7 +54,7 @@ export default function ContactPage() {
       <div className="grid md:grid-cols-2 gap-8">
         {/* Contact Form */}
         <div className="bg-green-50 rounded-lg p-6 md:p-8">
-          <h2 className="text-green-900 font-bold text-xl mb-6">
+          <h2 className="text-green-800 font-bold text-xl mb-6">
             Hubungi kami dengan mengisi formulir kontak di bawah ini
           </h2>
 
@@ -177,7 +177,7 @@ export default function ContactPage() {
 
         {/* Contact Info */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8">
-          <h2 className="text-green-900 font-bold text-xl mb-6">Kontak Kami</h2>
+          <h2 className="text-green-800 font-bold text-xl mb-6">Kontak Kami</h2>
 
           <div className="space-y-6">
             {/* Alamat */}
@@ -244,7 +244,7 @@ export default function ContactPage() {
 
             {/* Map Section */}
             <div className="mt-12">
-              <h2 className="text-green-900 font-bold text-xl mb-6">
+              <h2 className="text-green-800 font-bold text-xl mb-6">
                 Lokasi Kantor Gubernur Jawa Timur
               </h2>
               <Gmaps />

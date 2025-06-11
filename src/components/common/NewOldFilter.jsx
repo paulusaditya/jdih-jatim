@@ -24,13 +24,13 @@ export default function NewOldFilter({ onSortChange }) {
         <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
           <button
             onClick={() => handleSort("desc")}
-            className="block w-full text-left px-4 py-2 text-sm text-green-900 hover:bg-gray-100 rounded-t-lg"
+            className="block w-full text-left px-4 py-2 text-sm text-green-800 hover:bg-gray-100 rounded-t-lg"
           >
             Baru ke Lama
           </button>
           <button
             onClick={() => handleSort("asc")}
-            className="block w-full text-left px-4 py-2 text-sm text-green-900 hover:bg-gray-100 rounded-b-lg"
+            className="block w-full text-left px-4 py-2 text-sm text-green-800 hover:bg-gray-100 rounded-b-lg"
           >
             Lama ke Baru
           </button>

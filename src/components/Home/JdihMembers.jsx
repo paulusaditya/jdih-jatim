@@ -58,7 +58,7 @@ export default function JDIHNetworkMembers() {
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-green-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-green-800">
             Anggota Jaringan JDIH Provinsi Jawa Timur
           </h2>
           <button

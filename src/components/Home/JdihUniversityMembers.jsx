@@ -26,7 +26,7 @@ export default function JDIHUniversityMembers() {
   return (
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-green-900 mb-8 text-center mt-10">
+        <h2 className="text-2xl md:text-3xl font-bold text-green-800 mb-8 text-center mt-10">
           Anggota Jaringan JDIH Provinsi Jawa Timur Perguruan Tinggi
         </h2>
 

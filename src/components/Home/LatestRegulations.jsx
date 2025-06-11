@@ -41,7 +41,7 @@ export default function LatestRegulations() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-green-900">{sectionTitle}</h2>
+            <h2 className="text-2xl font-bold text-green-800">{sectionTitle}</h2>
             <p className="text-gray-600">{sectionDesc}</p>
           </div>
           <Link

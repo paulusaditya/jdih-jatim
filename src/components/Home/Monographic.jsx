@@ -66,7 +66,7 @@ export default function Monographic() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-green-900">Dokumen Monografi</h2>
+            <h2 className="text-3xl font-bold text-green-800">Dokumen Monografi</h2>
             <p className="text-gray-600 mt-1">Koleksi dokumen Monografi terbaru milik Biro Hukum Provinsi Jawa Timur</p>
           </div>
           <Link

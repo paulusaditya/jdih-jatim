@@ -81,10 +81,10 @@ export default function Header() {
               height={32}
             />
             <div>
-              <div className="text-green-900 text-[10px] sm:text-xs">
+              <div className="text-green-800 text-[10px] sm:text-xs">
                 Jaringan Dokumentasi dan Informasi Hukum
               </div>
-              <div className="text-green-900 font-bold text-base sm:text-lg md:text-2xl font-jakarta">
+              <div className="text-green-800 font-bold text-base sm:text-lg md:text-2xl font-jakarta">
                 PROVINSI JAWA TIMUR
               </div>
             </div>
@@ -218,7 +218,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
         } transition-transform duration-300 ease-in-out z-50 p-4 overflow-y-auto md:hidden`}
       >
         <div className="flex justify-between border-b pb-2">
-          <span className="text-green-900 font-bold text-lg">Menu</span>
+          <span className="text-green-800 font-bold text-lg">Menu</span>
           <button onClick={() => setSidebarOpen(false)}>
             <X size={24} className="text-green-800" />
           </button>

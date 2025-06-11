@@ -3,7 +3,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-8 py-12">
         {/* Judul Halaman */}
-        <h1 className="text-2xl font-bold text-green-900 mb-6">Tentang Kami</h1>
+        <h1 className="text-2xl font-bold text-green-800 mb-6">Tentang Kami</h1>
 
         {/* Pengantar */}
         <section className="mb-8">
