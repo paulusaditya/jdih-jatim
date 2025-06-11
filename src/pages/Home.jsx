@@ -9,6 +9,7 @@ import LatestRegulations from "../components/Home/LatestRegulations";
 import PropemperdaRegulations from "../components/Home/PropemperdaRegulations";
 import Monographic from "../components/Home/Monographic";
 import ProfileVideo from "../components/Home/ProfileVideo";
+import LegalStatsChart from "../components/Home/LegalStatsChart";
 import WhatsAppButton from "../components/common/ChatWaButton";
 import LinkTerkait from "../components/Home/LinkTerkait";
 
@@ -20,6 +21,7 @@ export default function Home() {
         <ProfileVideo />
         <LegalStatsDashboard />
         <LegalPortal />
+        <LegalStatsChart />
         <LegalDocumentsSection />
         <JDIHNetworkMembers />
         <JDIHUniversityMembers />
