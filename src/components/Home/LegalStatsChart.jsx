@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from 'recharts'
 
 const ProductChartJatim = () => {
   const [data, setData] = useState([])
@@ -22,27 +30,40 @@ const ProductChartJatim = () => {
   const totalProduk = data.reduce((acc, cur) => acc + cur.total, 0)
 
   return (
-<div className="px-4 py-15 sm:px-8 md:px-16 lg:px-30 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <h2 className="text-3xl font-bold text-green-800">Jumlah Produk Hukum Jawa Timur</h2>
-        <p className="mb-4">Grafik produk hukum Jawa Timur.</p>
-        <div className="bg-green-50 p-4 rounded-md">
-          <p className="font-semibold">Total Produk: {totalProduk}</p>
-          <p>{data.length} Kategori</p>
+    <section className="py-8 px-4 md:px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-green-800">
+              Jumlah Produk Hukum Jawa Timur
+            </h2>
+            <p className="mb-4">Grafik produk hukum Jawa Timur.</p>
+            <div className="bg-green-50 p-4 rounded-md">
+              <p className="font-semibold">Total Produk: {totalProduk}</p>
+              <p>{data.length} Kategori</p>
+            </div>
+          </div>
+          <div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={data}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="name"
+                  angle={-25}
+                  textAnchor="end"
+                  interval={0}
+                  height={100}
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="total" fill="#16a34a" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
-      <div>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" angle={-35} textAnchor="end" interval={0} height={150} />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="total" fill="#16a34a" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
+    </section>
   )
 }
 
