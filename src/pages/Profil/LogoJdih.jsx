@@ -1,18 +1,18 @@
-import DasarHukumPage from "../../components/Profil/DasarHukumPage";
+import LogoJdihPage from "../../components/Profil/LogoJdihPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
   { label: "Profil", path: "/site-pages" },
-  { label: "Dasar Hukum", path: "/dasar-hukum" },
+  { label: "Logo JDIH", path: "/logo-jdih" },
 ];
 
-export default function DasarHukum() {
+export default function LogoJdih() {
   return (
     <div className="min-h-screen bg-white">
       <Breadcrumbs paths={breadcrumbPaths} />
-      <DasarHukumPage />
+      <LogoJdihPage />
       <WhatsAppButton />
     </div>
   );
