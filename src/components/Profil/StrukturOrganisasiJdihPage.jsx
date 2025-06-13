@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../../config/api";
 
-const StrukturOrganisasiPengelolaanPage = () => {
+const StrukturOrganisasiJdihPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/topics/by-slug/struktur-organisasi-tim-pengelolaan-jdih-provinsi-jawa-timur`)
+      .get(`${baseUrl}/topics/by-slug/struktur-organisasi-jdih-jatim`)
       .then((res) => {
         setData(res.data.data);
         setLoading(false);
@@ -47,7 +47,7 @@ const StrukturOrganisasiPengelolaanPage = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-12">
         <h1 className="text-3xl font-bold text-green-700 mb-6">
-          {data?.title || "Struktur Organisasi Pengelolaan JDIH"}
+          {data?.title || "Struktur Organisasi JDIH Jatim"}
         </h1>
 
         <div
@@ -59,4 +59,4 @@ const StrukturOrganisasiPengelolaanPage = () => {
   );
 };
 
-export default StrukturOrganisasiPengelolaanPage;
+export default StrukturOrganisasiJdihPage;
