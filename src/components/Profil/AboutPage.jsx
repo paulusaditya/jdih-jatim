@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import baseUrl from "../../config/api";
 
 export default function AboutPage() {
   const [content, setContent] = useState("");
@@ -7,12 +8,12 @@ export default function AboutPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://jdih.pisdev.my.id/api/v2/topics/1");
+        const response = await fetch(`${baseUrl}/topics/by-slug/tentang-kami`);
         const result = await response.json();
         const { data } = result;
 
         setTitle(data.title || "Tentang Kami");
-        setContent(data.details_id || "");
+        setContent(data.details_id || "<p>Konten tidak tersedia.</p>");
       } catch (error) {
         console.error("Gagal mengambil data:", error);
       }
