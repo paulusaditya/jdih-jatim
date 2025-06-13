@@ -4,6 +4,7 @@ import LegalPortal from "../components/Home/ProductLawCard";
 import LegalDocumentsSection from "../components/Home/DocumentLawOthers";
 import JDIHNetworkMembers from "../components/Home/JdihMembers";
 import JDIHUniversityMembers from "../components/Home/JdihUniversityMembers";
+import DprdMemberCity from "../components/Home/DprdMemberCity";
 import NewsSection from "../components/Home/News";
 import LatestRegulations from "../components/Home/LatestRegulations";
 import PropemperdaRegulations from "../components/Home/PropemperdaRegulations";
@@ -25,6 +26,7 @@ export default function Home() {
         <LegalDocumentsSection />
         <JDIHNetworkMembers />
         <JDIHUniversityMembers />
+        <DprdMemberCity/>
         <NewsSection />
         <LatestRegulations />
         <PropemperdaRegulations />
