@@ -6,10 +6,17 @@ import {
   useLocation,
 } from "react-router-dom";
 import Home from "./pages/Home";
+import Perpustakaan from "./pages/Perpustakaan";
 import Profil from "./pages/Profil/Profil";
 import ContactPage from "./pages/Profil/Contact";
 import OrganizationalChart from "./pages/Profil/OrganizationalChart";
 import TeamChart from "./pages/Profil/TeamChart";
+import DasarHukum from "./pages/Profil/DasarHukum";
+import LogoJdih from "./pages/Profil/LogoJdih";
+import StrukturOrganisasiJdih from "./pages/Profil/StrukturOrganisasiJdih";
+import StrukturOrganisasiPengelolaan from "./pages/Profil/StrukturOrganisasiPengelolaan";
+import StandartOperasional from "./pages/Profil/StandartOperasional";
+import StrukturOrganisasiBiroHukum from "./pages/Profil/StrukturOrganisasiBiroHukum";
 import LawPage from "./pages/ProdukHukum/LawPage";
 import ProdukJatimPage from "./pages/ProdukHukum/ProdukJatimPage";
 import ProdukKotaPage from "./pages/ProdukHukum/ProdukKotaPage";
@@ -38,6 +45,7 @@ import SuratEdaranPage from "./pages/DokumenHukum/SuratEdaranPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import PopularDocumentMonography from "./components/PopularDocumentMonography";
 import baseUrl from "./config/api";
+
 
 function TitleUpdater({ menuData }) {
   const location = useLocation();
@@ -131,6 +139,7 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/perpustakaan" element={<Perpustakaan />} />
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
                   <Route
@@ -164,6 +173,18 @@ function App() {
                           <Profil />
                         ) : sub.link.includes("contact") ? (
                           <ContactPage />
+                        ) : sub.link.includes("dasar-hukum") ? (
+                          <DasarHukum />
+                        ) : sub.link.includes("logo-jdih") ? (
+                          <LogoJdih />
+                        ) : sub.link.includes("struktur-organisasi-tim-pengelolaan-jdih-provinsi-jawa-timur") ? (
+                          <StrukturOrganisasiPengelolaan />
+                        ) : sub.link.includes("struktur-organisasi-jdih-jatim") ? (
+                          <StrukturOrganisasiJdih />
+                        ) : sub.link.includes("standar-operasional-prosedur-jdih-provinsi-jawa-timur") ? (
+                          <StandartOperasional />
+                        ) : sub.link.includes("struktur-organisasi-biro-hukum") ? (
+                          <StrukturOrganisasiBiroHukum />
                         ) : sub.link.includes(
                             "struktur-organisasi-jdih-jatim"
                           ) ? (
@@ -190,7 +211,7 @@ function App() {
                           <SuratEdaranPage />
                         ) : (
                           <Home />
-                        )
+                        ) 
                       }
                     />
                   ))}
