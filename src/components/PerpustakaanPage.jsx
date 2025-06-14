@@ -1,90 +1,92 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { MapPin } from "lucide-react"
-import baseUrl from "../config/api"
+import { useEffect, useState } from "react";
+import { MapPin } from "lucide-react";
+import baseUrl from "../config/api";
 
 const PerpustakaanPage = () => {
-  const [libraryData, setLibraryData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchLibraryData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${baseUrl}/api/v2/topics/by-slug/perpustakaan-hukum-biro-hukum-sekretariat-daerah-provinsi-jawa-timur`,
-        )
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch library data")
-        }
-
-        const result = await response.json()
-        setLibraryData(result.data)
+        const res = await fetch(
+          `${baseUrl}/topics/by-slug/perpustakaan-hukum-biro-hukum-sekretariat-daerah-provinsi-jawa-timur`
+        );
+        if (!res.ok) throw new Error("Failed to fetch library data");
+        const result = await res.json();
+        setData(result.data);
       } catch (err) {
-        setError(err.message)
+        console.error(err);
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchLibraryData()
-  }, [])
+    fetchData();
+  }, []);
 
-  if (loading) return <div className="flex justify-center p-8">Loading...</div>
-  if (error) return <div className="text-red-500 p-8">Error: {error}</div>
-  if (!libraryData) return <div className="p-8">No data available</div>
+  if (loading) return <div className="p-6 text-center">Loading...</div>;
+  if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
 
-  // Find address and opening hours from fields
-  const addressField = libraryData.fields.find((field) => field.title === "Alamat")
-  const openingHoursField = libraryData.fields.find((field) => field.title === "Buka")
+  const alamat =
+    data?.fields
+      ?.find((f) => f.title === "Alamat")
+      ?.details?.replace(/\r\n/g, " ") ?? "Jl. Pahlawan No.110, Surabaya";
+  const buka =
+    data?.fields?.find((f) => f.title === "Buka")?.details ??
+    "Senin - Jumat (09.00 - 15.00)";
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Map Image */}
-        <div className="rounded-lg overflow-hidden">
-          <img
-            src="/placeholder.svg?height=400&width=500"
-            alt="Peta Lokasi Perpustakaan"
-            className="w-full h-auto object-cover"
+    <section className="py-10 px-4 md:px-6">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+        {/* MAPS */}
+        <div className="rounded-lg overflow-hidden w-full h-[300px] md:h-[400px]">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1120.7372642867172!2d112.73900700233523!3d-7.245924159933477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7f940401c8755%3A0xe6b91ad0a085eaca!2sKantor%20Gubernur%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1749876888754!5m2!1sid!2sid"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
 
-        {/* Library Information */}
+        {/* INFO */}
         <div className="flex flex-col justify-center">
-          <h1 className="text-2xl font-bold text-green-700 mb-6">{libraryData.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-green-800 mb-6">
+            {data?.title ?? "Perpustakaan JDIH"}
+          </h1>
 
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-green-700 mb-2">Lokasi</h2>
-            <p className="text-gray-700">
-              {addressField
-                ? addressField.details
-                : "Kantor Gubernur Jawa Timur (Lantai 1), Jl. Pahlawan No. 110 Kota Surabaya"}
-            </p>
+            <h2 className="text-lg font-semibold text-green-700 mb-1">
+              Lokasi
+            </h2>
+            <p className="text-gray-700">{alamat}</p>
           </div>
 
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-green-700 mb-2">Buka</h2>
-            <p className="text-gray-700">
-              {openingHoursField ? openingHoursField.details : "Senin - Jumat ( 08.00 - 16.00 WIB )"}
-            </p>
+            <h2 className="text-lg font-semibold text-green-700 mb-1">Buka</h2>
+            <p className="text-gray-700">{buka}</p>
           </div>
 
           <a
             href="https://maps.google.com/?q=Jl. Pahlawan No. 110 Kota Surabaya"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white text-green-700 border border-green-700 px-4 py-2 rounded-md hover:bg-green-50 transition-colors w-fit"
+            className="inline-flex items-center gap-2 border border-green-700 text-green-700 px-4 py-2 rounded-md hover:bg-green-50 transition-colors w-fit"
           >
             <MapPin size={18} />
             Buka Maps
           </a>
         </div>
       </div>
-    </div>
-  )
-}
+    </section>
+  );
+};
 
 export default PerpustakaanPage;
