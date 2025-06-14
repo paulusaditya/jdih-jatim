@@ -140,6 +140,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/perpustakaan" element={<Perpustakaan />} />
+              <Route path="/survey" element={<Survey />} />
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
                   <Route
