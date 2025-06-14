@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import baseUrl from "../../config/api"
 import { DownloadIcon } from "lucide-react"
+import LoadingSpinner from "../common/LoadingSpinner"
 
 const StrukturOrganisasiBiroHukumPage = () => {
   const [data, setData] = useState(null)
@@ -27,7 +28,7 @@ const StrukturOrganisasiBiroHukumPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-700"></div>
+        <LoadingSpinner/>
       </div>
     )
   }
