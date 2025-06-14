@@ -45,6 +45,7 @@ import SuratEdaranPage from "./pages/DokumenHukum/SuratEdaranPage";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import PopularDocumentMonography from "./components/PopularDocumentMonography";
 import baseUrl from "./config/api";
+import Survey from "./pages/Survey";
 
 
 function TitleUpdater({ menuData }) {
