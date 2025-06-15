@@ -75,7 +75,7 @@ export default function KomentarPage() {
           Perusahaan Tahun 2024
         </h1>
 
-        <div className="flex gap-8 mt-8">
+        <div className="flex flex-col md:flex-row gap-8 mt-8">
           {/* Comments Section */}
           <div className="flex-1">
             <h2 className="text-lg font-medium text-gray-800 mb-6">Komentar</h2>
@@ -141,7 +141,7 @@ export default function KomentarPage() {
           </div>
 
           {/* Document Preview */}
-          <div className="w-80 flex-shrink-0">
+          <div className="w-full md:w-80 flex-shrink-0">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
               <div className="w-full h-96 bg-gray-50 flex flex-col">
                 {/* Document header */}
