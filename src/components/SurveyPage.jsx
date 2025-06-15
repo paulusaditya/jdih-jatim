@@ -23,9 +23,19 @@ export default function SurveyPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, phone, subject, message } = formData;
-    const waMessage = `Halo, saya ingin menghubungi Anda.%0A%0ANama: ${name}%0AEmail: ${email}%0ANo Telp: ${phone}%0ASubject: ${subject}%0APesan: ${message}`;
-    const waUrl = `https://wa.me/6283850286066?text=${waMessage}`;
+
+    const waMessage =
+      `Halo, saya ingin menghubungi Anda.\n\n` +
+      `Nama: ${name}\n` +
+      `Email: ${email}\n` +
+      `No Telp: ${phone}\n` +
+      `Subject: ${subject}\n` +
+      `Pesan: ${message}`;
+
+    const encodedMessage = encodeURIComponent(waMessage);
+    const waUrl = `https://wa.me/6283850286066?text=${encodedMessage}`;
     window.open(waUrl, "_blank");
+
     setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     setCharCount(0);
   };
@@ -63,4 +73,4 @@ export default function SurveyPage() {
       </form>
     </div>
   );
-} 
+}

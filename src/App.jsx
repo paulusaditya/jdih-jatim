@@ -46,6 +46,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import PopularDocumentMonography from "./components/PopularDocumentMonography";
 import baseUrl from "./config/api";
 import Survey from "./pages/Survey";
+import LayananHukum from "./pages/LayananHukum";
+import Komentar from "./pages/Komentar";
 
 
 function TitleUpdater({ menuData }) {
@@ -142,6 +144,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/perpustakaan" element={<Perpustakaan />} />
               <Route path="/survey" element={<Survey />} />
+              <Route path="/layanan-hukum" element={<LayananHukum />} />
+              <Route path="/layanan-hukum/komentar" element={<Komentar />} />
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
                   <Route
