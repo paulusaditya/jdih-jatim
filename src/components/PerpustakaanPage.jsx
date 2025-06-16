@@ -42,7 +42,7 @@ const PerpustakaanPage = () => {
 
   return (
     <section className="py-10 px-4 md:px-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
         {/* MAPS */}
         <div className="rounded-lg overflow-hidden w-full h-[300px] md:h-[400px]">
           <iframe

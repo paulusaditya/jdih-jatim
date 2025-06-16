@@ -11,7 +11,9 @@ const StandartOperasionalPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/topics/by-slug/standar-operasional-prosedur-jdih-provinsi-jawa-timur`)
+      .get(
+        `${baseUrl}/topics/by-slug/standar-operasional-prosedur-jdih-provinsi-jawa-timur`
+      )
       .then((res) => {
         setData(res.data.data);
         setLoading(false);
@@ -40,13 +42,17 @@ const StandartOperasionalPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 py-12">
-        <h1 className="text-3xl font-bold text-green-700 mb-6">{data?.title || "Standar Operasional Prosedur JDIH"}</h1>
-        <div
-          className="prose prose-sm max-w-none text-gray-800"
-          dangerouslySetInnerHTML={{ __html: data?.details_id || "" }}
-        />
+    <div className="min-h-screen bg-white text-center">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+        <h1 className="text-3xl font-bold text-green-700 mb-6">
+          {data?.title || "Standar Operasional Prosedur JDIH"}
+        </h1>
+        <div className="w-full flex justify-center">
+          <div
+            className="prose prose-sm max-w-3xl text-gray-800 text-left"
+            dangerouslySetInnerHTML={{ __html: data?.details_id || "" }}
+          />
+        </div>
       </div>
     </div>
   );

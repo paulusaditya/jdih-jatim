@@ -52,7 +52,7 @@ const StrukturOrganisasiBiroHukumPage = () => {
 
         {/* Konten utama */}
         <div className="bg-gray-50 p-6 rounded-lg shadow-md text-gray-800">
-          <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: data?.details_id || "" }} />
+          <div className="prose prose-sm max-w-7xl" dangerouslySetInnerHTML={{ __html: data?.details_id || "" }} />
 
           {/* Referensi Peraturan Gubernur - Static text since it's not in the API */}
           <p className="text-sm mt-4">

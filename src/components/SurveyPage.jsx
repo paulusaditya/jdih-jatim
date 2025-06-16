@@ -41,7 +41,7 @@ export default function SurveyPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-12 px-4">
+    <div className="max-w-7xl mx-auto py-12 px-4">
       <h2 className="text-green-800 font-bold text-xl mb-6">
         Hubungi kami dengan mengisi formulir kontak di bawah ini
       </h2>

@@ -48,6 +48,7 @@ import baseUrl from "./config/api";
 import Survey from "./pages/Survey";
 import LayananHukum from "./pages/LayananHukum";
 import Komentar from "./pages/Komentar";
+import Gallery from "./pages/Gallery";
 
 
 function TitleUpdater({ menuData }) {
@@ -146,6 +147,7 @@ function App() {
               <Route path="/survey" element={<Survey />} />
               <Route path="/layanan-hukum" element={<LayananHukum />} />
               <Route path="/layanan-hukum/komentar" element={<Komentar />} />
+              <Route path="/gallery" element={<Gallery />} />
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
                   <Route
