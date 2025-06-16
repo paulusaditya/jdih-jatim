@@ -24,7 +24,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="container px-8 md:px-0 py-12 mx-auto">
+      <div className="container px-8 md:px-0 py-12 mx-auto max-w-7xl" >
         <h1 className="text-2xl font-bold text-green-800 mb-6">{title}</h1>
 
         {content ? (
