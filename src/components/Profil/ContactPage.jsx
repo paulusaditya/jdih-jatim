@@ -5,7 +5,7 @@ import { Clock, Mail, MapPin, Phone, Printer } from "lucide-react";
 export default function ContactPage() {
   return (
     <div className="container mx-auto py-12 px-4">
-      <div className="bg-white border border-gray-200 rounded-lg p-6 md:p-8 shadow-sm max-w-4xl mx-auto">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 md:p-8 shadow-sm max-w-7xl mx-auto">
         <h2 className="text-blue-900 font-bold text-lg md:text-xl mb-6">
           Kontak Kami
         </h2>
