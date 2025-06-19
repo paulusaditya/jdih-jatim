@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
 import baseUrl from "../config/api";
+import LoadingSpinner from "./common/LoadingSpinner";
 
 const PerpustakaanPage = () => {
   const [data, setData] = useState(null);
@@ -29,7 +30,7 @@ const PerpustakaanPage = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="p-6 text-center">Loading...</div>;
+  if (loading) return <LoadingSpinner/>;
   if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
 
   const alamat =
