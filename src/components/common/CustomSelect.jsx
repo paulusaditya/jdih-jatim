@@ -1,78 +1,72 @@
-import React, { useState, useRef, useEffect } from "react";
-import { X, ChevronDown } from "lucide-react";
+"use client"
 
-const CustomSelect = ({
-  options = [],
-  value,
-  onChange,
-  name,
-  placeholder,
-  isMultiple = false,
-  type = "select",
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const [inputValue, setInputValue] = useState(value || "");
-  const [history, setHistory] = useState([]);
+import { useState, useRef, useEffect } from "react"
+import { X, ChevronDown } from "lucide-react"
+
+const CustomSelect = ({ options = [], value, onChange, name, placeholder, isMultiple = false, type = "select" }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+  const [inputValue, setInputValue] = useState(value || "")
+  const [history, setHistory] = useState([])
 
   useEffect(() => {
-    setInputValue(value || "");
-  }, [value]);
+    setInputValue(value || "")
+  }, [value])
 
   const handleSelect = (optionValue) => {
-    const newValue = optionValue.value || optionValue;
+    const newValue = optionValue.value || optionValue
     onChange({
       target: {
         name,
         value: newValue,
         isMultiple,
       },
-    });
+    })
 
     if (!history.includes(newValue)) {
-      setHistory((prev) => [...prev, newValue]);
+      setHistory((prev) => [...prev, newValue])
     }
 
-    setIsOpen(false);
-  };
+    setIsOpen(false)
+  }
 
   const handleClear = (e) => {
-    e.stopPropagation();
+    e.stopPropagation()
     onChange({
       target: {
         name,
         value: "",
         isMultiple,
       },
-    });
-    setInputValue("");
-  };
+    })
+    setInputValue("")
+  }
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+    setInputValue(e.target.value)
     onChange({
       target: {
         name,
         value: e.target.value,
         isMultiple,
       },
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
-  const displayValue = value || placeholder;
+  const displayValue = value || placeholder
 
   if (type === "text" || type === "number") {
     return (
@@ -87,29 +81,23 @@ const CustomSelect = ({
             className="px-4 py-3 w-full bg-white rounded-lg border border-green-300 text-zinc-600 pr-10"
           />
           {inputValue && (
-            <button
-              type="button"
-              onClick={handleClear}
-              className="absolute right-3 text-gray-500 hover:text-gray-700"
-            >
+            <button type="button" onClick={handleClear} className="absolute right-3 text-gray-500 hover:text-gray-700">
               <X size={16} />
             </button>
           )}
         </div>
 
         {isOpen && history.length > 0 && (
-          <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1 max-h-40 overflow-y-auto">
+          <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1 max-h-48 overflow-y-auto custom-scrollbar">
             {history
-              .filter((item) =>
-                item.toLowerCase().includes(inputValue.toLowerCase())
-              )
+              .filter((item) => item.toLowerCase().includes(inputValue.toLowerCase()))
               .map((item, idx) => (
                 <div
                   key={idx}
                   className="px-4 py-2 cursor-pointer hover:bg-green-100 hover:font-semibold"
                   onClick={() => {
-                    handleSelect(item);
-                    setIsOpen(false);
+                    handleSelect(item)
+                    setIsOpen(false)
                   }}
                 >
                   {item}
@@ -118,7 +106,7 @@ const CustomSelect = ({
           </div>
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -127,18 +115,14 @@ const CustomSelect = ({
         className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-green-300 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span
-          className={`text-zinc-600 ${!value && "text-gray-400"} flex-grow`}
-        >
-          {displayValue}
-        </span>
+        <span className={`text-zinc-600 ${!value && "text-gray-400"} flex-grow`}>{displayValue}</span>
         <div className="flex items-center">
           {value ? (
             <button
               type="button"
               onClick={(e) => {
-                e.stopPropagation();
-                handleClear(e);
+                e.stopPropagation()
+                handleClear(e)
               }}
               className="text-gray-500 hover:text-gray-700"
             >
@@ -150,7 +134,7 @@ const CustomSelect = ({
         </div>
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1">
+        <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1 max-h-48 overflow-y-auto custom-scrollbar">
           {options && options.length > 0 ? (
             options.map((option, index) => (
               <div
@@ -166,8 +150,34 @@ const CustomSelect = ({
           )}
         </div>
       )}
-    </div>
-  );
-};
 
-export default CustomSelect;
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f5f9;
+          border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #16a34a;
+          border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #15803d;
+        }
+
+        /* Firefox */
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #16a34a #f1f5f9;
+        }
+      `}</style>
+    </div>
+  )
+}
+
+export default CustomSelect
