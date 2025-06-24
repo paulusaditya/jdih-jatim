@@ -146,7 +146,7 @@ function App() {
               <Route path="/perpustakaan" element={<Perpustakaan />} />
               <Route path="/survey" element={<Survey />} />
               <Route path="/layanan-hukum" element={<LayananHukum />} />
-              <Route path="/layanan-hukum/komentar" element={<Komentar />} />
+              <Route path="/layanan-hukum/komentar/:id" element={<Komentar />} />
               <Route path="/gallery" element={<Gallery />} />
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
