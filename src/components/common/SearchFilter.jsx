@@ -1,167 +1,201 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { Search } from "lucide-react"
-import axios from "axios"
-import CustomSelect from "./CustomSelect"
-import baseUrl from "../../config/api"
+import React, { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import axios from "axios";
+import CustomSelect from "./CustomSelect";
+import baseUrl from "../../config/api";
 
 const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
-  const [documentTypes, setDocumentTypes] = useState([
-    { value: "peraturan-daerah", label: "Peraturan Daerah" },
-    { value: "peraturan-gubernur", label: "Peraturan Gubernur" },
-    { value: "keputusan-gubernur", label: "Keputusan Gubernur" },
-    { value: "surat-keputusan-gubernur", label: "Surat Keputusan Gubernur" },
-    { value: "instruksi-gubernur", label: "Instruksi Gubernur" },
-    { value: "keputusan-bersama-gubernur", label: "Keputusan Bersama Gubernur" },
-    { value: "keputusan-atas-nama-gubernur", label: "Keputusan Atas Nama Gubernur" },
-  ])
-  const [years, setYears] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [filterFields, setFilterFields] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const allowedFields = [
+    "find_q",
+    "customField_20",
+    "customField_19",
+    "customField_79",
+  ];
 
   useEffect(() => {
-    if (!webmasterSectionId) return
+    if (!webmasterSectionId) return;
 
     const fetchFilterOptions = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const response = await axios.get(`${baseUrl}/topics/filter-options?webmaster_section_id=${webmasterSectionId}`)
+        const response = await axios.get(
+          `${baseUrl}/topics/filter-options?webmaster_section_id=${webmasterSectionId}`
+        );
 
         if (response.data && response.data.status === "success") {
-          const data = response.data.data || []
+          const filteredFields = (response.data.data || []).filter((field) =>
+            allowedFields.includes(field.name)
+          );
 
-          // Only extract years from API response, document types are now hardcoded
-          const yearField = data.find((field) => field.name === "tahun" || field.name === "year")
+          const sortedFields = filteredFields.sort((a, b) => {
+            const orderMap = {
+              find_q: 1, 
+              customField_20: 2,
+              customField_19: 3, 
+              customField_79: 4, 
+            };
+            return orderMap[a.name] - orderMap[b.name];
+          });
 
-          if (yearField && yearField.options) {
-            setYears(
-              yearField.options.map((option) => ({
-                value: option,
-                label: option,
-              })),
-            )
-          } else {
-            // Generate years if not provided by API (current year back to 1900)
-            const currentYear = new Date().getFullYear()
-            const yearOptions = []
-            for (let year = currentYear; year >= 1900; year--) {
-              yearOptions.push({ value: year.toString(), label: year.toString() })
-            }
-            setYears(yearOptions)
-          }
+          setFilterFields(sortedFields);
         } else {
-          console.error("Failed to fetch filter options: Invalid response format")
+          console.error(
+            "Failed to fetch filter options: Invalid response format"
+          );
         }
       } catch (error) {
-        console.error("Failed to fetch filter options:", error)
-
-        // Fallback: Generate default years if API fails
-        const currentYear = new Date().getFullYear()
-        const yearOptions = []
-        for (let year = currentYear; year >= 1900; year--) {
-          yearOptions.push({ value: year.toString(), label: year.toString() })
-        }
-        setYears(yearOptions)
+        console.error("Failed to fetch filter options:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchFilterOptions()
-  }, [webmasterSectionId])
+    fetchFilterOptions();
+  }, [webmasterSectionId]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
+  const handleMultipleChange = (e) => {
+    const { name, value } = e.target;
+
     onChange({
       target: {
         name,
         value: value,
+        isMultiple: true,
       },
-    })
-  }
-
-  const handleSelectChange = (e) => {
-    const { name, value } = e.target
-    onChange({
-      target: {
-        name,
-        value: value,
-      },
-    })
-  }
+    });
+  };
 
   return (
     <div className="flex flex-col px-8 py-8 w-full text-base bg-green-50 rounded-xl max-md:px-4 max-md:max-w-full">
-      <h2 className="text-lg font-semibold mb-6">Pencarian</h2>
+      <h2 className="text-lg font-semibold mb-4">Pencarian</h2>
 
       {isLoading ? (
         <div className="text-center py-4">
           <span className="text-gray-600">Memuat opsi filter...</span>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 w-full">
-          {/* Main Search Input */}
-          <div className="w-full">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                name="nama_dokumen"
-                value={filters.nama_dokumen || ""}
-                onChange={handleInputChange}
-                placeholder="Silahkan ketikan dokumen yang kamu cari disini.."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
+        <div className="w-full space-y-4">
+          {filterFields
+            .filter((field) => field.name === "find_q")
+            .map((field) => (
+              <div key={field.name} className="w-full">
+                <CustomSelect
+                  type={field.type}
+                  id={field.name}
+                  name={field.name}
+                  value={
+                    Array.isArray(filters[field.name])
+                      ? filters[field.name][0] || ""
+                      : filters[field.name] || ""
+                  }
+                  onChange={handleMultipleChange}
+                  placeholder="Silahkan ketikan dokumen yang kamu cari disini.."
+                  isMultiple={true}
+                  icon={<Search size={16} className="text-gray-400" />}
+                />
+              </div>
+            ))}
+
+          <div className="flex flex-wrap gap-4 items-end w-full max-md:max-w-full">
+            {filterFields
+              .filter((field) => field.name !== "find_q")
+              .map((field) => {
+                if (field.type === "text" || field.type === "number") {
+                  if (field.name === "customField_79") {
+                    const currentYear = new Date().getFullYear();
+                    const yearOptions = [];
+                    for (let year = 100; year <= currentYear; year++) {
+                      yearOptions.push({
+                        value: year.toString(),
+                        label: year.toString(),
+                      });
+                    }
+                    yearOptions.reverse();
+
+                    return (
+                      <div
+                        key={field.name}
+                        className="flex flex-col grow shrink w-44"
+                      >
+                        <CustomSelect
+                          id={field.name}
+                          name={field.name}
+                          options={yearOptions}
+                          value={
+                            Array.isArray(filters[field.name])
+                              ? filters[field.name][0] || ""
+                              : filters[field.name] || ""
+                          }
+                          onChange={handleMultipleChange}
+                          placeholder={`Pilih ${field.label}`}
+                          isMultiple={true}
+                        />
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={field.name}
+                      className="flex flex-col grow shrink w-44"
+                    >
+                      <CustomSelect
+                        type={field.type}
+                        id={field.name}
+                        name={field.name}
+                        value={
+                          Array.isArray(filters[field.name])
+                            ? filters[field.name][0] || ""
+                            : filters[field.name] || ""
+                        }
+                        onChange={handleMultipleChange}
+                        placeholder={field.label}
+                        isMultiple={true}
+                      />
+                    </div>
+                  );
+                }
+
+                if (field.type === "select" && field.options) {
+                  const options = field.options.map((option) => ({
+                    value: option,
+                    label: option,
+                  }));
+
+                  return (
+                    <div
+                      key={field.name}
+                      className="flex flex-col grow shrink w-44"
+                    >
+                      <CustomSelect
+                        id={field.name}
+                        name={field.name}
+                        options={options}
+                        value={
+                          Array.isArray(filters[field.name])
+                            ? filters[field.name][0] || ""
+                            : filters[field.name] || ""
+                        }
+                        onChange={handleMultipleChange}
+                        placeholder={`Pilih ${field.label}`}
+                        isMultiple={true}
+                      />
+                    </div>
+                  );
+                }
+
+                return null;
+              })}
           </div>
 
-          {/* Filter Row */}
-          <div className="flex flex-wrap gap-4 items-end w-full">
-            {/* Document Number */}
-            <div className="flex flex-col grow shrink min-w-0 basis-0">
-              <input
-                type="text"
-                name="nomor_dokumen"
-                value={filters.nomor_dokumen || ""}
-                onChange={handleInputChange}
-                placeholder="Nomer Dokumen"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Document Type Dropdown */}
-            <div className="flex flex-col grow shrink min-w-0 basis-0">
-              <CustomSelect
-                id="jenis_dokumen"
-                name="jenis_dokumen"
-                options={documentTypes}
-                value={filters.jenis_dokumen || ""}
-                onChange={handleSelectChange}
-                placeholder="Jenis Dokumen"
-                className="w-full"
-              />
-            </div>
-
-            {/* Year Dropdown */}
-            <div className="flex flex-col grow shrink min-w-0 basis-0">
-              <CustomSelect
-                id="tahun"
-                name="tahun"
-                options={years}
-                value={filters.tahun || ""}
-                onChange={handleSelectChange}
-                placeholder="Pilih Tahun"
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          {/* Search Button */}
-          <div className="w-full mt-4">
+          <div className="flex flex-col grow shrink w-full">
             <button
               type="button"
               onClick={onSearch}
-              className="flex items-center justify-center gap-2 px-6 py-3 w-full text-sm font-semibold leading-6 text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors"
+              className="flex items-center justify-center gap-2 px-5 py-3 mt-6 w-full text-sm font-semibold leading-6 text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors"
             >
               <Search size={20} /> Cari Sekarang
             </button>
@@ -169,7 +203,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default SearchFilter
+export default SearchFilter;
