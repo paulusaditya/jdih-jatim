@@ -176,13 +176,7 @@ function DetailLawCard({ lawId }) {
         </div>
       ) : (
         <div className="flex flex-col">
-          {fields.map((item, index) => {
-            const value = item.details.includes("http")
-              ? decodeURIComponent(item.details.split("/").pop())
-              : item.details;
-
-            return <DetailItem key={index} label={item.title} value={value} />;
-          })}
+          <DetailItem fields={fields} />
         </div>
       )}
     </div>
