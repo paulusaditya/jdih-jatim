@@ -1,6 +1,7 @@
 import PerpustakaanPage from "../components/PerpustakaanPage";
 import Breadcrumbs from "../components/common/Breadcrumbs";
 import WhatsAppButton from "../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../components/common/FloatingAccessibilityButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -13,6 +14,7 @@ export default function Perpustakaan() {
       <Breadcrumbs paths={breadcrumbPaths} />
       <PerpustakaanPage />
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 }

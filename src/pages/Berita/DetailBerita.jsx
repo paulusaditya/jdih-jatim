@@ -4,6 +4,7 @@ import DetailBeritaPage from "../../components/Berita/DetailBeritaPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const DetailBerita = () => {
   const { slug } = useParams();
@@ -43,6 +44,7 @@ const DetailBerita = () => {
       <Breadcrumbs paths={breadcrumbPaths} />
       <DetailBeritaPage slug={slug} />
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </>
   );
 };

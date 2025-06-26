@@ -1,6 +1,7 @@
 import TeamChartPage from "../../components/Profil/TeamChartPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -17,6 +18,7 @@ export default function TeamChart() {
       <Breadcrumbs paths={breadcrumbPaths} />
       <TeamChartPage />
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 }

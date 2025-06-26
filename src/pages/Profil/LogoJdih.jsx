@@ -1,6 +1,7 @@
 import LogoJdihPage from "../../components/Profil/LogoJdihPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -14,6 +15,7 @@ export default function LogoJdih() {
       <Breadcrumbs paths={breadcrumbPaths} />
       <LogoJdihPage />
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 }
