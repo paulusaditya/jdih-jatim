@@ -44,7 +44,7 @@ const ProductChartJatim = () => {
             </div>
           </div>
           <div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={370}>
               <BarChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
@@ -52,7 +52,7 @@ const ProductChartJatim = () => {
                   angle={-25}
                   textAnchor="end"
                   interval={0}
-                  height={100}
+                  height={150}
                   tick={{ fontSize: 12 }}
                 />
                 <YAxis />
