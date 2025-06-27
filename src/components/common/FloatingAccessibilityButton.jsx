@@ -278,7 +278,7 @@ const FloatingAccessibilityButton = () => {
             ${
               currentTheme === "dark" || currentTheme === "highContrast"
                 ? "bg-black text-white border-2 border-white"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-green-600 text-white hover:bg-green-700"
             }
             hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300
             active:scale-95 flex items-center justify-center group
@@ -346,7 +346,7 @@ const FloatingAccessibilityButton = () => {
                     relative w-20 h-20 rounded-2xl shadow-lg transition-all duration-300 transform
                     ${
                       talkBackEnabled
-                        ? "bg-blue-500 hover:bg-blue-600 text-white"
+                        ? "bg-green-500 hover:bg-green-600 text-white"
                         : "bg-red-500 hover:bg-red-600 text-white"
                     }
                     hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300
