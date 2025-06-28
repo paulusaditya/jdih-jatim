@@ -195,17 +195,6 @@ export default function GalleryPage() {
           </div>
         </section>
       )}
-
-      {videos.regulations.length > 0 && (
-        <section>
-          <SectionTitle title="Video Lainnya :" />
-          <div className="space-y-6">
-            {videos.regulations.map((v) => (
-              <VideoCard key={v.id} video={v} />
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
