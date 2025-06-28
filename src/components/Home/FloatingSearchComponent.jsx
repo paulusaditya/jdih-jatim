@@ -12,7 +12,7 @@ export default function FloatingSearchComponent() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div>
       {/* Background with blur effect */}
       <div 
         className="inset-0 bg-gradient-to-br from-blue-100 via-green-50 to-yellow-50"
