@@ -30,6 +30,7 @@ export default function KomentarPage() {
   const [topicId, setTopicId] = useState(null);
 
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -78,7 +79,14 @@ export default function KomentarPage() {
   }, [slug]);
 
   const handleSubmit = async () => {
-    if (!name.trim() || !commentText.trim() || !topicId) return;
+    if (!name.trim() || !email.trim() || !commentText.trim() || !topicId) return;
+
+    // Validasi email sederhana
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      alert("Format email tidak valid");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -86,6 +94,7 @@ export default function KomentarPage() {
         `https://jdih.pisdev.my.id/api/v2/topics/${topicId}/comments`,
         {
           name: name.trim(),
+          email: email.trim(),
           comment: commentText.trim(),
         }
       );
@@ -93,6 +102,7 @@ export default function KomentarPage() {
       // Ambil ulang komentar dari halaman pertama
       fetchCommentsBySlug(1);
       setName("");
+      setEmail("");
       setCommentText("");
     } catch (error) {
       console.error("Gagal mengirim komentar:", error);
@@ -172,21 +182,28 @@ export default function KomentarPage() {
                 <input
                   type="text"
                   placeholder="Nama Anda"
-                  className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none"
+                  className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
+                <input
+                  type="email"
+                  placeholder="Email Anda"
+                  className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                 <textarea
                   placeholder="Tambahkan Komentar"
-                  className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none"
+                  className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                 />
                 <div className="flex justify-end">
                   <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+                    disabled={isSubmitting || !name.trim() || !email.trim() || !commentText.trim()}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Mengirim..." : "Kirim"}
                   </button>
