@@ -1,6 +1,7 @@
 import ContactPage from "../../components/Profil/ContactPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -14,6 +15,7 @@ export default function Contact() {
       <Breadcrumbs paths={breadcrumbPaths} />
       <ContactPage />
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 }

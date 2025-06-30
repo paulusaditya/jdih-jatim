@@ -6,6 +6,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/id";
+import Pagination from "./common/Pagination";
 
 dayjs.extend(relativeTime);
 dayjs.locale("id");
@@ -28,12 +29,16 @@ export default function KomentarPage() {
   const [topicTitle, setTopicTitle] = useState("");
   const [topicId, setTopicId] = useState(null);
 
-  // Inputan user
   const [name, setName] = useState("");
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchCommentsBySlug = async () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const [totalComments, setTotalComments] = useState(0);
+
+  const fetchCommentsBySlug = async (page = 1) => {
+    setLoading(true);
     try {
       const topicsRes = await axios.get(
         "https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=28"
@@ -43,6 +48,7 @@ export default function KomentarPage() {
 
       if (!topic) {
         setComments([]);
+        setTotalComments(0);
         setLoading(false);
         return;
       }
@@ -51,10 +57,15 @@ export default function KomentarPage() {
       setTopicId(topic.id);
 
       const commentsRes = await axios.get(
-        `https://jdih.pisdev.my.id/api/v2/topics/${topic.id}/comments`
+        `https://jdih.pisdev.my.id/api/v2/topics/${topic.id}/comments?per_page=${recordsPerPage}&page=${page}`
       );
+
       const commentData = commentsRes.data?.data?.comments || [];
+      const pagination = commentsRes.data?.data?.pagination || {};
+
       setComments(commentData);
+      setTotalComments(pagination.total || commentData.length);
+      setCurrentPage(pagination.current_page || 1);
     } catch (error) {
       console.error("Gagal mengambil komentar:", error);
     } finally {
@@ -79,16 +90,21 @@ export default function KomentarPage() {
         }
       );
 
-      // Refresh komentar
-      fetchCommentsBySlug();
-
-      // Reset form
+      // Ambil ulang komentar dari halaman pertama
+      fetchCommentsBySlug(1);
       setName("");
       setCommentText("");
     } catch (error) {
       console.error("Gagal mengirim komentar:", error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handlePageChange = (page) => {
+    const totalPages = Math.ceil(totalComments / recordsPerPage);
+    if (page >= 1 && page <= totalPages) {
+      fetchCommentsBySlug(page);
     }
   };
 
@@ -136,6 +152,15 @@ export default function KomentarPage() {
                   </div>
                 ))
               )}
+            </div>
+
+            <div className="mt-6">
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalComments}
+                itemsPerPage={recordsPerPage}
+                onPageChange={handlePageChange}
+              />
             </div>
 
             {/* Form Komentar */}

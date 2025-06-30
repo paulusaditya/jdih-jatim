@@ -10,6 +10,7 @@ import Pagination from "../../components/common/Pagination";
 import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const DocPage = ({
   apiUrl,
@@ -263,6 +264,7 @@ const DocPage = ({
         )}
       </div>
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 };

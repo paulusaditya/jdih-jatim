@@ -4,6 +4,7 @@ import DetailLawCard from "../../components/ProdukHukum/DetailLawCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const LawDetailPage = () => {
   const { slug } = useParams();
@@ -28,6 +29,7 @@ const LawDetailPage = () => {
         </div>
       </div>
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </>
   );
 };

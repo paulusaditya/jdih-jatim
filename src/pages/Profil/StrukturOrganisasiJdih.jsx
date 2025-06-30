@@ -1,6 +1,7 @@
 import StrukturOrganisasiJdihPage from "../../components/Profil/StrukturOrganisasiJdihPage";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
@@ -14,6 +15,7 @@ export default function StrukturOrganisasiJdih() {
       <Breadcrumbs paths={breadcrumbPaths} />
       <StrukturOrganisasiJdihPage />
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 }

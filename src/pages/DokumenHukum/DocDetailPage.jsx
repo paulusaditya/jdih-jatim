@@ -6,6 +6,7 @@ import DetailDocCard from "../../components/DokumenHukum/DetailDocCard";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import PopularDocument from "../../components/PopularDocument";
 import WhatsAppButton from "../../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
 // Fungsi untuk konversi slug jadi judul fallback
 const formatSlug = (slug) => {
@@ -72,6 +73,7 @@ const DocDetailPage = ({ customSidebar }) => {
         </div>
       </div>
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </>
   );
 };

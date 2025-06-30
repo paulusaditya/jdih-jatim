@@ -12,6 +12,7 @@ import Monographic from "../components/Home/Monographic";
 import ProfileVideo from "../components/Home/ProfileVideo";
 import LegalStatsChart from "../components/Home/LegalStatsChart";
 import WhatsAppButton from "../components/common/ChatWaButton";
+import FloatingAccessibilityButton from "../components/common/FloatingAccessibilityButton";
 import LinkTerkait from "../components/Home/LinkTerkait";
 
 export default function Home() {
@@ -34,6 +35,7 @@ export default function Home() {
         <LinkTerkait />
       </main>
       <WhatsAppButton />
+      <FloatingAccessibilityButton/>
     </div>
   );
 }
