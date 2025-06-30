@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, FileText, Calendar, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import baseUrl from "../../config/api";
 
 function CustomSelect({ value, onChange, placeholder, options, icon, name }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +15,7 @@ function CustomSelect({ value, onChange, placeholder, options, icon, name }) {
   return (
     <div className="relative">
       {icon && (
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 z-10">
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 z-10 pointer-events-none flex items-center justify-center w-5 h-5">
           {icon}
         </div>
       )}
@@ -21,7 +23,7 @@ function CustomSelect({ value, onChange, placeholder, options, icon, name }) {
       <div
         className={`w-full ${
           icon ? "pl-12" : "pl-4"
-        } pr-12 py-4 bg-white/70 backdrop-blur-sm border-2 border-white/40 rounded-xl text-gray-800 focus:outline-none focus:border-green-400 hover:bg-white/80 transition-all duration-300 cursor-pointer shadow-md flex items-center justify-between`}
+        } pr-12 py-4 bg-white/70 backdrop-blur-sm border-2 border-white/40 rounded-xl text-gray-800 focus:outline-none focus:border-green-400 hover:bg-white/80 transition-all duration-300 cursor-pointer shadow-md flex items-center justify-between h-14`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className={value ? "text-gray-800" : "text-gray-500"}>
@@ -42,28 +44,83 @@ function CustomSelect({ value, onChange, placeholder, options, icon, name }) {
           >
             {placeholder}
           </div>
-          {options.map((option, index) => (
-            <div
-              key={index}
-              className="px-4 py-3 hover:bg-green-50 cursor-pointer text-gray-800 border-t border-gray-100"
-              onClick={() => handleSelect(option.value)}
-            >
-              {option.label}
-            </div>
-          ))}
+          {options &&
+            options.map((option, index) => (
+              <div
+                key={index}
+                className="px-4 py-3 hover:bg-green-50 cursor-pointer text-gray-800 border-t border-gray-100"
+                onClick={() => handleSelect(option.value)}
+              >
+                {option.label}
+              </div>
+            ))}
         </div>
       )}
     </div>
   );
 }
 
-export default function FloatingSearchComponent() {
+export default function FloatingSearchComponent({ webmasterSectionId = "10" }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [nomerDokumen, setNomerDokumen] = useState("");
   const [jenisDokumen, setJenisDokumen] = useState("");
   const [tahun, setTahun] = useState("");
+  const [filterFields, setFilterFields] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const allowedFields = [
+    "find_q",
+    "customField_20",
+    "customField_19",
+    "customField_79",
+  ];
+
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `${baseUrl}/topics/filter-options?webmaster_section_id=${webmasterSectionId}`
+        );
+
+        if (response.data && response.data.status === "success") {
+          let filteredFields = response.data.data || [];
+
+          filteredFields = filteredFields.filter((field) =>
+            allowedFields.includes(field.name)
+          );
+
+          const sortedFields = filteredFields.sort((a, b) => {
+            const orderMap = {
+              find_q: 1,
+              customField_20: 2,
+              customField_19: 3,
+              customField_79: 4,
+            };
+
+            const aOrder = orderMap[a.name] || 999;
+            const bOrder = orderMap[b.name] || 999;
+
+            return aOrder - bOrder;
+          });
+
+          setFilterFields(sortedFields);
+        } else {
+          console.error(
+            "Failed to fetch filter options: Invalid response format"
+          );
+        }
+      } catch (error) {
+        console.error("Failed to fetch filter options:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFilterOptions();
+  }, [webmasterSectionId]);
 
   const handleSearch = () => {
     const searchParams = {};
@@ -73,15 +130,15 @@ export default function FloatingSearchComponent() {
     }
 
     if (nomerDokumen.trim()) {
-      searchParams.customField_20 = nomerDokumen.trim(); 
+      searchParams.customField_20 = nomerDokumen.trim();
     }
 
     if (jenisDokumen) {
-      searchParams.customField_19 = jenisDokumen; 
+      searchParams.customField_19 = jenisDokumen;
     }
 
     if (tahun) {
-      searchParams.customField_79 = tahun; 
+      searchParams.customField_79 = tahun;
     }
 
     const urlParams = new URLSearchParams();
@@ -93,28 +150,47 @@ export default function FloatingSearchComponent() {
     urlParams.append("fromSearch", "true");
 
     const searchQuery = urlParams.toString();
-    const lawPagePath = `/peraturan-terbaru${searchQuery ? `?${searchQuery}` : ""}`;
+    const lawPagePath = `/peraturan-terbaru${
+      searchQuery ? `?${searchQuery}` : ""
+    }`;
 
     navigate(lawPagePath);
 
     console.log("Redirecting to LawPage with params:", searchParams);
   };
 
-  const currentYear = new Date().getFullYear();
-  const yearOptions = [];
-  for (let year = currentYear; year >= 2000; year--) {
-    yearOptions.push({
-      value: year.toString(),
-      label: year.toString(),
-    });
-  }
+  const getFieldOptions = (fieldName) => {
+    const field = filterFields.find((f) => f.name === fieldName);
 
-  const jenisOptions = [
-    { value: "perda", label: "Peraturan Daerah" },
-    { value: "pergub", label: "Peraturan Gubernur" },
-    { value: "perkada", label: "Peraturan Kepala Daerah" },
-    { value: "sk", label: "Surat Keputusan" },
-  ];
+    if (!field) return [];
+
+    if (fieldName === "customField_79") {
+      const currentYear = new Date().getFullYear();
+      const yearOptions = [];
+      for (let year = 100; year <= currentYear; year++) {
+        yearOptions.push({
+          value: year.toString(),
+          label: year.toString(),
+        });
+      }
+      yearOptions.reverse();
+      return yearOptions;
+    }
+
+    if (field.type === "select" && field.options) {
+      return field.options.map((option) => ({
+        value: option,
+        label: option,
+      }));
+    }
+
+    return [];
+  };
+
+  const getFieldLabel = (fieldName) => {
+    const field = filterFields.find((f) => f.name === fieldName);
+    return field ? field.label : "";
+  };
 
   return (
     <div>
@@ -144,58 +220,72 @@ export default function FloatingSearchComponent() {
               </p>
             </div>
 
-            <div className="mb-8">
-              <div className="relative">
-                <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Silahkan ketikan dokumen yang kamu cari disini..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  className="w-full pl-14 pr-6 py-5 bg-white/80 backdrop-blur-sm border-2 border-white/50 rounded-2xl text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:bg-white/90 transition-all duration-300 text-lg shadow-lg"
-                />
+            {isLoading ? (
+              <div className="text-center py-8">
+                <span className="text-gray-600">Memuat opsi pencarian...</span>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="mb-8">
+                  <div className="relative">
+                    <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                    <input
+                      type="text"
+                      placeholder="Silahkan ketikan dokumen yang kamu cari disini..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                      className="w-full pl-14 pr-6 py-5 bg-white/80 backdrop-blur-sm border-2 border-white/50 rounded-2xl text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:bg-white/90 transition-all duration-300 text-lg shadow-lg h-16"
+                    />
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="relative">
-                <FileText className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Nomer Dokumen"
-                  value={nomerDokumen}
-                  onChange={(e) => setNomerDokumen(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  className="w-full pl-12 pr-4 py-4 bg-white/70 backdrop-blur-sm border-2 border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:bg-white/80 transition-all duration-300 shadow-md"
-                />
-              </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="relative">
+                    <FileText className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                    <input
+                      type="text"
+                      placeholder={
+                        getFieldLabel("customField_20") || "Nomor Dokumen"
+                      }
+                      value={nomerDokumen}
+                      onChange={(e) => setNomerDokumen(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                      className="w-full pl-12 pr-4 py-4 bg-white/70 backdrop-blur-sm border-2 border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:bg-white/80 transition-all duration-300 shadow-md h-14"
+                    />
+                  </div>
 
-              <CustomSelect
-                value={jenisDokumen}
-                onChange={(e) => setJenisDokumen(e.target.value)}
-                name="jenisDokumen"
-                placeholder="Jenis Dokumen"
-                options={jenisOptions}
-              />
+                  <CustomSelect
+                    value={jenisDokumen}
+                    onChange={(e) => setJenisDokumen(e.target.value)}
+                    name="jenisDokumen"
+                    placeholder={
+                      getFieldLabel("customField_19") || "Jenis Dokumen"
+                    }
+                    options={getFieldOptions("customField_19")}
+                  />
 
-              <CustomSelect
-                value={tahun}
-                onChange={(e) => setTahun(e.target.value)}
-                name="tahun"
-                placeholder="Pilih Tahun"
-                options={yearOptions}
-                icon={<Calendar className="w-5 h-5" />}
-              />
-            </div>
+                  <CustomSelect
+                    value={tahun}
+                    onChange={(e) => setTahun(e.target.value)}
+                    name="tahun"
+                    placeholder={
+                      getFieldLabel("customField_79") || "Pilih Tahun"
+                    }
+                    options={getFieldOptions("customField_79")}
+                    icon={<Calendar className="w-5 h-5" />}
+                  />
+                </div>
 
-            <button
-              onClick={handleSearch}
-              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-5 px-8 rounded-2xl transition-all duration-300 text-lg flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-[1.02] transform"
-            >
-              <Search className="w-5 h-5" />
-              Cari Sekarang
-            </button>
+                <button
+                  onClick={handleSearch}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-5 px-8 rounded-2xl transition-all duration-300 text-lg flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:scale-[1.02] transform"
+                >
+                  <Search className="w-5 h-5" />
+                  Cari Sekarang
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
