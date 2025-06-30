@@ -1,13 +1,14 @@
 import * as React from "react";
+import { ChevronRight } from "lucide-react";
 
 function StatusBadge({ children }) {
   return (
     <div
       className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap text-sm"
       style={{
-        backgroundColor: "rgba(0, 62, 156, 0.16)",
-        color: "#003E9C",
-        border: "1px solid #003E9C",
+        backgroundColor: "rgba(22, 163, 74, 0.16)",
+        color: "#15803d",
+        border: "1px solid #15803d",
         borderRadius: "9999px",
         display: "inline-flex",
         justifyContent: "center",
@@ -39,12 +40,7 @@ function LawCard({ number, title, year, status, type, onDetailClick }) {
         onClick={onDetailClick}
       >
         <span className="self-stretch my-auto">Detail</span>
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/cb048e6e7e6dba6c030e69058b3e1833431794882502b07a7cb8f857d11ee174?placeholderIfAbsent=true&apiKey=770a91bd70474eb39d8c1896cfba8984"
-          alt="Arrow icon"
-          className="object-contain w-4 aspect-square"
-        />
+        <ChevronRight className="w-4 h-4 text-green-600" />
       </div>
     </div>
   );
