@@ -106,7 +106,7 @@ export default function Main() {
       </div>
 
       {/* Floating SearchComponent */}
-      <div className="absolute top-100 left-1/2 transform -translate-x-1/2 z-50">
+      <div className="absolute top-32 md:top-100 left-1/2 transform -translate-x-1/2 z-50">
         <SearchComponent />
       </div>
     </div>
