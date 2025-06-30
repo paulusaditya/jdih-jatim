@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../../config/api";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 const StrukturOrganisasiPengelolaanPage = () => {
   const [data, setData] = useState(null);
@@ -24,14 +25,7 @@ const StrukturOrganisasiPengelolaanPage = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-white px-4">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-700 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-sm">Memuat data...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
