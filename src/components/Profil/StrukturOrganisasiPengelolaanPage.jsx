@@ -106,19 +106,6 @@ const StrukturOrganisasiPengelolaanPage = () => {
             dangerouslySetInnerHTML={{ __html: data?.details_id || "" }}
           />
         </div>
-
-        {/* Back to top button - only visible on mobile */}
-        <div className="mt-12 text-center sm:hidden">
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors shadow-lg"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
-            Kembali ke Atas
-          </button>
-        </div>
       </div>
 
       {/* Custom styles for better mobile experience */}
