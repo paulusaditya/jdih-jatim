@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ExternalLink } from "lucide-react"
+import { useState } from "react";
+import { ExternalLink } from "lucide-react";
 
 export default function ProfileVideo() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const videoId = "7paQODa7iDA"
-  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoId = "7paQODa7iDA";
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return (
-    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 p-8 bg-gray-50 min-h-screen items-center">
-      <div className="relative bg-purple-100 rounded-3xl overflow-hidden aspect-video shadow-lg">
+    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 p-8 pt-16 md:pt-100 bg-white min-h-screen items-center">
+      <div className="relative bg-green-100 rounded-3xl overflow-hidden aspect-video shadow-lg">
         {isPlaying ? (
           <iframe
             className="w-full h-full"
@@ -27,7 +27,8 @@ export default function ProfileVideo() {
               alt="Thumbnail video Profile JDIH Jawa Timur"
               className="w-full h-full object-cover"
               onError={(e) => {
-                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjM2MCIgdmlld0JveD0iMCAwIDY0MCAzNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMjAgMTgwTDM0MCAyMDBIMzAwTDMyMCAxODBaIiBmaWxsPSIjOTMxOEY3Ii8+CjwvdXRmPgo='
+                e.target.src =
+                  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjM2MCIgdmlld0JveD0iMCAwIDY0MCAzNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMjAgMTgwTDM0MCAyMDBIMzAwTDMyMCAxODBaIiBmaWxsPSIjOTMxOEY3Ii8+CjwvdXRmPgo=";
               }}
             />
             <button
@@ -37,11 +38,11 @@ export default function ProfileVideo() {
               <div className="w-20 h-20 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-purple-600 ml-1"
+                  className="h-8 w-8 text-green-600 ml-1"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path d="M8 5v14l11-7z"/>
+                  <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
             </button>
@@ -54,11 +55,11 @@ export default function ProfileVideo() {
           Profile JDIH Jawa Timur
         </h2>
         <p className="text-gray-600 text-lg leading-relaxed">
-          Situs ini merupakan situs resmi JDIH Biro Hukum Provinsi Jawa 
-          Timur. Situs ini memuat data dan informasi-informasi produk hukum 
-          baik produk hukum pusat maupun daerah. Disamping itu, situs ini 
-          memuat pula informasi mengenai buku-buku referensi tentang 
-          hukum yang dimiliki oleh Biro Hukum Provinsi Jawa Timur.
+          Situs ini merupakan situs resmi JDIH Biro Hukum Provinsi Jawa Timur.
+          Situs ini memuat data dan informasi-informasi produk hukum baik produk
+          hukum pusat maupun daerah. Disamping itu, situs ini memuat pula
+          informasi mengenai buku-buku referensi tentang hukum yang dimiliki
+          oleh Biro Hukum Provinsi Jawa Timur.
         </p>
         <a
           href="https://www.youtube.com/@JDIHProvJatim"
@@ -71,5 +72,5 @@ export default function ProfileVideo() {
         </a>
       </div>
     </div>
-  )
+  );
 }
