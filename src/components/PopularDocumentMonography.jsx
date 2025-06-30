@@ -55,7 +55,7 @@ export default function PopularDocumentMonography() {
 
   return (
     <div className="bg-white rounded-lg shadow p-4">
-      <h2 className="text-lg font-semibold mb-4 text-emerald-700">
+      <h2 className="text-lg font-semibold mb-4 text-green-700">
         Dokumen Terpopuler
       </h2>
 

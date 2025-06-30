@@ -11,7 +11,6 @@ const generateSlug = (title) => {
     .replace(/\s+/g, "-"); // ganti spasi dengan '-'
 };
 
-
 const PopularDocument = ({ sectionId }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +43,7 @@ const PopularDocument = ({ sectionId }) => {
   return (
     <div className="flex flex-col w-full max-w-[395px] mx-auto">
       <section className="px-5 pt-6 pb-3 rounded-lg bg-zinc-100 text-zinc-800 shadow-md">
-        <h2 className="text-lg md:text-xl font-bold text-sky-900 mb-2">
+        <h2 className="text-lg md:text-xl font-bold text-green-700 mb-2">
           Dokumen Populer
         </h2>
         {loading ? (
@@ -55,7 +54,9 @@ const PopularDocument = ({ sectionId }) => {
           <ul className="mt-3 space-y-3 text-sm md:text-base font-semibold leading-6">
             {documents.map((doc, idx) => (
               <li key={idx} className="break-words hover:underline">
-                <Link to={`/site-pages/dokumen-populer/${generateSlug(doc.title)}`}>
+                <Link
+                  to={`/site-pages/dokumen-populer/${generateSlug(doc.title)}`}
+                >
                   {doc.title}
                 </Link>
               </li>
