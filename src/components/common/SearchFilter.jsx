@@ -4,11 +4,17 @@ import axios from "axios";
 import CustomSelect from "./CustomSelect";
 import baseUrl from "../../config/api";
 
-const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
+const SearchFilter = ({
+  filters,
+  onChange,
+  onSearch,
+  webmasterSectionId,
+  allowedFields = null, 
+}) => {
   const [filterFields, setFilterFields] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const allowedFields = [
+  const defaultAllowedFields = [
     "find_q",
     "customField_20",
     "customField_19",
@@ -26,18 +32,27 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
         );
 
         if (response.data && response.data.status === "success") {
-          const filteredFields = (response.data.data || []).filter((field) =>
-            allowedFields.includes(field.name)
-          );
+          let filteredFields = response.data.data || [];
+
+          if (allowedFields !== null) {
+            filteredFields = filteredFields.filter((field) =>
+              allowedFields.includes(field.name)
+            );
+          }
 
           const sortedFields = filteredFields.sort((a, b) => {
             const orderMap = {
-              find_q: 1, 
+              find_q: 1,
               customField_20: 2,
-              customField_19: 3, 
-              customField_79: 4, 
+              customField_19: 3,
+              customField_79: 4,
             };
-            return orderMap[a.name] - orderMap[b.name];
+
+        
+            const aOrder = orderMap[a.name] || 999;
+            const bOrder = orderMap[b.name] || 999;
+
+            return aOrder - bOrder;
           });
 
           setFilterFields(sortedFields);
@@ -54,7 +69,7 @@ const SearchFilter = ({ filters, onChange, onSearch, webmasterSectionId }) => {
     };
 
     fetchFilterOptions();
-  }, [webmasterSectionId]);
+  }, [webmasterSectionId, allowedFields]);
 
   const handleMultipleChange = (e) => {
     const { name, value } = e.target;

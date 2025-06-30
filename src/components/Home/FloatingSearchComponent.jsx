@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Search, FileText, Calendar, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function CustomSelect({ value, onChange, placeholder, options, icon, name }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,13 +63,41 @@ export default function FloatingSearchComponent() {
   const [jenisDokumen, setJenisDokumen] = useState("");
   const [tahun, setTahun] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSearch = () => {
-    console.log("Searching...", {
-      searchTerm,
-      nomerDokumen,
-      jenisDokumen,
-      tahun,
+    const searchParams = {};
+
+    if (searchTerm.trim()) {
+      searchParams.find_q = searchTerm.trim();
+    }
+
+    if (nomerDokumen.trim()) {
+      searchParams.customField_20 = nomerDokumen.trim(); 
+    }
+
+    if (jenisDokumen) {
+      searchParams.customField_19 = jenisDokumen; 
+    }
+
+    if (tahun) {
+      searchParams.customField_79 = tahun; 
+    }
+
+    const urlParams = new URLSearchParams();
+
+    Object.entries(searchParams).forEach(([key, value]) => {
+      urlParams.append(key, value);
     });
+
+    urlParams.append("fromSearch", "true");
+
+    const searchQuery = urlParams.toString();
+    const lawPagePath = `/peraturan-terbaru${searchQuery ? `?${searchQuery}` : ""}`;
+
+    navigate(lawPagePath);
+
+    console.log("Redirecting to LawPage with params:", searchParams);
   };
 
   const currentYear = new Date().getFullYear();
@@ -100,10 +129,8 @@ export default function FloatingSearchComponent() {
         }}
       />
 
-
       <div className="relative">
         <div className="w-full max-w-3xl">
-
           <div className="bg-white/20 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-2xl border border-white/30">
             <div className="text-center mb-10">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
@@ -125,6 +152,7 @@ export default function FloatingSearchComponent() {
                   placeholder="Silahkan ketikan dokumen yang kamu cari disini..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                   className="w-full pl-14 pr-6 py-5 bg-white/80 backdrop-blur-sm border-2 border-white/50 rounded-2xl text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:bg-white/90 transition-all duration-300 text-lg shadow-lg"
                 />
               </div>
@@ -138,6 +166,7 @@ export default function FloatingSearchComponent() {
                   placeholder="Nomer Dokumen"
                   value={nomerDokumen}
                   onChange={(e) => setNomerDokumen(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                   className="w-full pl-12 pr-4 py-4 bg-white/70 backdrop-blur-sm border-2 border-white/40 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:bg-white/80 transition-all duration-300 shadow-md"
                 />
               </div>
