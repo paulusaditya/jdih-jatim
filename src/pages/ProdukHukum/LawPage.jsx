@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
@@ -33,11 +33,46 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
-
   const [filters, setFilters] = useState({});
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  const allowedFields = [
+    "find_q",
+    "customField_20",
+    "customField_19",
+    "customField_79",
+  ];
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const getUrlParams = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const params = {};
+
+    allowedFields.forEach((field) => {
+      const value = searchParams.get(field);
+      if (value) {
+        params[field] = value;
+      }
+    });
+
+    return params;
+  };
+
+  useEffect(() => {
+    const urlParams = getUrlParams();
+    const fromSearch = new URLSearchParams(location.search).get("fromSearch");
+
+    if (Object.keys(urlParams).length > 0) {
+      setFilters(urlParams);
+
+      if (fromSearch === "true") {
+        setIsInitialLoad(false);
+      }
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -45,7 +80,20 @@ const LawPage = ({
 
   const handleSearch = () => {
     setCurrentPage(1);
+    setIsInitialLoad(false);
     fetchLaws();
+
+    const searchParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value.toString().trim() !== "") {
+        searchParams.append(key, value);
+      }
+    });
+
+    const newUrl = `${location.pathname}${
+      searchParams.toString() ? `?${searchParams.toString()}` : ""
+    }`;
+    window.history.replaceState({}, "", newUrl);
   };
 
   const handleSortChange = (order) => {
@@ -54,8 +102,10 @@ const LawPage = ({
   };
 
   useEffect(() => {
-    fetchLaws();
-  }, [currentPage, sortOrder]);
+    if (!isInitialLoad || Object.keys(filters).length > 0) {
+      fetchLaws();
+    }
+  }, [currentPage, sortOrder, isInitialLoad, filters]);
 
   const fetchLaws = async () => {
     setIsLoading(true);
@@ -215,6 +265,7 @@ const LawPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
+          allowedFields={allowedFields} 
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
@@ -275,7 +326,7 @@ const LawPage = ({
         )}
       </div>
       <WhatsAppButton />
-      <FloatingAccessibilityButton/>
+      <FloatingAccessibilityButton />
     </div>
   );
 };

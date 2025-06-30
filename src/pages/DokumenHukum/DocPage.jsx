@@ -207,6 +207,7 @@ const DocPage = ({
           onChange={handleChange}
           onSearch={handleSearch}
           webmasterSectionId={webmasterSectionId || sectionId}
+          allowedFields={null} 
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
@@ -264,7 +265,7 @@ const DocPage = ({
         )}
       </div>
       <WhatsAppButton />
-      <FloatingAccessibilityButton/>
+      <FloatingAccessibilityButton />
     </div>
   );
 };
