@@ -32,7 +32,7 @@ const LawPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const [filters, setFilters] = useState({});
 
@@ -64,7 +64,7 @@ const LawPage = ({
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
-      params.append("sort_by", "created_at");
+      params.append("sort_by", "nomor");
       params.append("sort_order", sortOrder);
 
       if (sectionId) {
