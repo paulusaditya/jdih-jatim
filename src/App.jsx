@@ -31,6 +31,7 @@ import ArticlePage from "./pages/DokumenHukum/ArticlePage";
 import PropemperdaPage from "./pages/DokumenHukum/PropemperdaPage";
 import PutusanPengadilanPage from "./pages/DokumenHukum/PutusanPengadilanPage";
 import DokumenLangkaPage from "./pages/DokumenHukum/DokumenLangkaPage";
+import BraillePage from "./pages/DokumenHukum/BraillePage";
 import Berita from "./pages/Berita/Berita";
 import DetailBerita from "./pages/Berita/DetailBerita";
 import NotFound from "./pages/NotFound";
@@ -225,6 +226,8 @@ function App() {
                           <PutusanPengadilanPage />
                         ) : sub.link.includes("dokumen-langka") ? (
                           <DokumenLangkaPage />
+                        ) : sub.link.includes("dokumen-braille") ? (
+                          <BraillePage />
                         ) : sub.link.includes("kerjasama") ? (
                           <KerjasamaPage />
                         ) : sub.link.includes("rancangan-perda") ? (
@@ -278,6 +281,10 @@ function App() {
               />
               <Route
                 path="/site-pages/dokumen-langka/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/dokumen-braille/:slug"
                 element={<DocDetailPage />}
               />
               <Route
