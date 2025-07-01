@@ -1,7 +1,7 @@
 import LawPage from "./LawPage";
 import baseUrl from "../../config/api";
 
-const ProdukJatimPage = () => {
+const PeraturanDaerahJatimPage = () => {
   const typeToSectionId = {
     "Keputusan Gubernur": 20,
     "Instruksi Gubernur": 21,
@@ -17,9 +17,9 @@ const ProdukJatimPage = () => {
       title="Produk Hukum Jawa Timur"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },
-        { label: "Produk Hukum Jawa Timur", path: "/site-pages/produk-jatim" },
+        { label: "Produk Hukum Jawa Timur", path: "/peraturan/peraturan-daerah" },
       ]}
-      sectionId="3"
+      sectionId="29"
       years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
       documentTypes={[
         "",
@@ -32,10 +32,10 @@ const ProdukJatimPage = () => {
       ]}
       includeStatus={true}
       includeCategory={true}
-      detailPath="/peraturan/produk-hukum-jatim"
+      detailPath="/peraturan/peraturan-daerah"
       typeToSectionId={typeToSectionId}
     />
   );
 };
 
-export default ProdukJatimPage;
+export default PeraturanDaerahJatimPage;

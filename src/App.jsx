@@ -18,7 +18,7 @@ import StrukturOrganisasiPengelolaan from "./pages/Profil/StrukturOrganisasiPeng
 import StandartOperasional from "./pages/Profil/StandartOperasional";
 import StrukturOrganisasiBiroHukum from "./pages/Profil/StrukturOrganisasiBiroHukum";
 import LawPage from "./pages/ProdukHukum/LawPage";
-import ProdukJatimPage from "./pages/ProdukHukum/ProdukJatimPage";
+import PeraturanDaerahJatimPage from "./pages/ProdukHukum/PeraturanDaerahJatimPage";
 import ProdukKotaPage from "./pages/ProdukHukum/ProdukKotaPage";
 import ProdukDesaPage from "./pages/ProdukHukum/ProdukDesaPage";
 import AlihBahasaPage from "./pages/ProdukHukum/AlihBahasaPage";
@@ -37,7 +37,6 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
-import productLawData from "./data/productLawData";
 import LatestRegulationPage from "./pages/DokumenHukum/LatestRegulationPage";
 import KerjasamaPage from "./pages/DokumenHukum/KerjasamaPage";
 import RancanganPerdaPage from "./pages/DokumenHukum/RancanganPerdaPage";
@@ -49,6 +48,13 @@ import Survey from "./pages/Survey";
 import LayananHukum from "./pages/LayananHukum";
 import Komentar from "./pages/Komentar";
 import Gallery from "./pages/Gallery";
+import PeraturanGubernurPage from "./pages/ProdukHukum/PeraturanGubernurPage";
+import SuratKeputusanGubernurPage from "./pages/ProdukHukum/SuratKeputusanGubernurPage";
+import KeputusanGubernurPage from "./pages/ProdukHukum/KeputusanGubernurPage";
+import InstruksiGubernurPage from "./pages/ProdukHukum/InstruksiGubernurPage";
+import SuratEdaranGubernurPage from "./pages/ProdukHukum/SuratEdaranGubernurPage";
+import KeputusanSekretarisDaerahPage from "./pages/ProdukHukum/KeputusanSekretarisDaerahPage";
+import KeputusanAtasNamaGubernurPage from "./pages/ProdukHukum/KeputusanAtasNamaGubernurPage";
 
 
 function TitleUpdater({ menuData }) {
@@ -169,14 +175,22 @@ function App() {
                         sub.link.startsWith("/") ? sub.link : `/${sub.link}`
                       }`}
                       element={
-                        sub.link.includes("produk-hukum-jatim") ? (
-                          <ProdukJatimPage />
-                        ) : sub.link.includes("produk-hukum-kabupatenkota") ? (
-                          <ProdukKotaPage />
-                        ) : sub.link.includes("produk-hukum-desa") ? (
-                          <ProdukDesaPage />
-                        ) : sub.link.includes("peraturan-alih-bahasa") ? (
-                          <AlihBahasaPage />
+                        sub.link.includes("peraturan-daerah") ? (
+                          <PeraturanDaerahJatimPage />
+                        ) : sub.link.includes("peraturan-gubernur") ? (
+                          <PeraturanGubernurPage />
+                        ) : sub.link.includes("surat-keputusan-gubernur") ? (
+                          <SuratKeputusanGubernurPage />
+                        ) : sub.link.includes("keputusan-gubernur") ? (
+                          <KeputusanGubernurPage />
+                        ) : sub.link.includes("instruksi-gubernur") ? (
+                          <InstruksiGubernurPage />
+                        ) : sub.link.includes("surat-ederan-gubernur") ? (
+                          <SuratEdaranGubernurPage />
+                        ) : sub.link.includes("keputusan-sekretaris-daerah") ? (
+                          <KeputusanSekretarisDaerahPage />
+                        ) : sub.link.includes("keputusan-atas-nama-gubernur") ? (
+                          <KeputusanAtasNamaGubernurPage/>
                         ) : sub.link.includes("about") ? (
                           <Profil />
                         ) : sub.link.includes("contact") ? (
