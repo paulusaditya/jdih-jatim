@@ -24,7 +24,7 @@ const avatarColors = [
 ];
 
 // Ganti dengan site key milikmu
-const RECAPTCHA_SITE_KEY = "YOUR_SITE_KEY";
+const RECAPTCHA_SITE_KEY = "6LdG8HMrAAAAAFcf1y1GyHBKdib7ceVpqcEMrkRM";
 
 export default function KomentarPage() {
   const { id: slug } = useParams();
