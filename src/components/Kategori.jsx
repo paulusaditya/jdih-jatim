@@ -15,7 +15,7 @@ function Kategori() {
 
   return (
     <div className="px-5 pt-6 pb-3 rounded-lg border border-solid border-zinc-100">
-      <div className="mb-3 text-xl font-bold text-sky-900">Kategori</div>
+      <div className="mb-3 text-xl font-bold text-green-600">Kategori</div>
       <div>
         {kategoriList.map((mainItem, index) => (
           <React.Fragment key={index}>
