@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/id";
 import Pagination from "./common/Pagination";
+import NewOldFilter from "./common/NewOldFilter";
 
 dayjs.extend(relativeTime);
 dayjs.locale("id");
@@ -24,7 +25,7 @@ const avatarColors = [
 
 export default function KomentarPage() {
   const { id: slug } = useParams();
-  const [comments, setComments] = useState([]);
+  const [allComments, setAllComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [topicTitle, setTopicTitle] = useState("");
   const [topicId, setTopicId] = useState(null);
@@ -36,9 +37,9 @@ export default function KomentarPage() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
-  const [totalComments, setTotalComments] = useState(0);
+  const [sortOrder, setSortOrder] = useState("desc");
 
-  const fetchCommentsBySlug = async (page = 1) => {
+  const fetchCommentsBySlug = async () => {
     setLoading(true);
     try {
       const topicsRes = await axios.get(
@@ -48,8 +49,7 @@ export default function KomentarPage() {
       const topic = topics.find((t) => t.seo_url_slug_id === slug);
 
       if (!topic) {
-        setComments([]);
-        setTotalComments(0);
+        setAllComments([]);
         setLoading(false);
         return;
       }
@@ -57,21 +57,35 @@ export default function KomentarPage() {
       setTopicTitle(topic.title || topic.seo_title_id);
       setTopicId(topic.id);
 
-      const commentsRes = await axios.get(
-        `https://jdih.pisdev.my.id/api/v2/topics/${topic.id}/comments?per_page=${recordsPerPage}&page=${page}`
-      );
+      let comments = [];
+      let page = 1;
+      let lastPage = 1;
 
-      const commentData = commentsRes.data?.data?.comments || [];
-      const pagination = commentsRes.data?.data?.pagination || {};
+      do {
+        const res = await axios.get(
+          `https://jdih.pisdev.my.id/api/v2/topics/${topic.id}/comments?page=${page}`
+        );
+        const data = res.data?.data;
+        comments = [...comments, ...(data?.comments || [])];
+        lastPage = data?.pagination?.last_page || 1;
+        page++;
+      } while (page <= lastPage);
 
-      setComments(commentData);
-      setTotalComments(pagination.total || commentData.length);
-      setCurrentPage(pagination.current_page || 1);
-    } catch (error) {
-      console.error("Gagal mengambil komentar:", error);
+      sortAndSetComments(comments, sortOrder);
+    } catch (err) {
+      console.error("Gagal mengambil komentar:", err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const sortAndSetComments = (comments, order) => {
+    const sorted = [...comments].sort((a, b) => {
+      return order === "desc"
+        ? new Date(b.created_at) - new Date(a.created_at)
+        : new Date(a.created_at) - new Date(b.created_at);
+    });
+    setAllComments(sorted);
   };
 
   useEffect(() => {
@@ -81,7 +95,6 @@ export default function KomentarPage() {
   const handleSubmit = async () => {
     if (!name.trim() || !email.trim() || !commentText.trim() || !topicId) return;
 
-    // Validasi email sederhana
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
       alert("Format email tidak valid");
@@ -99,8 +112,7 @@ export default function KomentarPage() {
         }
       );
 
-      // Ambil ulang komentar dari halaman pertama
-      fetchCommentsBySlug(1);
+      await fetchCommentsBySlug();
       setName("");
       setEmail("");
       setCommentText("");
@@ -112,11 +124,22 @@ export default function KomentarPage() {
   };
 
   const handlePageChange = (page) => {
-    const totalPages = Math.ceil(totalComments / recordsPerPage);
+    const totalPages = Math.ceil(allComments.length / recordsPerPage);
     if (page >= 1 && page <= totalPages) {
-      fetchCommentsBySlug(page);
+      setCurrentPage(page);
     }
   };
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+    sortAndSetComments(allComments, order);
+    setCurrentPage(1);
+  };
+
+  const paginatedComments = allComments.slice(
+    (currentPage - 1) * recordsPerPage,
+    currentPage * recordsPerPage
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -127,15 +150,18 @@ export default function KomentarPage() {
 
         <div className="flex flex-col md:flex-row gap-8 mt-8">
           <div className="flex-1">
-            <h2 className="text-lg font-medium text-gray-800 mb-6">Komentar</h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-lg font-medium text-gray-800">Komentar</h2>
+              <NewOldFilter onSortChange={handleSortChange} />
+            </div>
 
             <div className="space-y-6">
               {loading ? (
                 <p className="text-gray-500">Memuat komentar...</p>
-              ) : comments.length === 0 ? (
+              ) : paginatedComments.length === 0 ? (
                 <p className="text-gray-500">Belum ada komentar.</p>
               ) : (
-                comments.map((comment, idx) => (
+                paginatedComments.map((comment, idx) => (
                   <div key={comment.id} className="flex gap-4">
                     <div
                       className={`w-10 h-10 rounded-full ${
@@ -167,13 +193,12 @@ export default function KomentarPage() {
             <div className="mt-6">
               <Pagination
                 currentPage={currentPage}
-                totalItems={totalComments}
+                totalItems={allComments.length}
                 itemsPerPage={recordsPerPage}
                 onPageChange={handlePageChange}
               />
             </div>
 
-            {/* Form Komentar */}
             <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6">
               <h2 className="text-lg font-medium text-gray-800 mb-6">
                 Berikan Komentar
@@ -212,7 +237,6 @@ export default function KomentarPage() {
             </div>
           </div>
 
-          {/* Dummy Dokumen Preview */}
           <div className="w-full md:w-80 flex-shrink-0">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
               <div className="w-full h-96 bg-gray-50 flex flex-col">
@@ -239,9 +263,7 @@ export default function KomentarPage() {
                 </div>
               </div>
               <div className="p-3 bg-gray-100 border-t border-gray-200">
-                <p className="text-xs text-gray-600 text-center">
-                  {topicTitle}
-                </p>
+                <p className="text-xs text-gray-600 text-center">{topicTitle}</p>
               </div>
             </div>
           </div>
