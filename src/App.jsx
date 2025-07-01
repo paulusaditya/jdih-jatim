@@ -56,6 +56,7 @@ import InstruksiGubernurPage from "./pages/ProdukHukum/InstruksiGubernurPage";
 import SuratEdaranGubernurPage from "./pages/ProdukHukum/SuratEdaranGubernurPage";
 import KeputusanSekretarisDaerahPage from "./pages/ProdukHukum/KeputusanSekretarisDaerahPage";
 import KeputusanAtasNamaGubernurPage from "./pages/ProdukHukum/KeputusanAtasNamaGubernurPage";
+import NaskahAkademikPage from "./pages/DokumenHukum/NaskahAkademikPage";
 
 
 function TitleUpdater({ menuData }) {
@@ -228,6 +229,8 @@ function App() {
                           <DokumenLangkaPage />
                         ) : sub.link.includes("dokumen-braille") ? (
                           <BraillePage />
+                        ) : sub.link.includes("naskah-akademik") ? (
+                          <NaskahAkademikPage />
                         ) : sub.link.includes("kerjasama") ? (
                           <KerjasamaPage />
                         ) : sub.link.includes("rancangan-perda") ? (
@@ -285,6 +288,10 @@ function App() {
               />
               <Route
                 path="/site-pages/dokumen-braille/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/naskah-akademik/:slug"
                 element={<DocDetailPage />}
               />
               <Route
