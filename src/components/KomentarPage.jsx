@@ -117,7 +117,7 @@ export default function KomentarPage() {
           name: name.trim(),
           email: email.trim(),
           comment: commentText.trim(),
-          "g-recaptcha-response": "03AGdBq26...",
+          "g-recaptcha-response": token,
         }
       );
 
