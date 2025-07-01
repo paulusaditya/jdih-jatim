@@ -7,20 +7,32 @@ const cards = [
   {
     title: "Peraturan Daerah Provinsi Jawa Timur",
     description: "Aturan bersama DPRD dan Gubernur, mengatur kehidupan provinsi.",
-    path: "/peraturan/perda-jatim",
+    path: "/peraturan/peraturan-daerah",
     icon: "/assets/icn/icn.png",
   },
   {
     title: "Peraturan Gubernur Provinsi Jawa Timur",
     description: "Kebijakan teknis Gubernur untuk pelaksanaan atau hal spesifik.",
-    path: "/peraturan/pergub-jatim",
+    path: "/peraturan/peraturan-gubernur",
     icon: "/assets/icn/icn1.png",
+  },
+  {
+    title: "Surat Keputusan Gubernur Jawa Timur",
+    description: "Penetapan Gubernur untuk tindakan atau status tertentu.",
+    path: "/peraturan/surat-keputusan-gubernur",
+    icon: "/assets/icn/icn2.png",
   },
   {
     title: "Keputusan Gubernur Provinsi Jawa Timur",
     description: "Penetapan Gubernur untuk tindakan atau status tertentu.",
-    path: "/peraturan/kepgub-jatim",
-    icon: "/assets/icn/icn2.png",
+    path: "/peraturan/keputusan-gubernur",
+    icon: "/assets/icn/icn6.png",
+  },
+  {
+    title: "Keputusan atas nama Gubernur Jawa Timur",
+    description: "Keputusan yang dikeluarkan atas nama Gubernur oleh pejabat terkait.",
+    path: "/peraturan/keputusan-atas-nama-gubernur",
+    icon: "/assets/icn/icn6.png",
   },
   {
     title: "Instruksi Gubernur Provinsi Jawa Timur",
@@ -31,22 +43,16 @@ const cards = [
   {
     title: "Surat Edaran Gubernur Provinsi Jawa Timur",
     description: "Pemberitahuan administrasi dari Gubernur, petunjuk pelaksanaan.",
-    path: "/peraturan/surat-edaran",
+    path: "/peraturan/surat-edaran-gubernur",
     icon: "/assets/icn/icn4.png",
   },
   {
     title: "Keputusan Sekretaris Daerah Provinsi Jawa Timur",
     description: "Penetapan Sekda terkait administrasi pemerintahan.",
-    path: "/peraturan/keputusan-sekda",
+    path: "/peraturan/keputusan-sekretaris-daerah",
     icon: "/assets/icn/icn5.png",
   },
-  {
-    title: "Keputusan Kepala Perangkat Daerah",
-    description: "Keputusan pimpinan instansi untuk hal spesifik fungsi mereka.",
-    path: "/peraturan/keputusan-kepala-pd",
-    icon: "/assets/icn/icn6.png",
-  },
-]
+];
 
 export default function LegalPortal() {
   return (
@@ -76,7 +82,7 @@ export default function LegalPortal() {
 
         {/* Bottom row - 3 cards + See All card */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {cards.slice(4, 7).map((card, index) => (
+          {cards.slice(4, 8).map((card, index) => (
             <Card
               key={index + 4}
               title={card.title}
@@ -87,7 +93,7 @@ export default function LegalPortal() {
             />
           ))}
 
-          {/* See All Card */}
+          {/* See All Card
           <motion.div
             whileHover={{ scale: 1.05 }}
             initial={{ opacity: 0, y: 50 }}
@@ -107,7 +113,7 @@ export default function LegalPortal() {
               <h2 className="font-bold text-green-700 text-lg mb-2">Lihat Semua</h2>
               <p className="text-green-600 text-sm">Jelajahi semua produk hukum yang tersedia</p>
             </Link>
-          </motion.div>
+          </motion.div> */}
         </div>
       </motion.div>
     </div>
