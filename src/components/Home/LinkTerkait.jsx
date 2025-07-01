@@ -27,9 +27,6 @@ const LinkTerkait = () => {
     <div className="w-full h-full px-6 md:px-20 py-10 flex flex-col items-center gap-8">
       <div className="flex flex-col items-center gap-2 text-center max-w-xl">
         <h2 className="text-2xl font-bold text-green-800">Link Terkait</h2>
-        <p className="text-gray-600 text-base">
-          Akses ke portal milik Kementrian, Dinas, dan Badan terkait.
-        </p>
       </div>
       <div className="flex flex-wrap justify-center gap-4">
         {loading
