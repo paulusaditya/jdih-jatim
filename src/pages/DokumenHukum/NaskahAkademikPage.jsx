@@ -9,7 +9,7 @@ const NaskahAkademikPage = () => (
       { label: "Beranda", path: "/" },
       { label: "Naskah Akademik", path: "/site-pages/naskah-akademik" },
     ]}
-    sectionId="17"
+    sectionId="26"
     years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018"]}
     documentTypes={["", "Buku", "Jurnal", "Artikel", "Penelitian", "Lainnya"]}
     includeStatus={false}
