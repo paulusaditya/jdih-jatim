@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import baseUrl from "../../config/api";
-import SearchComponent from "./FloatingSearchComponent";
+import SearchComponent from "./SearchHome";
 
 export default function Main() {
   const [banners, setBanners] = useState([]);
@@ -103,11 +103,6 @@ export default function Main() {
             onClick={() => setActiveIndex(index)}
           />
         ))}
-      </div>
-
-      {/* Floating SearchComponent */}
-      <div className="absolute top-32 md:top-100 left-1/2 transform -translate-x-1/2 z-50">
-        <SearchComponent />
       </div>
     </div>
   );

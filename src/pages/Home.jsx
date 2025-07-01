@@ -9,7 +9,7 @@ import NewsSection from "../components/Home/News";
 import LatestRegulations from "../components/Home/LatestRegulations";
 import PropemperdaRegulations from "../components/Home/PropemperdaRegulations";
 import Monographic from "../components/Home/Monographic";
-import ProfileVideo from "../components/Home/ProfileVideo";
+import HeroSection from "../components/Home/HeroSection";
 import LegalStatsChart from "../components/Home/LegalStatsChart";
 import WhatsAppButton from "../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../components/common/FloatingAccessibilityButton";
@@ -20,14 +20,14 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <main>
         <Main />
-        <ProfileVideo />
+        <HeroSection />
         <LegalStatsDashboard />
         <LegalPortal />
         <LegalStatsChart />
         <LegalDocumentsSection />
         <JDIHNetworkMembers />
         <JDIHUniversityMembers />
-        <DprdMemberCity/>
+        <DprdMemberCity />
         <NewsSection />
         <LatestRegulations />
         <PropemperdaRegulations />
@@ -35,7 +35,7 @@ export default function Home() {
         <LinkTerkait />
       </main>
       <WhatsAppButton />
-      <FloatingAccessibilityButton/>
+      <FloatingAccessibilityButton />
     </div>
   );
 }
