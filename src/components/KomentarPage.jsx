@@ -23,6 +23,9 @@ const avatarColors = [
   "bg-green-500",
 ];
 
+// Ganti dengan site key milikmu
+const RECAPTCHA_SITE_KEY = "YOUR_SITE_KEY";
+
 export default function KomentarPage() {
   const { id: slug } = useParams();
   const [allComments, setAllComments] = useState([]);
@@ -103,12 +106,17 @@ export default function KomentarPage() {
 
     setIsSubmitting(true);
     try {
+      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, {
+        action: "submit_comment",
+      });
+
       await axios.post(
         `https://jdih.pisdev.my.id/api/v2/topics/${topicId}/comments`,
         {
           name: name.trim(),
           email: email.trim(),
           comment: commentText.trim(),
+          recaptcha_token: token,
         }
       );
 
@@ -140,6 +148,14 @@ export default function KomentarPage() {
     (currentPage - 1) * recordsPerPage,
     currentPage * recordsPerPage
   );
+
+  useEffect(() => {
+    if (window.grecaptcha) {
+      window.grecaptcha.ready(() => {
+        console.log("reCAPTCHA v3 ready");
+      });
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
