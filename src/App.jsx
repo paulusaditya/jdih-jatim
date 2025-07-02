@@ -57,6 +57,7 @@ import SuratEdaranGubernurPage from "./pages/ProdukHukum/SuratEdaranGubernurPage
 import KeputusanSekretarisDaerahPage from "./pages/ProdukHukum/KeputusanSekretarisDaerahPage";
 import KeputusanAtasNamaGubernurPage from "./pages/ProdukHukum/KeputusanAtasNamaGubernurPage";
 import NaskahAkademikPage from "./pages/DokumenHukum/NaskahAkademikPage";
+import ProgramPembentukanPerdaPage from "./pages/DokumenHukum/ProgramPembentukanPerdaPage";
 
 
 function TitleUpdater({ menuData }) {
@@ -231,6 +232,8 @@ function App() {
                           <BraillePage />
                         ) : sub.link.includes("naskah-akademik") ? (
                           <NaskahAkademikPage />
+                        ) : sub.link.includes("program-pembentukan-peraturan-daerah") ? (
+                          <ProgramPembentukanPerdaPage />
                         ) : sub.link.includes("kerjasama") ? (
                           <KerjasamaPage />
                         ) : sub.link.includes("rancangan-perda") ? (
@@ -292,6 +295,10 @@ function App() {
               />
               <Route
                 path="/site-pages/naskah-akademik/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/program-pembentukan-peraturan-daerah/:slug"
                 element={<DocDetailPage />}
               />
               <Route
