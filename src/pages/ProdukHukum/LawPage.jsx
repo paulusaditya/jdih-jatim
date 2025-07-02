@@ -215,6 +215,12 @@ const LawPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
+          allowedFields={[
+            "find_q", // input pencarian
+            "customField_20", // Nomor Dokumen
+            "customField_19", // Jenis Dokumen (dropdown)
+            "customField_79", // Tahun (dropdown)
+          ]}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
