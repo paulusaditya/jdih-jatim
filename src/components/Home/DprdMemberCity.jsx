@@ -125,7 +125,7 @@ export default function DprdMemberCity() {
 
         <motion.div
           layout
-          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4"
+          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-6"
         >
           <AnimatePresence>
             {displayedData.map((item) => (
@@ -146,7 +146,7 @@ export default function DprdMemberCity() {
                 >
                   <div className="h-[140px] rounded-lg border border-gray-200 flex flex-col transition-all duration-300 group-hover:bg-green-50 group-hover:border-green-200 overflow-hidden">
                     {item.logo ? (
-                      <div className="h-16 flex items-center justify-center bg-white border-b border-gray-100 p-2">
+                      <div className="h-40 flex items-center justify-center bg-white border-b border-gray-100 p-2">
                         <img 
                           src={item.logo} 
                           alt={`${item.name} logo`}
