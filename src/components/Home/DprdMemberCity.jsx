@@ -1,232 +1,127 @@
 "use client"
 
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+
 import { ArrowRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
-const dprdData = [
-  {
-    id: 1,
-    name: "Sekretariat DPRD Kabupaten Bangkalan",
-    url: "https://jdih-dprdbangkalankab.jatimprov.go.id/",
-  },
-  {
-    id: 2,
-    name: "Sekretariat DPRD Kabupaten Banyuwangi",
-    url: "https://jdih.dprd.banyuwangikab.go.id/",
-  },
-  {
-    id: 3,
-    name: "Sekretariat DPRD Kota Batu",
-    url: "https://jdih-dprdbatukota.jatimprov.go.id/",
-  },
-  {
-    id: 4,
-    name: "Sekretariat DPRD Kabupaten Blitar",
-    url: "https://jdih-dprdblitarkab.jatimprov.go.id/",
-  },
-  {
-    id: 5,
-    name: "Sekretariat DPRD Kota Blitar",
-    url: "https://jdih-dprdblitarkota.jatimprov.go.id/",
-  },
-  {
-    id: 6,
-    name: "Sekretariat DPRD Kabupaten Bojonegoro",
-    url: "https://jdih-dprdbojonegorokab.jatimprov.go.id/",
-  },
-  {
-    id: 7,
-    name: "Sekretariat DPRD Kabupaten Bondowoso",
-    url: "https://jdihdprd.bondowosokab.go.id/",
-  },
-  {
-    id: 8,
-    name: "Sekretariat DPRD Kabupaten Gresik",
-    url: "https://jdihdprd.gresikkab.go.id/",
-  },
-  {
-    id: 9,
-    name: "Sekretariat DPRD Kabupaten Jember",
-    url: "https://jdih-dprdjemberkab.jatimprov.go.id/",
-  },
-  {
-    id: 10,
-    name: "Sekretariat DPRD Kabupaten jombang",
-    url: "https://jdih.dprd.jombangkab.go.id/",
-  },
-  {
-    id: 11,
-    name: "Sekretariat DPRD Kabupaten Kediri",
-    url: "https://jdih-dprdkedirikab.jatimprov.go.id/",
-  },
-  {
-    id: 12,
-    name: "Sekretariat DPRD Kota Kediri",
-    url: "https://jdih-dprd.kedirikota.go.id/",
-  },
-  {
-    id: 13,
-    name: "Sekretariat DPRD Kabupaten Lamongan",
-    url: "https://jdih-dprdlamongankab.jatimprov.go.id/",
-  },
-  {
-    id: 14,
-    name: "Sekretariat DPRD Kabupaten Lumajang",
-    url: "https://jdih-dprdlumajangkab.jatimprov.go.id/",
-  },
-  {
-    id: 15,
-    name: "Sekretariat DPRD Kabupaten Madiun",
-    url: "https://jdih-dprdmadiunkab.jatimprov.go.id/",
-  },
-  {
-    id: 16,
-    name: "Sekretariat DPRD Kota Madiun",
-    url: "https://jdih-dprd.madiunkota.go.id/",
-  },
-  {
-    id: 17,
-    name: "Sekretariat DPRD Kabupaten Magetan",
-    url: "https://jdih-dprdmagetankab.jatimprov.go.id/",
-  },
-  {
-    id: 18,
-    name: "Sekretariat DPRD Kabupaten Malang",
-    url: "https://jdihdprd.malangkab.go.id/",
-  },
-  {
-    id: 19,
-    name: "Sekretariat DPRD Kota Malang",
-    url: "https://jdihdprd.malangkota.go.id/",
-  },
-  {
-    id: 20,
-    name: "Sekretariat DPRD Kabupaten Mojokerto",
-    url: "https://jdih-dprdmojokertokab.jatimprov.go.id/",
-  },
-  {
-    id: 21,
-    name: "Sekretariat DPRD Kota Mojokerto",
-    url: "https://jdih-dprdmojokertokota.jatimprov.go.id/",
-  },
-  {
-    id: 22,
-    name: "Sekretariat DPRD Kabupaten Nganjuk",
-    url: "https://jdihdprd.nganjukkab.go.id/",
-  },
-  {
-    id: 23,
-    name: "Sekretariat DPRD Kabupaten Ngawi",
-    url: "https://jdih-dprd.ngawikab.go.id/",
-  },
-  {
-    id: 24,
-    name: "Sekretariat DPRD Kabupaten Pacitan",
-    url: "https://jdih-dprdpacitankab.jatimprov.go.id/",
-  },
-  {
-    id: 25,
-    name: "Sekretariat DPRD Kabupaten Pamekasan",
-    url: "https://jdih-dprdpamekasankab.jatimprov.go.id/",
-  },
-  {
-    id: 26,
-    name: "Sekretariat DPRD Kabupaten Pasuruan",
-    url: "https://jdihdprd.pasuruankab.go.id/",
-  },
-  {
-    id: 27,
-    name: "Sekretariat DPRD Kota Pasuruan",
-    url: "https://jdih-dprdpasuruankota.jatimprov.go.id/",
-  },
-  {
-    id: 28,
-    name: "Sekretariat DPRD Kabupaten Ponorogo",
-    url: "https://jdih-dprd.ponorogo.go.id/",
-  },
-  {
-    id: 29,
-    name: "Sekretariat DPRD Kabupaten Probolinggo",
-    url: "https://jdih-dprdprobolinggokab.jatimprov.go.id/",
-  },
-  {
-    id: 30,
-    name: "Sekretariat DPRD Kota Probolinggo",
-    url: "https://jdih-dprdprobolinggokota.jatimprov.go.id/",
-  },
-  {
-    id: 31,
-    name: "Sekretariat DPRD Kabupaten Sampang",
-    url: "https://jdih-dprdsampangkab.jatimprov.go.id/",
-  },
-  {
-    id: 32,
-    name: "Sekretariat DPRD Kabupaten Sidoarjo",
-    url: "https://jdih.dprd-sidoarjo.go.id/",
-  },
-  {
-    id: 33,
-    name: "Sekretariat DPRD Kabupaten Situbondo",
-    url: "https://jdihdprd.situbondokab.go.id/",
-  },
-  {
-    id: 34,
-    name: "Sekretariat DPRD Kabupaten Sumenep",
-    url: "https://dprd.sumenepkab.go.id/jaringan-dokumentasi-dan-informasi-hukum",
-  },
-  {
-    id: 35,
-    name: "Sekretariat DPRD Kota Surabaya",
-    url: "https://jdih-dprdsurabaya.jatimprov.go.id/",
-  },
-  {
-    id: 36,
-    name: "Sekretariat DPRD Kabupaten Trenggalek",
-    url: "https://jdih.dprd.trenggalekkab.go.id/",
-  },
-  {
-    id: 37,
-    name: "Sekretariat DPRD Kabupaten Tuban",
-    url: "https://jdihdprd.tubankab.go.id/",
-  },
-  {
-    id: 38,
-    name: "Sekretariat DPRD Kabupaten Tulungagung",
-    url: "https://jdih.dprd-tulungagungkab.go.id/",
-  },
-  {
-    id: 39,
-    name: "Sekretariat DPRD Provinsi Jawa Timur",
-    url: "https://jdih.dprd.jatimprov.go.id/",
-  },
-]
-
 export default function DprdMemberCity() {
   const [showAll, setShowAll] = useState(false)
+  const [dprdData, setDprdData] = useState([])
+  const [sectionData, setSectionData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchDprdData = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('https://jdih.pisdev.my.id/api/v2/home/partner-dprd?per_page=99')
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
+        const data = await response.json()
+        
+        // Store the section data for title and description
+        setSectionData(data)
+        
+        // Handle the actual API response structure
+        const partners = data.data || []
+        
+        // Transform the data to match the expected format
+        const transformedData = partners.map((item) => ({
+          id: item.id,
+          name: item.title,
+          url: item.link,
+          logo: item.image || item.icon || null
+        }))
+        
+        setDprdData(transformedData)
+      } catch (err) {
+        console.error('Error fetching DPRD data:', err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDprdData()
+  }, [])
+
   const displayedData = showAll ? dprdData : dprdData.slice(0, 6)
+
+  if (loading) {
+    return (
+      <section className="py-8 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-green-800">
+            Anggota DPRD Kota/Kabupaten
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 mt-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-[140px] rounded-lg border border-gray-200 bg-gray-100 animate-pulse">
+                <div className="h-16 bg-gray-200 rounded-t-lg"></div>
+                <div className="p-2">
+                  <div className="h-3 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section className="py-8 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-green-800">
+            Anggota DPRD Kota/Kabupaten
+          </h2>
+          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-600">Error loading data: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-green-800">
-          Anggota DPRD Kota/Kabupaten
+          {sectionData?.title || "Anggota DPRD Kota/Kabupaten"}
         </h2>
+        
+        {sectionData?.description && (
+          <p className="text-gray-600 mt-2 mb-6">{sectionData.description}</p>
+        )}
 
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className={`flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors ${
-              showAll
-                ? "bg-pink-100 text-pink-600 border-pink-300"
-                : "text-green-600 border-green-600 hover:text-green-800"
-            }`}
-          >
-            <span className="hidden md:inline">{showAll ? "LIHAT SEDIKIT" : "LIHAT SEMUA"}</span>
-            <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
-          </button>
-        </div>
+        {dprdData.length > 6 && (
+          <div className="flex justify-end mb-6">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className={`flex items-center font-medium text-sm border rounded px-4 py-2 transition-colors ${
+                showAll
+                  ? "bg-pink-100 text-pink-600 border-pink-300"
+                  : "text-green-600 border-green-600 hover:text-green-800"
+              }`}
+            >
+              <span className="hidden md:inline">{showAll ? "LIHAT SEDIKIT" : "LIHAT SEMUA"}</span>
+              <ArrowRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
+            </button>
+          </div>
+        )}
 
         <motion.div
           layout
@@ -241,21 +136,60 @@ export default function DprdMemberCity() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
+                className="h-[140px]"
               >
-                <Link
-                  to={item.url}
+                <a
+                  href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group block h-full"
                 >
-                  <div className="h-[120px] rounded-lg border border-gray-200 flex items-center justify-center p-4 transition-all duration-300 group-hover:bg-green-50 group-hover:border-green-200">
-                    <p className="text-center text-green-800 font-medium text-sm">{item.name}</p>
+                  <div className="h-[140px] rounded-lg border border-gray-200 flex flex-col transition-all duration-300 group-hover:bg-green-50 group-hover:border-green-200 overflow-hidden">
+                    {item.logo ? (
+                      <div className="h-16 flex items-center justify-center bg-white border-b border-gray-100 p-2">
+                        <img 
+                          src={item.logo} 
+                          alt={`${item.name} logo`}
+                          className="max-h-12 max-w-full object-contain"
+                          onError={(e) => {
+                            e.target.style.display = 'none'
+                            e.target.nextSibling.style.display = 'flex'
+                          }}
+                        />
+                        <div 
+                          className="hidden h-12 w-12 bg-green-100 rounded-full items-center justify-center"
+                        >
+                          <span className="text-green-600 font-bold text-lg">
+                            {item.name.charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-16 flex items-center justify-center bg-green-100 border-b border-gray-100">
+                        <div className="h-12 w-12 bg-green-200 rounded-full flex items-center justify-center">
+                          <span className="text-green-700 font-bold text-lg">
+                            {item.name.charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex-1 flex items-center justify-center p-3">
+                      <p className="text-center text-green-800 font-medium text-xs leading-tight line-clamp-3">
+                        {item.name}
+                      </p>
+                    </div>
                   </div>
-                </Link>
+                </a>
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {dprdData.length === 0 && !loading && (
+          <div className="text-center py-8">
+            <p className="text-gray-500">No data available</p>
+          </div>
+        )}
       </div>
     </section>
   )
