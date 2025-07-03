@@ -104,19 +104,17 @@ const LawPage = ({
       const fullUrl = `${apiUrl}?${params.toString()}`;
 
       const response = await fetch(fullUrl);
-
-      if (!response.ok) {
-        throw new Error(`Invalid response: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Invalid response: ${response.status}`);
 
       const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
+      if (!contentType || !contentType.includes("application/json"))
         throw new Error(`Invalid content type: ${contentType}`);
-      }
 
       const result = await response.json();
-
       let mappedLaws = [];
+
+      const cleanNumber = (val) =>
+        parseInt(String(val).replace(/[^\d]/g, "")) || 0;
 
       if (Array.isArray(result.data)) {
         const rawLaws = result.data;
@@ -125,14 +123,11 @@ const LawPage = ({
           rawLaws.map(async (item) => {
             try {
               const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
-
-              if (!detailRes.ok) {
+              if (!detailRes.ok)
                 throw new Error(`Detail fetch failed: ${detailRes.status}`);
-              }
 
               const detailData = await detailRes.json();
               const fields = {};
-
               detailData.data?.fields?.forEach(
                 (f) => (fields[f.title] = f.details)
               );
@@ -165,6 +160,12 @@ const LawPage = ({
           })
         );
 
+        mappedLaws.sort((a, b) => {
+          const numA = cleanNumber(a.number);
+          const numB = cleanNumber(b.number);
+          return sortOrder === "asc" ? numA - numB : numB - numA;
+        });
+
         setLaws(mappedLaws);
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
       } else {
@@ -187,6 +188,12 @@ const LawPage = ({
             image: item.image,
             slug: item.seo_url_slug_id || item.id,
           };
+        });
+
+        mappedLaws.sort((a, b) => {
+          const numA = cleanNumber(a.number);
+          const numB = cleanNumber(b.number);
+          return sortOrder === "asc" ? numA - numB : numB - numA;
         });
 
         setLaws(mappedLaws);
