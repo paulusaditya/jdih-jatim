@@ -11,6 +11,7 @@ import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const LawPage = ({
   apiUrl,
@@ -262,7 +263,7 @@ const LawPage = ({
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {isLoading ? (
-            <div className="text-center py-8 text-gray-500">Memuat data...</div>
+            <LoadingSpinner/>
           ) : laws.length > 0 ? (
             laws.map((law) => (
               <LawCard

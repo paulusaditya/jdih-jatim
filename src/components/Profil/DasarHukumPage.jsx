@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../../config/api";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 const DasarHukumPage = () => {
   const [htmlContent, setHtmlContent] = useState("");
@@ -22,14 +23,14 @@ const DasarHukumPage = () => {
       });
   }, []);
 
-  if (loading) return <p className="text-center py-10">Memuat...</p>;
+  if (loading) return <LoadingSpinner/>
   if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
 
   return (
     <div className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto bg-gray-100 p-6 md:p-8 rounded-xl shadow-md">
         <div
-          className="prose max-w-none break-words overflow-x-auto prose-p:my-2 prose-li:my-1 prose-a:text-blue-600 prose-strong:text-green-700 prose-p:text-justify"
+          className="prose max-w-none prose-p:my-2 prose-li:my-1 prose-a:text-blue-600 prose-strong:text-green-700 prose-p:text-center prose-p:first:text-green-700 prose-p:nth-of-type(2):text-green-700 prose-p:nth-of-type(3):text-green-700"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
       </div>

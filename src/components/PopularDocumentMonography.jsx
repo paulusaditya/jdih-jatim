@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import baseUrl from "../config/api";
+import LoadingSpinner from "./common/LoadingSpinner";
 
 export default function PopularDocumentMonography() {
   const [books, setBooks] = useState([]);
@@ -60,7 +61,7 @@ export default function PopularDocumentMonography() {
       </h2>
 
       {loading ? (
-        <p className="text-gray-500 text-sm">Memuat data...</p>
+        <LoadingSpinner/>
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
       ) : books.length > 0 ? (
