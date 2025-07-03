@@ -137,12 +137,12 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden bg-white">
       <Router>
         <ScrollToTop />
         <TitleUpdater menuData={menuData} />
         <Header />
-        <main className="flex-grow">
+        <main className="flex-grow overflow-x-hidden">
           {loading ? (
             <div className="flex justify-center items-center h-screen">
               <div className="w-20 h-20 border-4 border-transparent text-green-400 text-4xl animate-spin flex items-center justify-center border-t-green-400 rounded-full">

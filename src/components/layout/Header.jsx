@@ -78,9 +78,7 @@ export default function Header() {
                 rel="noopener noreferrer"
                 className="flex items-center bg-green-800 text-white text-xs px-2 py-1.5 rounded space-x-1 hover:bg-green-900 transition-colors w-fit whitespace-nowrap"
               >
-                <span className="leading-none">
-                  majadigi.jatimprov.go.id
-                </span>
+                <span className="leading-none">majadigi.jatimprov.go.id</span>
                 <ExternalLink size={12} className="flex-shrink-0" />
               </a>
             </div>
@@ -202,7 +200,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-x-2 2xl:gap-x-5 text-green-800">
+    <div className="flex flex-wrap items-center gap-x-2 2xl:gap-x-7 text-green-800">
       {navItems.map((item, index) => (
         <div key={index} className="relative dropdown-container group">
           {item.sub_menus.length > 0 ? (
@@ -306,8 +304,9 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
       {/* Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-transparent z-40 xl:hidden"
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 xl:hidden transition-opacity duration-300"
           onClick={() => setSidebarOpen(false)}
+          aria-label="Close sidebar"
         />
       )}
 
@@ -315,7 +314,7 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
       <div
         className={`fixed inset-y-0 left-0 w-80 max-w-[85vw] bg-white shadow-2xl transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 xl:hidden overflow-y-auto max-h-screen`}
+        } transition-transform duration-300 ease-in-out z-50 xl:hidden overflow-y-auto max-h-screen will-change-transform`}
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-green-50">
