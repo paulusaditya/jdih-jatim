@@ -33,6 +33,7 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
 
   const [filters, setFilters] = useState({});
 
@@ -45,12 +46,14 @@ const LawPage = ({
 
   const handleSearch = () => {
     setCurrentPage(1);
+    setIsInitialLoad(false); // Set to false when user searches
     fetchLaws();
   };
 
   const handleSortChange = (order) => {
     setSortOrder(order);
     setCurrentPage(1);
+    setIsInitialLoad(false); // Set to false when user changes sort
   };
 
   useEffect(() => {
@@ -64,8 +67,15 @@ const LawPage = ({
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
-      params.append("sort_by", "nomor");
-      params.append("sort_order", sortOrder);
+      
+      // Use created_by for initial load, nomor for subsequent requests
+      if (isInitialLoad && currentPage === 1 && Object.keys(filters).length === 0) {
+        params.append("sort_by", "created_by");
+        params.append("sort_order", "desc");
+      } else {
+        params.append("sort_by", "nomor");
+        params.append("sort_order", sortOrder);
+      }
 
       if (sectionId) {
         params.append("section_id", sectionId);
@@ -160,11 +170,14 @@ const LawPage = ({
           })
         );
 
-        mappedLaws.sort((a, b) => {
-          const numA = cleanNumber(a.number);
-          const numB = cleanNumber(b.number);
-          return sortOrder === "asc" ? numA - numB : numB - numA;
-        });
+        // Only sort by number if not initial load
+        if (!isInitialLoad || Object.keys(filters).length > 0) {
+          mappedLaws.sort((a, b) => {
+            const numA = cleanNumber(a.number);
+            const numB = cleanNumber(b.number);
+            return sortOrder === "asc" ? numA - numB : numB - numA;
+          });
+        }
 
         setLaws(mappedLaws);
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
@@ -190,11 +203,14 @@ const LawPage = ({
           };
         });
 
-        mappedLaws.sort((a, b) => {
-          const numA = cleanNumber(a.number);
-          const numB = cleanNumber(b.number);
-          return sortOrder === "asc" ? numA - numB : numB - numA;
-        });
+        // Only sort by number if not initial load
+        if (!isInitialLoad || Object.keys(filters).length > 0) {
+          mappedLaws.sort((a, b) => {
+            const numA = cleanNumber(a.number);
+            const numB = cleanNumber(b.number);
+            return sortOrder === "asc" ? numA - numB : numB - numA;
+          });
+        }
 
         setLaws(mappedLaws);
         setTotalItems(result.data?.pagination?.total || 0);
@@ -209,6 +225,7 @@ const LawPage = ({
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    setIsInitialLoad(false); // Set to false when user changes page
     window.scrollTo(0, 0);
   };
 
