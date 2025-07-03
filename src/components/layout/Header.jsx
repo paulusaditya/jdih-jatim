@@ -45,6 +45,11 @@ export default function Header() {
     };
   }, [isSidebarOpen]);
 
+  // Function to handle menu click and close sidebar
+  const handleMenuClick = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <>
       {/* Top Bar - Hidden on mobile, visible from sm up */}
@@ -151,6 +156,7 @@ export default function Header() {
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setSidebarOpen}
         navItems={navItems}
+        onMenuClick={handleMenuClick}
       />
     </>
   );
@@ -256,7 +262,7 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
   );
 }
 
-function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
+function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems, onMenuClick }) {
   const [activeDropdown, setActiveDropdown] = React.useState(null);
   const location = useLocation();
 
@@ -299,12 +305,18 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
     return topLevelPaths.some((path) => locationPath.startsWith(path));
   };
 
+  // Handle menu click for external links
+  const handleExternalLinkClick = () => {
+    // Close sidebar when external link is clicked
+    setSidebarOpen(false);
+  };
+
   return (
     <>
       {/* Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-40 xl:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-transparent bg-opacity-40 z-40 xl:hidden transition-opacity duration-300"
           onClick={() => setSidebarOpen(false)}
           aria-label="Close sidebar"
         />
@@ -366,6 +378,7 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center bg-green-800 text-white text-sm px-3 py-2 rounded space-x-2 hover:bg-green-900 transition-colors mt-2"
+                onClick={handleExternalLinkClick}
               >
                 <span>majadigi.jatimprov.go.id</span>
                 <ExternalLink size={14} />
@@ -404,6 +417,7 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
                           currentPath={location.pathname}
                           navItems={navItems}
                           isMobile={true}
+                          onMenuClick={onMenuClick}
                         />
                       </div>
                     )}
@@ -416,6 +430,7 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-between p-3 text-green-800 hover:bg-green-50 rounded-lg transition-colors"
+                        onClick={handleExternalLinkClick}
                       >
                         <span className="font-medium break-words">
                           {item.title}
@@ -433,7 +448,7 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems }) {
                             ? "bg-green-100 text-green-900 font-bold"
                             : "text-green-800 hover:bg-green-50"
                         }`}
-                        onClick={() => setSidebarOpen(false)}
+                        onClick={onMenuClick}
                       >
                         <span className="font-medium break-words">
                           {item.title}
@@ -458,6 +473,7 @@ function DropdownMenu({
   currentPath,
   navItems,
   isMobile = false,
+  onMenuClick
 }) {
   const isExternalLink = (link) =>
     link.startsWith("http://") || link.startsWith("https://");
@@ -490,6 +506,13 @@ function DropdownMenu({
     ? "block py-2 px-3 rounded-md transition-colors break-words"
     : "block py-2 px-3 hover:bg-gray-100 rounded-md transition-colors break-words";
 
+  // Handle external link click for submenu
+  const handleExternalLinkClick = () => {
+    if (isMobile && onMenuClick) {
+      onMenuClick();
+    }
+  };
+
   return (
     <div
       className={`${isMobile ? "space-y-1" : "bg-white rounded-lg p-2"} w-full`}
@@ -507,6 +530,7 @@ function DropdownMenu({
             className={`${baseClasses} text-green-800 ${
               isMobile ? "hover:bg-green-50" : ""
             }`}
+            onClick={handleExternalLinkClick}
           >
             <div className="flex items-center justify-between">
               <span>{subMenu.title}</span>
@@ -526,6 +550,7 @@ function DropdownMenu({
                   } font-semibold`
                 : `text-green-800 ${isMobile ? "hover:bg-green-50" : ""}`
             }`}
+            onClick={isMobile ? onMenuClick : undefined}
           >
             {subMenu.title}
           </Link>
