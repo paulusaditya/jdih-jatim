@@ -169,7 +169,11 @@ export default function KomentarPage() {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-medium text-gray-800">Komentar</h2>
-              <NewOldFilter onSortChange={handleSortChange} />
+              <NewOldFilter
+                onSortChange={handleSortChange}
+                newestText="Urutkan Berdasarkan Komentar Terbaru"
+                oldestText="Urutkan Berdasarkan Komentar Terlama"
+              />
             </div>
 
             <div className="space-y-6">
