@@ -266,7 +266,7 @@ const LawPage = ({
   return (
     <div className="px-4 py-16 md:p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
-        {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />}
+        {/* {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />} */}
 
         <SearchFilter
           webmasterSectionId={webmasterSectionId}
