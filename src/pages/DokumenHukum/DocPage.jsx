@@ -11,7 +11,6 @@ import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const DocPage = ({
   apiUrl,
@@ -198,6 +197,7 @@ const DocPage = ({
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -208,7 +208,7 @@ const DocPage = ({
           onChange={handleChange}
           onSearch={handleSearch}
           webmasterSectionId={webmasterSectionId || sectionId}
-          allowedFields={null} 
+          allowedFields={null}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
@@ -216,7 +216,7 @@ const DocPage = ({
             Semua Dokumen ({totalItems})
           </div>
           {isLoading ? (
-            <span className="text-sm text-gray-500">Loading...</span>
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
           ) : (
             <div className="flex justify-between items-center mt-5">
               <NewOldFilter onSortChange={handleSortChange} />
@@ -225,7 +225,11 @@ const DocPage = ({
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
-          {documents.length > 0 ? (
+          {isLoading ? (
+            Array.from({ length: itemsPerPage }).map((_, index) => (
+              <DocumentCard key={index} loading={true} />
+            ))
+          ) : documents.length > 0 ? (
             documents.map((doc) => (
               <DocumentCard
                 key={doc.id}
@@ -241,19 +245,19 @@ const DocPage = ({
             ))
           ) : (
             <div className="text-center py-8 text-gray-500">
-              {isLoading
-                ? <LoadingSpinner/>
-                : "Tidak ada dokumen yang ditemukan"}
+              Tidak ada dokumen yang ditemukan
             </div>
           )}
         </div>
 
-        <Pagination
-          currentPage={currentPage}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
+        {totalItems > itemsPerPage && !isLoading && (
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
 
       <div className="w-full">

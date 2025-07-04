@@ -1,7 +1,13 @@
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 
-function StatusBadge({ children }) {
+function StatusBadge({ children, loading = false }) {
+  if (loading) {
+    return (
+      <div className="h-7 bg-gray-200 rounded-full w-20 animate-pulse"></div>
+    );
+  }
+
   return (
     <div
       className="gap-2 self-stretch px-4 py-1 my-auto whitespace-nowrap"
@@ -26,9 +32,37 @@ function DocCard({
   number,
   onDetailClick,
   image,
+  loading = false,
 }) {
+  if (loading) {
+    return (
+      <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-gray-200 animate-pulse max-md:px-5 max-md:max-w-full">
+        {/* Image skeleton */}
+        <div className="w-[100px] h-[151px] bg-gray-200 rounded-lg"></div>
+
+        {/* Content skeleton */}
+        <div className="flex flex-col flex-1 shrink self-stretch my-auto basis-8 min-w-[240px] max-md:max-w-full">
+          {/* Title skeleton */}
+          <div className="h-6 bg-gray-200 rounded w-3/4 mb-16"></div>
+
+          {/* Badges skeleton */}
+          <div className="flex flex-wrap gap-2 justify-start items-center self-start">
+            <StatusBadge loading={true} />
+            <StatusBadge loading={true} />
+            <StatusBadge loading={true} />
+            <StatusBadge loading={true} />
+            <StatusBadge loading={true} />
+          </div>
+        </div>
+
+        {/* Detail button skeleton */}
+        <div className="h-12 bg-gray-200 rounded-xl w-24"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-green-600 border-solid max-md:px-5 max-md:max-w-full">
+    <div className="flex flex-col md:flex-row gap-4 items-start p-6 mt-5 w-full rounded-xl border border-green-600 border-solid max-md:px-5 max-md:max-w-full hover:shadow-md transition-shadow">
       <img
         src={
           image ||
@@ -50,7 +84,7 @@ function DocCard({
         </div>
       </div>
       <div
-        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-green-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer"
+        className="flex gap-2 justify-center items-center self-stretch px-4 py-3 my-auto text-sm font-semibold leading-6 text-green-600 whitespace-nowrap rounded-xl w-[95px] cursor-pointer hover:bg-green-50 transition-colors"
         onClick={onDetailClick}
       >
         <div className="self-stretch my-auto">Detail</div>
