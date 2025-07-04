@@ -219,7 +219,11 @@ const DocPage = ({
             <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
           ) : (
             <div className="flex justify-between items-center mt-5">
-              <NewOldFilter onSortChange={handleSortChange} />
+              <NewOldFilter
+                onSortChange={handleSortChange}
+                newestText="Urutkan Berdasarkan Dokumen Terlama"
+                oldestText="Urutkan Berdasarkan Dokumen Terbaru"
+              />
             </div>
           )}
         </div>
