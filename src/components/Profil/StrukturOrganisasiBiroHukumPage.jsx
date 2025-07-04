@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../../config/api";
 import { DownloadIcon } from "lucide-react";
-import LoadingSpinner from "../common/LoadingSpinner";
 
 const StrukturOrganisasiBiroHukumPage = () => {
   const [data, setData] = useState(null);
@@ -27,8 +26,35 @@ const StrukturOrganisasiBiroHukumPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <LoadingSpinner />
+      <div className="min-h-screen bg-white">
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          {/* Judul skeleton */}
+          <div className="text-center mb-6">
+            <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-1 animate-pulse"></div>
+            <div className="h-7 bg-gray-200 rounded w-3/4 mx-auto animate-pulse"></div>
+          </div>
+
+          {/* Konten utama skeleton */}
+          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+              
+              {/* Image placeholder */}
+              <div className="h-64 bg-gray-200 rounded-lg mx-auto animate-pulse"></div>
+              
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              
+              {/* Reference text skeleton */}
+              <div className="h-3 bg-gray-200 rounded w-4/5 animate-pulse mt-4"></div>
+              
+              {/* Download button skeleton */}
+              <div className="h-10 bg-gray-200 rounded w-40 animate-pulse mt-6"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -93,6 +119,7 @@ const StrukturOrganisasiBiroHukumPage = () => {
 
           {/* Tombol Download */}
           <div className="mt-6 flex justify-start">
+            
             <a
               href="https://drive.google.com/file/d/1Q831zkmg92BFtJ53t_BdwdsEaud2R74F/view?usp=drive_link"
               target="_blank"

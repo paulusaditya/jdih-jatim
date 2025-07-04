@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../../config/api";
-import LoadingSpinner from "../common/LoadingSpinner";
 
 const StrukturOrganisasiPengelolaanPage = () => {
   const [data, setData] = useState(null);
@@ -12,7 +11,9 @@ const StrukturOrganisasiPengelolaanPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/topics/by-slug/struktur-organisasi-tim-pengelolaan-jdih-provinsi-jawa-timur`)
+      .get(
+        `${baseUrl}/topics/by-slug/struktur-organisasi-tim-pengelolaan-jdih-provinsi-jawa-timur`
+      )
       .then((res) => {
         setData(res.data.data);
         setLoading(false);
@@ -25,7 +26,46 @@ const StrukturOrganisasiPengelolaanPage = () => {
   }, []);
 
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="min-h-screen bg-white">
+        {/* Header skeleton */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+          <div className="text-center">
+            <div className="h-8 bg-gray-200 rounded w-2/3 mx-auto mb-4 animate-pulse"></div>
+          </div>
+        </div>
+
+        {/* Content skeleton */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <div className="bg-white flex justify-center">
+            <div className="space-y-4 w-full">
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+
+              {/* Image skeleton */}
+              <div className="h-64 bg-gray-200 rounded-lg mx-auto animate-pulse my-6"></div>
+
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+
+              {/* Table skeleton */}
+              <div className="mt-6 border border-gray-200 rounded-lg">
+                <div className="grid grid-cols-2 gap-4 p-4">
+                  {Array.from({ length: 8 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="h-4 bg-gray-200 rounded animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -34,13 +74,23 @@ const StrukturOrganisasiPengelolaanPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="bg-red-50 border border-red-200 p-4 sm:p-6 rounded-lg text-red-700 text-center max-w-2xl mx-auto">
             <div className="mb-2">
-              <svg className="w-8 h-8 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-8 h-8 mx-auto text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
             <p className="text-sm sm:text-base">{error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
             >
               Coba Lagi
@@ -65,7 +115,7 @@ const StrukturOrganisasiPengelolaanPage = () => {
       {/* Content Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <div className="bg-white flex justify-center">
-          <div 
+          <div
             className="
               prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 
               max-w-none 
@@ -158,7 +208,8 @@ const StrukturOrganisasiPengelolaanPage = () => {
             margin-bottom: 0.5rem !important;
           }
 
-          .prose ul, .prose ol {
+          .prose ul,
+          .prose ol {
             padding-left: 1.25rem !important;
             margin-bottom: 0.75rem !important;
           }
@@ -173,7 +224,8 @@ const StrukturOrganisasiPengelolaanPage = () => {
           width: 100% !important;
         }
 
-        .prose td, .prose th {
+        .prose td,
+        .prose th {
           border: 1px solid #e5e7eb !important;
           padding: 0.5rem !important;
           text-align: left !important;

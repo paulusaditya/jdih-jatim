@@ -34,8 +34,36 @@ const LogoJdihPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-700"></div>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-12">
+          {/* Header skeleton */}
+          <div className="flex flex-row justify-between items-center mb-8">
+            <div className="h-10 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+            <div className="h-10 bg-gray-200 rounded w-40 animate-pulse"></div>
+          </div>
+
+          {/* Main Content skeleton */}
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            {/* Logo Image skeleton */}
+            <div className="w-full md:w-1/3 flex justify-center md:justify-start">
+              <div className="h-80 w-64 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+
+            {/* Description skeleton */}
+            <div className="w-full md:w-3/3 bg-gray-100 rounded-xl p-10 shadow-md">
+              <div className="space-y-4">
+                <div className="h-6 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+                <div className="space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -58,6 +86,7 @@ const LogoJdihPage = () => {
         {/* Header */}
         <div className="flex flex-row justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-green-700">Logo JDIH</h1>
+          
           <a
             href="https://drive.google.com/file/d/1Q831zkmg92BFtJ53t_BdwdsEaud2R74F/view"
             target="_blank"
