@@ -262,7 +262,12 @@ function NavBar({ isSidebarOpen, setSidebarOpen, navItems }) {
   );
 }
 
-function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems, onMenuClick }) {
+function MobileSidebar({
+  isSidebarOpen,
+  setSidebarOpen,
+  navItems,
+  onMenuClick,
+}) {
   const [activeDropdown, setActiveDropdown] = React.useState(null);
   const location = useLocation();
 
@@ -350,38 +355,37 @@ function MobileSidebar({ isSidebarOpen, setSidebarOpen, navItems, onMenuClick })
         {/* Sidebar Content */}
         <div className="flex-1 overflow-y-auto p-4">
           {/* Mobile Contact Info */}
-          <div className="sm:hidden mb-6 p-3 bg-green-50 rounded-lg">
-            <div className="space-y-2">
+          <div className="sm:hidden mb-4 p-2 bg-green-50 rounded-lg">
+            <div className="space-y-1.5 pb-2.5">
               <div className="flex items-start space-x-2">
                 <Phone
-                  size={16}
+                  size={12}
                   className="text-green-800 mt-0.5 flex-shrink-0"
                 />
-                <span className="text-sm text-green-800">
+                <span className="text-xs text-green-800">
                   031-3520881 031-3524001 (Psw. 1118)
                 </span>
               </div>
               <div className="flex items-start space-x-2">
                 <Mail
-                  size={16}
+                  size={12}
                   className="text-green-800 mt-0.5 flex-shrink-0"
                 />
-                <span className="text-sm text-green-800 break-all">
+                <span className="text-xs text-green-800 break-all">
                   support@jdih.jatimprov.go.id
                 </span>
               </div>
             </div>
-            <div className="mt-3 pt-3 border-t border-green-200">
-              <GoogleTranslate />
+            <div className=" border-t border-green-200">
               <a
                 href="https://majadigi.jatimprov.go.id"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center bg-green-800 text-white text-sm px-3 py-2 rounded space-x-2 hover:bg-green-900 transition-colors mt-2"
+                className="flex items-center bg-green-800 text-white text-xs px-2.5 py-1.5 rounded space-x-1.5 hover:bg-green-900 transition-colors mt-2"
                 onClick={handleExternalLinkClick}
               >
                 <span>majadigi.jatimprov.go.id</span>
-                <ExternalLink size={14} />
+                <ExternalLink size={12} />
               </a>
             </div>
           </div>
@@ -473,7 +477,7 @@ function DropdownMenu({
   currentPath,
   navItems,
   isMobile = false,
-  onMenuClick
+  onMenuClick,
 }) {
   const isExternalLink = (link) =>
     link.startsWith("http://") || link.startsWith("https://");
