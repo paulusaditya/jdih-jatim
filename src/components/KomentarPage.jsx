@@ -165,7 +165,39 @@ export default function KomentarPage() {
           Komentar untuk Dokumen: {topicTitle || `ID ${slug}`}
         </h1>
 
-        <div className="flex flex-col md:flex-row gap-8 mt-8">
+        {/* Sidebar Dokumen - Tampil di atas pada mobile */}
+        <div className="w-full md:hidden mb-8">
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div className="w-full h-96 bg-gray-50 flex flex-col">
+              <div className="p-4 border-b border-gray-200 text-center">
+                <div className="w-12 h-12 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
+                  <span className="text-lg">🏛️</span>
+                </div>
+                <div className="text-xs text-gray-600 leading-tight">
+                  PEMERINTAH DAERAH
+                  <br />
+                  PROVINSI JAWA TENGAH
+                </div>
+              </div>
+              <div className="p-4 flex-1">
+                <div className="space-y-2">
+                  {[...Array(20)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-2 bg-gray-300 rounded"
+                      style={{ width: `${Math.random() * 40 + 60}%` }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="p-3 bg-gray-100 border-t border-gray-200">
+              <p className="text-xs text-gray-600 text-center">{topicTitle}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-medium text-gray-800">Komentar</h2>
@@ -279,7 +311,7 @@ export default function KomentarPage() {
             </div>
           </div>
 
-          <div className="w-full md:w-80 flex-shrink-0">
+          <div className="w-full md:w-80 flex-shrink-0 hidden md:block">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
               <div className="w-full h-96 bg-gray-50 flex flex-col">
                 <div className="p-4 border-b border-gray-200 text-center">
