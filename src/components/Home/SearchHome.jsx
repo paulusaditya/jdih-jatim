@@ -157,7 +157,7 @@ export default function SearchHome({ webmasterSectionId = "10" }) {
     if (fieldName === "customField_79") {
       const currentYear = new Date().getFullYear();
       const yearOptions = [];
-      for (let year = 100; year <= currentYear; year++) {
+      for (let year = 1900; year <= currentYear; year++) {
         yearOptions.push({
           value: year.toString(),
           label: year.toString(),
@@ -261,9 +261,16 @@ export default function SearchHome({ webmasterSectionId = "10" }) {
         </p>
 
         {isLoading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-            <span className="text-gray-600">Memuat opsi pencarian...</span>
+          <div className="space-y-6">
+            <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+            </div>
+
+            <div className="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
           </div>
         ) : (
           <>

@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import baseUrl from "../../config/api";
-import SearchComponent from "./SearchHome";
 
 export default function Main() {
   const [banners, setBanners] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${baseUrl}/home/banners`)
@@ -19,6 +19,9 @@ export default function Main() {
       })
       .catch((error) => {
         console.error("Error fetching banners:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -45,6 +48,26 @@ export default function Main() {
       window.open(link, "_blank");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="w-full relative overflow-visible">
+        <div className="w-full flex justify-center">
+          <div className="w-full h-64 md:h-96 bg-gray-200 animate-pulse rounded-lg"></div>
+        </div>
+
+        {/* Skeleton indicators */}
+        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="w-3 h-3 rounded-full bg-gray-300 animate-pulse"
+            ></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
