@@ -9,7 +9,6 @@ import {
   Linkedin,
   Twitter,
 } from "lucide-react";
-import LoadingSpinner from "../common/LoadingSpinner";
 import Seo from "../../components/common/Seo";
 import baseUrl from "../../config/api";
 
@@ -56,7 +55,33 @@ function RelatedNews({ currentArticleId }) {
     return `${day} ${month} ${year}`;
   };
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="animate-pulse">
+            {/* Image skeleton */}
+            <div className="w-full h-40 bg-gray-200 rounded-lg mb-3"></div>
+
+            {/* Date and category skeleton */}
+            <div className="flex items-center text-xs mb-2">
+              <div className="w-3 h-3 bg-gray-200 rounded mr-1"></div>
+              <div className="h-3 bg-gray-200 rounded w-20"></div>
+              <div className="mx-2 w-1 h-1 bg-gray-200 rounded-full"></div>
+              <div className="h-3 bg-gray-200 rounded w-16"></div>
+            </div>
+
+            {/* Title skeleton */}
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (relatedArticles.length === 0) return null;
 
   return (
@@ -189,7 +214,92 @@ export default function DetailBeritaPage() {
     return new Date(dateString).toLocaleDateString("id-ID", options);
   };
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        {/* Image skeleton */}
+        <div className="w-full h-64 bg-gray-200 rounded-lg mb-6 animate-pulse"></div>
+
+        {/* Title skeleton */}
+        <div className="space-y-2 mb-4">
+          <div className="h-8 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+          <div className="h-8 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+        </div>
+
+        {/* Date and author skeleton */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center">
+            <div className="w-4 h-4 bg-gray-200 rounded mr-1 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+          </div>
+          <div className="h-4 bg-gray-200 rounded w-48 animate-pulse"></div>
+        </div>
+
+        {/* Content skeleton */}
+        <div className="space-y-4 mb-8">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+            </div>
+          ))}
+
+          {/* Image in content skeleton */}
+          <div className="w-full h-48 bg-gray-200 rounded-lg my-6 animate-pulse"></div>
+
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index + 8} className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Share section skeleton */}
+        <div className="flex items-center justify-between border-t pt-4 pb-4">
+          <div className="flex items-center">
+            <div className="h-4 bg-gray-200 rounded w-16 mr-2 animate-pulse"></div>
+            <div className="flex space-x-2">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="w-4 h-4 bg-gray-200 rounded animate-pulse"
+                ></div>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className="w-4 h-4 bg-gray-200 rounded mr-1 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+          </div>
+        </div>
+
+        {/* Related news skeleton */}
+        <div className="mt-12">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="animate-pulse">
+                <div className="w-full h-40 bg-gray-200 rounded-lg mb-3"></div>
+                <div className="flex items-center text-xs mb-2">
+                  <div className="w-3 h-3 bg-gray-200 rounded mr-1"></div>
+                  <div className="h-3 bg-gray-200 rounded w-20"></div>
+                  <div className="mx-2 w-1 h-1 bg-gray-200 rounded-full"></div>
+                  <div className="h-3 bg-gray-200 rounded w-16"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error || !article) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-6 text-center">
@@ -282,7 +392,7 @@ export default function DetailBeritaPage() {
           <div className="flex space-x-2">
             {/* Copy Link */}
             <button
-              className="text-gray-600 hover:text-gray-900 flex items-center"
+              className="text-gray-600 hover:text-gray-900 flex items-center transition-colors"
               onClick={() => {
                 navigator.clipboard
                   .writeText(window.location.href)
@@ -315,7 +425,7 @@ export default function DetailBeritaPage() {
 
             {/* Facebook */}
             <button
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
               onClick={() => shareToSocialMedia("facebook")}
             >
               <Facebook className="h-4 w-4" />
@@ -323,7 +433,7 @@ export default function DetailBeritaPage() {
 
             {/* WhatsApp */}
             <button
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
               onClick={() => shareToSocialMedia("whatsapp")}
             >
               <svg
@@ -341,7 +451,7 @@ export default function DetailBeritaPage() {
 
             {/* Twitter (X) */}
             <button
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
               onClick={() => shareToSocialMedia("x")}
               aria-label="Share to X"
             >
@@ -359,7 +469,7 @@ export default function DetailBeritaPage() {
 
             {/* LinkedIn */}
             <button
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
               onClick={() => shareToSocialMedia("linkedin")}
             >
               <Linkedin className="h-4 w-4" />
@@ -369,7 +479,7 @@ export default function DetailBeritaPage() {
         {/* Back button */}
         <Link
           to="/news"
-          className="inline-flex items-center text-green-600 text-sm"
+          className="inline-flex items-center text-green-600 text-sm hover:text-green-800 transition-colors"
         >
           <ChevronLeftCircle className="h-4 w-4 mr-1" />
           Kembali
