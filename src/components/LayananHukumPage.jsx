@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import Pagination from "./common/Pagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import LoadingSpinner from "./common/LoadingSpinner";
 
 export default function LayananHukumPage() {
   const [allDocuments, setAllDocuments] = useState([]);
@@ -87,7 +88,7 @@ export default function LayananHukumPage() {
         {/* Document List */}
         <div className="space-y-6">
           {loading ? (
-            <p className="text-center text-gray-500">Memuat data...</p>
+            <LoadingSpinner/>
           ) : currentDocs.length === 0 ? (
             <p className="text-center text-gray-500">
               Tidak ada dokumen ditemukan.

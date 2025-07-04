@@ -11,6 +11,7 @@ import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const LawPage = ({
   apiUrl,
@@ -32,7 +33,9 @@ const LawPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
+
   const [filters, setFilters] = useState({});
   const [hasInitialSearch, setHasInitialSearch] = useState(false);
 
@@ -70,12 +73,14 @@ const LawPage = ({
 
   const handleSearch = () => {
     setCurrentPage(1);
+    setIsInitialLoad(false); // Set to false when user searches
     fetchLaws();
   };
 
   const handleSortChange = (order) => {
     setSortOrder(order);
     setCurrentPage(1);
+    setIsInitialLoad(false); // Set to false when user changes sort
   };
 
   useEffect(() => {
@@ -95,8 +100,15 @@ const LawPage = ({
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
-      params.append("sort_by", "created_at");
-      params.append("sort_order", sortOrder);
+      
+      // Use created_by for initial load, nomor for subsequent requests
+      if (isInitialLoad && currentPage === 1 && Object.keys(filters).length === 0) {
+        params.append("sort_by", "created_by");
+        params.append("sort_order", "desc");
+      } else {
+        params.append("sort_by", "nomor");
+        params.append("sort_order", sortOrder);
+      }
 
       if (sectionId) {
         params.append("section_id", sectionId);
@@ -136,19 +148,17 @@ const LawPage = ({
       console.log("Fetching with URL:", fullUrl);
 
       const response = await fetch(fullUrl);
-
-      if (!response.ok) {
-        throw new Error(`Invalid response: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Invalid response: ${response.status}`);
 
       const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
+      if (!contentType || !contentType.includes("application/json"))
         throw new Error(`Invalid content type: ${contentType}`);
-      }
 
       const result = await response.json();
-
       let mappedLaws = [];
+
+      const cleanNumber = (val) =>
+        parseInt(String(val).replace(/[^\d]/g, "")) || 0;
 
       if (Array.isArray(result.data)) {
         const rawLaws = result.data;
@@ -157,14 +167,11 @@ const LawPage = ({
           rawLaws.map(async (item) => {
             try {
               const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
-
-              if (!detailRes.ok) {
+              if (!detailRes.ok)
                 throw new Error(`Detail fetch failed: ${detailRes.status}`);
-              }
 
               const detailData = await detailRes.json();
               const fields = {};
-
               detailData.data?.fields?.forEach(
                 (f) => (fields[f.title] = f.details)
               );
@@ -197,6 +204,15 @@ const LawPage = ({
           })
         );
 
+        // Only sort by number if not initial load
+        if (!isInitialLoad || Object.keys(filters).length > 0) {
+          mappedLaws.sort((a, b) => {
+            const numA = cleanNumber(a.number);
+            const numB = cleanNumber(b.number);
+            return sortOrder === "asc" ? numA - numB : numB - numA;
+          });
+        }
+
         setLaws(mappedLaws);
         setTotalItems(result.pagination?.total || rawLaws.length || 0);
       } else {
@@ -221,6 +237,15 @@ const LawPage = ({
           };
         });
 
+        // Only sort by number if not initial load
+        if (!isInitialLoad || Object.keys(filters).length > 0) {
+          mappedLaws.sort((a, b) => {
+            const numA = cleanNumber(a.number);
+            const numB = cleanNumber(b.number);
+            return sortOrder === "asc" ? numA - numB : numB - numA;
+          });
+        }
+
         setLaws(mappedLaws);
         setTotalItems(result.data?.pagination?.total || 0);
       }
@@ -234,6 +259,7 @@ const LawPage = ({
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    setIsInitialLoad(false); // Set to false when user changes page
     window.scrollTo(0, 0);
   };
 
@@ -247,7 +273,12 @@ const LawPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
-          allowedFields={allowedFields}
+          allowedFields={[
+            "find_q", // input pencarian
+            "customField_20", // Nomor Dokumen
+            "customField_19", // Jenis Dokumen (dropdown)
+            "customField_79", // Tahun (dropdown)
+          ]}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
@@ -265,7 +296,7 @@ const LawPage = ({
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {isLoading ? (
-            <div className="text-center py-8 text-gray-500">Memuat data...</div>
+            <LoadingSpinner/>
           ) : laws.length > 0 ? (
             laws.map((law) => (
               <LawCard

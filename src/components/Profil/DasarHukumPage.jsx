@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../../config/api";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 const DasarHukumPage = () => {
   const [htmlContent, setHtmlContent] = useState("");
@@ -22,7 +23,7 @@ const DasarHukumPage = () => {
       });
   }, []);
 
-  if (loading) return <p className="text-center py-10">Memuat...</p>;
+  if (loading) return <LoadingSpinner/>
   if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
 
   return (

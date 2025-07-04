@@ -54,20 +54,17 @@ const StrukturOrganisasiPengelolaanPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header Section */}
-      <div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-700 mb-4 leading-tight">
-              {data?.title || "Struktur Organisasi Pengelolaan JDIH"}
-            </h1>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="text-center">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-700 mb-4 leading-tight">
+            {data?.title || "Struktur Organisasi Pengelolaan JDIH"}
+          </h1>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="bg-white">
-          {/* Content with responsive typography and spacing */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="bg-white flex justify-center">
           <div 
             className="
               prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 
@@ -102,76 +99,15 @@ const StrukturOrganisasiPengelolaanPage = () => {
         </div>
       </div>
 
-      {/* Custom styles for better mobile experience */}
+      {/* Global Styles */}
       <style jsx global>{`
-        /* Custom responsive styles for content */
-        @media (max-width: 640px) {
-          .prose img {
-            max-width: 100% !important;
-            height: auto !important;
-            margin: 1rem auto !important;
-          }
-          
-          .prose table {
-            font-size: 0.875rem !important;
-            display: block !important;
-            overflow-x: auto !important;
-            white-space: nowrap !important;
-          }
-          
-          .prose pre {
-            overflow-x: auto !important;
-            font-size: 0.75rem !important;
-          }
-          
-          .prose blockquote {
-            margin: 1rem 0 !important;
-            padding: 0.5rem 1rem !important;
-          }
+        .prose img {
+          display: block !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
         }
 
-        @media (max-width: 480px) {
-          .prose {
-            font-size: 0.875rem !important;
-            line-height: 1.5 !important;
-          }
-          
-          .prose h1 {
-            font-size: 1.5rem !important;
-            line-height: 1.3 !important;
-            margin-bottom: 1rem !important;
-          }
-          
-          .prose h2 {
-            font-size: 1.25rem !important;
-            line-height: 1.3 !important;
-            margin-top: 1.5rem !important;
-            margin-bottom: 0.75rem !important;
-          }
-          
-          .prose h3 {
-            font-size: 1.125rem !important;
-            line-height: 1.3 !important;
-            margin-top: 1.25rem !important;
-            margin-bottom: 0.5rem !important;
-          }
-          
-          .prose p {
-            margin-bottom: 0.75rem !important;
-          }
-          
-          .prose ul, .prose ol {
-            padding-left: 1.25rem !important;
-            margin-bottom: 0.75rem !important;
-          }
-          
-          .prose li {
-            margin-bottom: 0.25rem !important;
-          }
-        }
-
-        /* Ensure images in org chart are responsive */
-        .prose img[src*="struktur"], 
+        .prose img[src*="struktur"],
         .prose img[src*="organisasi"],
         .prose img[src*="chart"] {
           width: 100% !important;
@@ -180,26 +116,68 @@ const StrukturOrganisasiPengelolaanPage = () => {
           object-fit: contain !important;
         }
 
-        /* Handle wide tables better on mobile */
+        @media (max-width: 640px) {
+          .prose {
+            font-size: 0.875rem !important;
+          }
+
+          .prose img {
+            max-width: 100% !important;
+            height: auto !important;
+          }
+
+          .prose table {
+            display: block !important;
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            font-size: 0.875rem !important;
+          }
+
+          .prose pre {
+            overflow-x: auto !important;
+            font-size: 0.75rem !important;
+          }
+
+          .prose blockquote {
+            margin: 1rem 0 !important;
+            padding: 0.5rem 1rem !important;
+          }
+
+          .prose h1 {
+            font-size: 1.5rem !important;
+            margin-bottom: 1rem !important;
+          }
+
+          .prose h2 {
+            font-size: 1.25rem !important;
+            margin-bottom: 0.75rem !important;
+          }
+
+          .prose h3 {
+            font-size: 1.125rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+
+          .prose ul, .prose ol {
+            padding-left: 1.25rem !important;
+            margin-bottom: 0.75rem !important;
+          }
+
+          .prose li {
+            margin-bottom: 0.25rem !important;
+          }
+        }
+
         .prose table {
           border-collapse: collapse !important;
           width: 100% !important;
         }
-        
+
         .prose td, .prose th {
           border: 1px solid #e5e7eb !important;
           padding: 0.5rem !important;
           text-align: left !important;
           vertical-align: top !important;
-        }
-
-        @media (max-width: 640px) {
-          .prose table {
-            display: block !important;
-            overflow-x: auto !important;
-            white-space: nowrap !important;
-            -webkit-overflow-scrolling: touch !important;
-          }
         }
       `}</style>
     </div>

@@ -12,7 +12,6 @@ export default function SurveyPage() {
   });
 
   const [charCount, setCharCount] = useState(0);
-  const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
   const maxChars = 500;
 
   const handleInputChange = (e) => {
@@ -21,17 +20,8 @@ export default function SurveyPage() {
     if (name === "message") setCharCount(value.length);
   };
 
-  const handleRecaptchaChange = (value) => {
-    setIsRecaptchaVerified(!!value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!isRecaptchaVerified) {
-      alert("Please complete the reCAPTCHA verification");
-      return;
-    }
 
     const { name, email, phone, subject, message } = formData;
     const waMessage =
@@ -49,7 +39,6 @@ export default function SurveyPage() {
 
     setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     setCharCount(0);
-    setIsRecaptchaVerified(false);
   };
 
   return (
@@ -161,26 +150,6 @@ export default function SurveyPage() {
                   <div className="text-right text-xs text-gray-500 mt-1">
                     {charCount}/{maxChars}
                   </div>
-                </div>
-
-                {/* reCAPTCHA Placeholder */}
-                <div className="flex items-center space-x-2 py-4">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="recaptcha"
-                      checked={isRecaptchaVerified}
-                      onChange={(e) => setIsRecaptchaVerified(e.target.checked)}
-                      className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500"
-                    />
-                    <label
-                      htmlFor="recaptcha"
-                      className="ml-2 text-sm text-gray-700"
-                    >
-                      I'm not a robot
-                    </label>
-                  </div>
-                  <div className="text-xs text-gray-500">reCAPTCHA</div>
                 </div>
 
                 <button

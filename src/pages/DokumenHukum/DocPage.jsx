@@ -11,6 +11,7 @@ import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const DocPage = ({
   apiUrl,
@@ -241,7 +242,7 @@ const DocPage = ({
           ) : (
             <div className="text-center py-8 text-gray-500">
               {isLoading
-                ? "Memuat data..."
+                ? <LoadingSpinner/>
                 : "Tidak ada dokumen yang ditemukan"}
             </div>
           )}

@@ -23,6 +23,9 @@ const avatarColors = [
   "bg-green-500",
 ];
 
+// Ganti dengan site key milikmu
+const RECAPTCHA_SITE_KEY = "6LdG8HMrAAAAAFcf1y1GyHBKdib7ceVpqcEMrkRM";
+
 export default function KomentarPage() {
   const { id: slug } = useParams();
   const [allComments, setAllComments] = useState([]);
@@ -93,7 +96,8 @@ export default function KomentarPage() {
   }, [slug]);
 
   const handleSubmit = async () => {
-    if (!name.trim() || !email.trim() || !commentText.trim() || !topicId) return;
+    if (!name.trim() || !email.trim() || !commentText.trim() || !topicId)
+      return;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
@@ -103,12 +107,17 @@ export default function KomentarPage() {
 
     setIsSubmitting(true);
     try {
+      const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, {
+        action: "submit_comment",
+      });
+
       await axios.post(
         `https://jdih.pisdev.my.id/api/v2/topics/${topicId}/comments`,
         {
           name: name.trim(),
           email: email.trim(),
           comment: commentText.trim(),
+          "g-recaptcha-response": token,
         }
       );
 
@@ -141,6 +150,14 @@ export default function KomentarPage() {
     currentPage * recordsPerPage
   );
 
+  useEffect(() => {
+    if (window.grecaptcha) {
+      window.grecaptcha.ready(() => {
+        console.log("reCAPTCHA v3 ready");
+      });
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
@@ -152,7 +169,11 @@ export default function KomentarPage() {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-medium text-gray-800">Komentar</h2>
-              <NewOldFilter onSortChange={handleSortChange} />
+              <NewOldFilter
+                onSortChange={handleSortChange}
+                newestText="Urutkan Berdasarkan Komentar Terbaru"
+                oldestText="Urutkan Berdasarkan Komentar Terlama"
+              />
             </div>
 
             <div className="space-y-6">
@@ -227,7 +248,12 @@ export default function KomentarPage() {
                 <div className="flex justify-end">
                   <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting || !name.trim() || !email.trim() || !commentText.trim()}
+                    disabled={
+                      isSubmitting ||
+                      !name.trim() ||
+                      !email.trim() ||
+                      !commentText.trim()
+                    }
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Mengirim..." : "Kirim"}
@@ -263,7 +289,9 @@ export default function KomentarPage() {
                 </div>
               </div>
               <div className="p-3 bg-gray-100 border-t border-gray-200">
-                <p className="text-xs text-gray-600 text-center">{topicTitle}</p>
+                <p className="text-xs text-gray-600 text-center">
+                  {topicTitle}
+                </p>
               </div>
             </div>
           </div>

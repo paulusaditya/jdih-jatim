@@ -32,7 +32,7 @@ const cards = [
     title: "Keputusan atas nama Gubernur Jawa Timur",
     description: "Keputusan yang dikeluarkan atas nama Gubernur oleh pejabat terkait.",
     path: "/peraturan/keputusan-atas-nama-gubernur",
-    icon: "/assets/icn/icn6.png",
+    icon: "/assets/icn/icn7.png",
   },
   {
     title: "Instruksi Gubernur Provinsi Jawa Timur",

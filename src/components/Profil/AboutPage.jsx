@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import baseUrl from "../../config/api";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function AboutPage() {
   const [content, setContent] = useState("");
@@ -33,7 +34,7 @@ export default function AboutPage() {
             dangerouslySetInnerHTML={{ __html: content }}
           />
         ) : (
-          <p className="text-gray-500">Memuat konten...</p>
+          <LoadingSpinner/>
         )}
       </div>
     </div>

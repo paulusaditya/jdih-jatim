@@ -57,6 +57,7 @@ import SuratEdaranGubernurPage from "./pages/ProdukHukum/SuratEdaranGubernurPage
 import KeputusanSekretarisDaerahPage from "./pages/ProdukHukum/KeputusanSekretarisDaerahPage";
 import KeputusanAtasNamaGubernurPage from "./pages/ProdukHukum/KeputusanAtasNamaGubernurPage";
 import NaskahAkademikPage from "./pages/DokumenHukum/NaskahAkademikPage";
+import ProgramPembentukanPerdaPage from "./pages/DokumenHukum/ProgramPembentukanPerdaPage";
 
 
 function TitleUpdater({ menuData }) {
@@ -136,12 +137,12 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden bg-white">
       <Router>
         <ScrollToTop />
         <TitleUpdater menuData={menuData} />
         <Header />
-        <main className="flex-grow">
+        <main className="flex-grow overflow-x-hidden">
           {loading ? (
             <div className="flex justify-center items-center h-screen">
               <div className="w-20 h-20 border-4 border-transparent text-green-400 text-4xl animate-spin flex items-center justify-center border-t-green-400 rounded-full">
@@ -231,6 +232,8 @@ function App() {
                           <BraillePage />
                         ) : sub.link.includes("naskah-akademik") ? (
                           <NaskahAkademikPage />
+                        ) : sub.link.includes("program-pembentukan-peraturan-daerah") ? (
+                          <ProgramPembentukanPerdaPage />
                         ) : sub.link.includes("kerjasama") ? (
                           <KerjasamaPage />
                         ) : sub.link.includes("rancangan-perda") ? (
@@ -292,6 +295,10 @@ function App() {
               />
               <Route
                 path="/site-pages/naskah-akademik/:slug"
+                element={<DocDetailPage />}
+              />
+              <Route
+                path="/site-pages/program-pembentukan-peraturan-daerah/:slug"
                 element={<DocDetailPage />}
               />
               <Route
