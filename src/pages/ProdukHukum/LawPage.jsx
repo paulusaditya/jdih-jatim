@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import LawCard from "../../components/ProdukHukum/LawCard";
@@ -33,11 +33,36 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
-
   const [filters, setFilters] = useState({});
+  const [hasInitialSearch, setHasInitialSearch] = useState(false);
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const allowedFields = [
+    "find_q",
+    "customField_20",
+    "customField_19",
+    "customField_79",
+  ];
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const initialFilters = {};
+
+    for (const [key, value] of urlParams.entries()) {
+      if (key !== "fromSearch" && value.trim() !== "") {
+        initialFilters[key] = value;
+      }
+    }
+
+    if (Object.keys(initialFilters).length > 0) {
+      setFilters(initialFilters);
+      setHasInitialSearch(true);
+      console.log("Initial filters from URL:", initialFilters);
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -55,7 +80,13 @@ const LawPage = ({
 
   useEffect(() => {
     fetchLaws();
-  }, [currentPage, sortOrder]);
+  }, [currentPage, sortOrder, filters]);
+
+  useEffect(() => {
+    if (hasInitialSearch && Object.keys(filters).length > 0) {
+      fetchLaws();
+    }
+  }, [hasInitialSearch, filters]);
 
   const fetchLaws = async () => {
     setIsLoading(true);
@@ -102,6 +133,7 @@ const LawPage = ({
       });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
+      console.log("Fetching with URL:", fullUrl);
 
       const response = await fetch(fullUrl);
 
@@ -208,13 +240,14 @@ const LawPage = ({
   return (
     <div className="px-4 py-16 md:p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
-        {/* {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />} */}
+        {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />}
 
         <SearchFilter
           webmasterSectionId={webmasterSectionId}
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
+          allowedFields={allowedFields}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
