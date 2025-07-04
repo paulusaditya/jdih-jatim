@@ -11,7 +11,6 @@ import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const LawPage = ({
   apiUrl,
@@ -34,7 +33,7 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const [filters, setFilters] = useState({});
   const [hasInitialSearch, setHasInitialSearch] = useState(false);
@@ -73,14 +72,14 @@ const LawPage = ({
 
   const handleSearch = () => {
     setCurrentPage(1);
-    setIsInitialLoad(false); // Set to false when user searches
+    setIsInitialLoad(false);
     fetchLaws();
   };
 
   const handleSortChange = (order) => {
     setSortOrder(order);
     setCurrentPage(1);
-    setIsInitialLoad(false); // Set to false when user changes sort
+    setIsInitialLoad(false);
   };
 
   useEffect(() => {
@@ -100,9 +99,12 @@ const LawPage = ({
       params.append("per_page", itemsPerPage);
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
-      
-      // Use created_by for initial load, nomor for subsequent requests
-      if (isInitialLoad && currentPage === 1 && Object.keys(filters).length === 0) {
+
+      if (
+        isInitialLoad &&
+        currentPage === 1 &&
+        Object.keys(filters).length === 0
+      ) {
         params.append("sort_by", "created_by");
         params.append("sort_order", "desc");
       } else {
@@ -204,7 +206,6 @@ const LawPage = ({
           })
         );
 
-        // Only sort by number if not initial load
         if (!isInitialLoad || Object.keys(filters).length > 0) {
           mappedLaws.sort((a, b) => {
             const numA = cleanNumber(a.number);
@@ -237,7 +238,6 @@ const LawPage = ({
           };
         });
 
-        // Only sort by number if not initial load
         if (!isInitialLoad || Object.keys(filters).length > 0) {
           mappedLaws.sort((a, b) => {
             const numA = cleanNumber(a.number);
@@ -259,7 +259,7 @@ const LawPage = ({
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setIsInitialLoad(false); // Set to false when user changes page
+    setIsInitialLoad(false);
     window.scrollTo(0, 0);
   };
 
@@ -274,10 +274,10 @@ const LawPage = ({
           onChange={handleChange}
           onSearch={handleSearch}
           allowedFields={[
-            "find_q", // input pencarian
-            "customField_20", // Nomor Dokumen
-            "customField_19", // Jenis Dokumen (dropdown)
-            "customField_79", // Tahun (dropdown)
+            "find_q",
+            "customField_20",
+            "customField_19",
+            "customField_79",
           ]}
         />
 
@@ -286,7 +286,7 @@ const LawPage = ({
             Semua Dokumen Hukum ({totalItems})
           </div>
           {isLoading ? (
-            <span className="text-sm text-gray-500">Loading...</span>
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
           ) : (
             <div className="flex justify-between items-center">
               <NewOldFilter onSortChange={handleSortChange} />
@@ -296,7 +296,9 @@ const LawPage = ({
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {isLoading ? (
-            <LoadingSpinner/>
+            Array.from({ length: itemsPerPage }).map((_, index) => (
+              <LawCard key={index} loading={true} />
+            ))
           ) : laws.length > 0 ? (
             laws.map((law) => (
               <LawCard
@@ -318,7 +320,7 @@ const LawPage = ({
           )}
         </div>
 
-        {totalItems > itemsPerPage && (
+        {totalItems > itemsPerPage && !isLoading && (
           <Pagination
             currentPage={currentPage}
             totalItems={totalItems}
