@@ -72,7 +72,7 @@ function DocCard({
         className="w-[100px] h-[151px] rounded-lg object-cover md:mr-4"
       />
       <div className="flex flex-col flex-1 shrink self-stretch my-auto basis-8 min-w-[240px] max-md:max-w-full">
-        <div className="text-base font-bold leading-6 text-zinc-800 max-md:max-w-full mb-16">
+        <div className="text-base font-bold leading-6 text-zinc-800 max-md:max-w-full mb-4 md:mb-16">
           {title}
         </div>
         <div className="flex flex-wrap gap-2 justify-start items-center self-start text-sm text-left text-green-950">
