@@ -178,7 +178,23 @@ export default function KomentarPage() {
 
             <div className="space-y-6">
               {loading ? (
-                <p className="text-gray-500">Memuat komentar...</p>
+                <div className="space-y-6">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index} className="flex gap-4 animate-pulse">
+                      <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="h-4 bg-gray-200 rounded w-24"></div>
+                          <div className="h-3 bg-gray-200 rounded w-16"></div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="h-3 bg-gray-200 rounded w-full"></div>
+                          <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ) : paginatedComments.length === 0 ? (
                 <p className="text-gray-500">Belum ada komentar.</p>
               ) : (

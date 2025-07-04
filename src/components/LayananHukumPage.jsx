@@ -5,7 +5,6 @@ import { Search } from "lucide-react";
 import Pagination from "./common/Pagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import LoadingSpinner from "./common/LoadingSpinner";
 
 export default function LayananHukumPage() {
   const [allDocuments, setAllDocuments] = useState([]);
@@ -88,7 +87,28 @@ export default function LayananHukumPage() {
         {/* Document List */}
         <div className="space-y-6">
           {loading ? (
-            <LoadingSpinner/>
+            <div className="space-y-6">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white shadow-md border border-gray-200 rounded-2xl overflow-hidden animate-pulse"
+                >
+                  <div className="p-6 flex gap-6">
+                    <div className="w-32 h-44 bg-gray-200 rounded-lg"></div>
+                    <div className="flex-1 space-y-4">
+                      <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 bg-gray-200 rounded"></div>
+                          <div className="h-6 bg-gray-200 rounded w-24"></div>
+                        </div>
+                        <div className="h-12 bg-gray-200 rounded w-40"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : currentDocs.length === 0 ? (
             <p className="text-center text-gray-500">
               Tidak ada dokumen ditemukan.
@@ -97,7 +117,7 @@ export default function LayananHukumPage() {
             currentDocs.map((doc) => (
               <div
                 key={doc.id}
-                className="bg-white shadow-md border border-gray-200 rounded-2xl overflow-hidden"
+                className="bg-white shadow-md border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <div className="p-6 flex gap-6">
                   <div className="w-32 h-44 flex-shrink-0 overflow-hidden rounded-lg border border-gray-300 bg-gray-100">
