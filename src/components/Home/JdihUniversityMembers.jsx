@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import LoadingSpinner from "../common/LoadingSpinner";
 import baseUrl from "../../config/api";
 
 export default function JDIHUniversityMembers() {
@@ -31,7 +30,14 @@ export default function JDIHUniversityMembers() {
         </h2>
 
         {loading ? (
-          <LoadingSpinner />
+          <div className="grid gap-6 justify-items-center grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-[182px] h-[212px] bg-gray-200 animate-pulse rounded-2xl"
+              ></div>
+            ))}
+          </div>
         ) : (
           <div className="grid gap-6 justify-items-center grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {members.map((member) => (

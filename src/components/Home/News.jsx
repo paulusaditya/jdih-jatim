@@ -1,87 +1,103 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react"
-import { Link } from "react-router-dom"
-import LoadingSpinner from "../common/LoadingSpinner";
-import baseUrl from "../../config/api"
-
+import { useState, useEffect } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
+import baseUrl from "../../config/api";
 
 export default function NewsSection() {
-  const [newsItems, setNewsItems] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 1
+  const [newsItems, setNewsItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1;
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        setLoading(true)
-        const response = await fetch(`${baseUrl}/topics?webmaster_section_id=3`)
+        setLoading(true);
+        const response = await fetch(
+          `${baseUrl}/topics?webmaster_section_id=3`
+        );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch news data")
+          throw new Error("Failed to fetch news data");
         }
 
-        const data = await response.json()
+        const data = await response.json();
 
         const formattedNews = Array.isArray(data.data.data)
           ? data.data.data.map((item) => {
-              const date = new Date(item.date)
-              const formattedDate = `${date.getDate().toString().padStart(2, "0")} - ${(date.getMonth() + 1)
+              const date = new Date(item.date);
+              const formattedDate = `${date
+                .getDate()
                 .toString()
-                .padStart(2, "0")} - ${date.getFullYear()}`
+                .padStart(2, "0")} - ${(date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0")} - ${date.getFullYear()}`;
 
               return {
                 id: item.id,
                 title: item.title,
-                content: item.seo_description_id || item.excerpt || "No description available",
+                content:
+                  item.seo_description_id ||
+                  item.excerpt ||
+                  "No description available",
                 image: item.image || "/placeholder.svg?height=300&width=500",
                 date: formattedDate,
-                slug: item.seo_url_slug_id || `news/${item.id}`, // Use slug from API
-              }
+                slug: item.seo_url_slug_id || `news/${item.id}`,
+              };
             })
-          : []
+          : [];
 
-        setNewsItems(formattedNews)
+        setNewsItems(formattedNews);
       } catch (err) {
-        setError(err.message || "An unknown error occurred")
-        console.error("Error fetching news:", err)
+        setError(err.message || "An unknown error occurred");
+        console.error("Error fetching news:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchNews()
-  }, [])
+    fetchNews();
+  }, []);
 
-  const totalPages = Math.ceil(newsItems.length / itemsPerPage)
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = newsItems.slice(indexOfFirstItem, indexOfLastItem)
+  const totalPages = Math.ceil(newsItems.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = newsItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber)
+      setCurrentPage(pageNumber);
     }
-  }
+  };
 
   if (loading) {
     return (
       <section className="py-8 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-green-800">
-              Berita Biro Hukum Sekretariat Daerah Jawa Timur
-            </h2>
+            <div className="h-8 bg-gray-200 rounded w-2/3 animate-pulse"></div>
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
           </div>
-          <div className="h-64 flex items-center justify-center">
-          <LoadingSpinner />
+          <div className="border border-gray-200 rounded-lg p-6 bg-white animate-pulse">
+            <div className="md:flex gap-6">
+              <div className="md:w-7/12 space-y-4">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-6 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-10 bg-gray-200 rounded w-32"></div>
+              </div>
+              <div className="md:w-5/12 mt-6 md:mt-0">
+                <div className="w-full h-64 md:h-[300px] bg-gray-200 rounded-lg"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   if (error) {
@@ -98,7 +114,7 @@ export default function NewsSection() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   if (newsItems.length === 0) {
@@ -115,7 +131,7 @@ export default function NewsSection() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -136,14 +152,19 @@ export default function NewsSection() {
 
         <div className="mb-6">
           {currentItems.map((news) => (
-            <div key={news.id} className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+            <div
+              key={news.id}
+              className="border border-gray-200 rounded-lg overflow-hidden bg-white"
+            >
               <div className="p-6 md:p-8 md:flex gap-6">
                 <div className="md:w-7/12 space-y-4">
                   <div className="flex items-center text-green-600 mb-2">
                     <Calendar className="h-4 w-4 mr-2" />
                     <span className="text-sm">{news.date}</span>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{news.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
+                    {news.title}
+                  </h3>
                   <p className="text-gray-600">{news.content}</p>
                   <Link
                     to={`/news/detail-berita/${news.slug}`}
@@ -189,5 +210,5 @@ export default function NewsSection() {
         )}
       </div>
     </section>
-  )
+  );
 }

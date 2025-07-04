@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import LoadingSpinner from "../common/LoadingSpinner";
 import baseUrl from "../../config/api";
 
 export default function JDIHNetworkMembers() {
@@ -48,8 +47,37 @@ export default function JDIHNetworkMembers() {
     fetchAllMembers();
   }, []);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p className="text-center text-red-600">Error: {error}</p>;
+  if (loading) {
+    return (
+      <section className="py-8 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <div className="h-8 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+            <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {Array.from({ length: 12 }).map((_, index) => (
+              <div
+                key={index}
+                className="aspect-[4/3] w-full max-w-[185px] rounded-2xl p-4 bg-gray-200 animate-pulse"
+              ></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-8 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-center text-red-600">Error: {error}</p>
+        </div>
+      </section>
+    );
+  }
 
   const initialMembers = members.slice(0, 12);
   const allMembers = showAll ? members : initialMembers;
