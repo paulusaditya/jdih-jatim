@@ -80,6 +80,40 @@ export default function BeritaPage() {
     return date.toLocaleDateString("id-ID", options);
   };
 
+  const cleanDescription = (text) => {
+    if (!text) return "Tidak ada deskripsi";
+
+    return text
+      .replace(/\r\n/g, " ")
+      .replace(/\r/g, " ")
+      .replace(/\n/g, " ")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&ldquo;/g, '"')
+      .replace(/&rdquo;/g, '"')
+      .replace(/&lsquo;/g, "'")
+      .replace(/&rsquo;/g, "'")
+      .replace(/&ndash;/g, "–")
+      .replace(/&mdash;/g, "—")
+      .replace(/&hellip;/g, "...")
+      .replace(/&copy;/g, "©")
+      .replace(/&reg;/g, "®")
+      .replace(/&trade;/g, "™")
+      .replace(/&deg;/g, "°")
+      .replace(/&plusmn;/g, "±")
+      .replace(/&frac12;/g, "½")
+      .replace(/&frac14;/g, "¼")
+      .replace(/&frac34;/g, "¾")
+      .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
+      .replace(/&[a-zA-Z]+;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  };
+
   const totalRecords = filteredBeritaList.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
   const startIndex = (currentPage - 1) * recordsPerPage;
@@ -157,27 +191,22 @@ export default function BeritaPage() {
                 key={index}
                 className="border border-gray-200 rounded-xl shadow-sm overflow-hidden bg-white animate-pulse"
               >
-                {/* Image skeleton */}
                 <div className="w-full h-48 bg-gray-200"></div>
 
                 <div className="p-4">
-                  {/* Date skeleton */}
                   <div className="h-3 bg-gray-200 rounded w-24 mb-2"></div>
 
-                  {/* Title skeleton */}
                   <div className="space-y-2 mb-2">
                     <div className="h-6 bg-gray-200 rounded w-full"></div>
                     <div className="h-6 bg-gray-200 rounded w-3/4"></div>
                   </div>
 
-                  {/* Description skeleton */}
                   <div className="space-y-2 mb-4">
                     <div className="h-4 bg-gray-200 rounded w-full"></div>
                     <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                     <div className="h-4 bg-gray-200 rounded w-2/3"></div>
                   </div>
 
-                  {/* Link skeleton */}
                   <div className="h-4 bg-gray-200 rounded w-32"></div>
                 </div>
               </div>
@@ -215,62 +244,67 @@ export default function BeritaPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {currentBeritaList.map((berita) => (
-              <div
-                key={berita.id}
-                className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-green-600 hover:shadow-md transition duration-300 cursor-pointer flex flex-col group"
-                onClick={() => handleCardClick(berita.seo_url_slug_id)}
-              >
-                <div className="overflow-hidden">
-                  <img
-                    src={berita.image || "/placeholder.svg"}
-                    alt={berita.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.target.src = "/assets/berita/image113.png";
-                    }}
-                  />
-                </div>
+            {currentBeritaList.map((berita) => {
+              const cleanedDescription = cleanDescription(
+                berita.seo_description_id
+              );
+              const truncatedDescription =
+                cleanedDescription.length > 150
+                  ? cleanedDescription.substring(0, 150) + "..."
+                  : cleanedDescription;
 
-                <div className="p-4 flex flex-col h-full">
-                  <div className="flex-1">
-                    <div className="text-xs text-gray-500 mb-2">
-                      {formatDate(berita.date)}
-                    </div>
-                    <h3 className="text-xl font-bold leading-tight pb-2 group-hover:text-green-600 transition-colors">
-                      {berita.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-3">
-                      {berita.seo_description_id
-                        ? berita.seo_description_id
-                            .replace(/<[^>]*>/g, "")
-                            .substring(0, 150) + "..."
-                        : "Tidak ada deskripsi"}
-                    </p>
+              return (
+                <div
+                  key={berita.id}
+                  className="border border-white rounded-xl shadow-sm overflow-hidden bg-white hover:border-green-600 hover:shadow-md transition duration-300 cursor-pointer flex flex-col group"
+                  onClick={() => handleCardClick(berita.seo_url_slug_id)}
+                >
+                  <div className="overflow-hidden">
+                    <img
+                      src={berita.image || "/placeholder.svg"}
+                      alt={berita.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.src = "/assets/berita/image113.png";
+                      }}
+                    />
                   </div>
 
-                  <Link
-                    to={`/news/detail-berita/${
-                      berita.seo_url_slug_id.startsWith("./")
-                        ? berita.seo_url_slug_id.substring(2)
-                        : berita.seo_url_slug_id
-                    }`}
-                    className="text-green-600 text-sm font-semibold flex items-center mt-auto hover:text-green-800 transition-colors"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleCardClick(berita.seo_url_slug_id);
-                    }}
-                  >
-                    Baca Selengkapnya <span className="ml-1">→</span>
-                  </Link>
+                  <div className="p-4 flex flex-col h-full">
+                    <div className="flex-1">
+                      <div className="text-xs text-gray-500 mb-2">
+                        {formatDate(berita.date)}
+                      </div>
+                      <h3 className="text-xl font-bold leading-tight pb-2 group-hover:text-green-600 transition-colors">
+                        {berita.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                        {truncatedDescription}
+                      </p>
+                    </div>
+
+                    <Link
+                      to={`/news/detail-berita/${
+                        berita.seo_url_slug_id.startsWith("./")
+                          ? berita.seo_url_slug_id.substring(2)
+                          : berita.seo_url_slug_id
+                      }`}
+                      className="text-green-600 text-sm font-semibold flex items-center mt-auto hover:text-green-800 transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCardClick(berita.seo_url_slug_id);
+                      }}
+                    >
+                      Baca Selengkapnya <span className="ml-1">→</span>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* Only show pagination when not loading and has data */}
       {!loading && totalRecords > recordsPerPage && (
         <Pagination
           currentPage={currentPage}
