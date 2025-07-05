@@ -146,11 +146,6 @@ export default function KomentarPage() {
     setCurrentPage(1);
   };
 
-  const paginatedComments = allComments.slice(
-    (currentPage - 1) * recordsPerPage,
-    currentPage * recordsPerPage
-  );
-
   useEffect(() => {
     if (window.grecaptcha) {
       window.grecaptcha.ready(() => {
@@ -214,12 +209,22 @@ export default function KomentarPage() {
     );
   };
 
+  const paginatedComments = allComments.slice(
+    (currentPage - 1) * recordsPerPage,
+    currentPage * recordsPerPage
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
         <h1 className="text-2xl font-semibold text-green-700 mb-2">
           Komentar untuk Dokumen: {topicTitle || `ID ${slug}`}
         </h1>
+
+        {/* PDF untuk Mobile */}
+        <div className="md:hidden mb-6">
+          <DocumentPreview />
+        </div>
 
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
@@ -335,7 +340,7 @@ export default function KomentarPage() {
             </div>
           </div>
 
-          {/* Desktop Sidebar PDF Only */}
+          {/* Sidebar PDF untuk Desktop */}
           <div className="w-full md:w-80 flex-shrink-0 hidden md:block">
             <DocumentPreview />
           </div>
