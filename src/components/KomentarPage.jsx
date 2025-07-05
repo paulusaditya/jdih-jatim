@@ -6,6 +6,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/id";
+import { Eye, Download } from "lucide-react";
 import Pagination from "./common/Pagination";
 import NewOldFilter from "./common/NewOldFilter";
 
@@ -32,6 +33,9 @@ export default function KomentarPage() {
   const [loading, setLoading] = useState(true);
   const [topicTitle, setTopicTitle] = useState("");
   const [topicId, setTopicId] = useState(null);
+  const [topicData, setTopicData] = useState(null);
+  const [selectedPreview, setSelectedPreview] = useState("detail");
+  const [isLoadingAttachment, setIsLoadingAttachment] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,20 +49,21 @@ export default function KomentarPage() {
   const fetchCommentsBySlug = async () => {
     setLoading(true);
     try {
-      const topicsRes = await axios.get(
-        "https://jdih.pisdev.my.id/api/v2/topics?webmaster_section_id=28"
+      // Fetch topic detail by slug
+      const topicRes = await axios.get(
+        `https://jdih.pisdev.my.id/api/v2/topics/by-slug/${slug}`
       );
-      const topics = topicsRes.data?.data?.data || [];
-      const topic = topics.find((t) => t.seo_url_slug_id === slug);
-
-      if (!topic) {
+      
+      if (topicRes.data?.status !== "success") {
         setAllComments([]);
         setLoading(false);
         return;
       }
 
+      const topic = topicRes.data?.data;
       setTopicTitle(topic.title || topic.seo_title_id);
       setTopicId(topic.id);
+      setTopicData(topic);
 
       let comments = [];
       let page = 1;
@@ -145,6 +150,26 @@ export default function KomentarPage() {
     setCurrentPage(1);
   };
 
+  const handlePreviewChange = (preview) => {
+    setSelectedPreview(preview);
+    if (preview === "dokumen") {
+      setIsLoadingAttachment(true);
+    }
+  };
+
+  const handleDownload = () => {
+    const url = topicData?.attach_file;
+    if (!url) return;
+
+    const decodedFilename = decodeURIComponent(url.split("/").pop());
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", decodedFilename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const paginatedComments = allComments.slice(
     (currentPage - 1) * recordsPerPage,
     currentPage * recordsPerPage
@@ -158,6 +183,219 @@ export default function KomentarPage() {
     }
   }, []);
 
+  // Get document data
+  const fields = topicData?.fields || [];
+  const visits = topicData?.visits || 0;
+  const judul = topicData?.title || topicData?.seo_title_id || topicTitle;
+  const attachFile = topicData?.attach_file || "";
+  const documentImage = topicData?.image || "";
+  
+  // Check if we have abstrak field
+  const abstrakField = fields.find((f) =>
+    f.title?.toLowerCase().includes("abstrak")
+  );
+  const hasAbstrak = abstrakField?.details?.trim();
+
+  const DocumentPreview = () => {
+    if (loading) {
+      return (
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+          <div className="w-full h-96 bg-gray-50 flex flex-col">
+            <div className="p-4 border-b border-gray-200 text-center">
+              <div className="w-12 h-12 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center animate-pulse">
+                <span className="text-lg">🏛️</span>
+              </div>
+              <div className="text-xs text-gray-600 leading-tight">
+                PEMERINTAH DAERAH
+                <br />
+                PROVINSI JAWA TENGAH
+              </div>
+            </div>
+            <div className="p-4 flex-1">
+              <div className="space-y-2">
+                {[...Array(20)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-2 bg-gray-300 rounded animate-pulse"
+                    style={{ width: `${Math.random() * 40 + 60}%` }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="p-3 bg-gray-100 border-t border-gray-200">
+            <div className="h-3 bg-gray-300 rounded w-3/4 mx-auto animate-pulse"></div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+              <span className="text-lg">📄</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <Eye size={16} />
+                <span>{visits}</span>
+              </div>
+              {attachFile && (
+                <button
+                  onClick={handleDownload}
+                  className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700"
+                >
+                  <Download size={16} />
+                </button>
+              )}
+            </div>
+          </div>
+          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2">
+            {judul}
+          </h3>
+          <p className="text-xs text-gray-500">
+            {topicData?.date || "-"}
+          </p>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="border-b border-gray-200">
+          <div className="flex text-xs">
+            <button
+              className={`px-3 py-2 font-medium border-b-2 transition-colors ${
+                selectedPreview === "detail"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+              onClick={() => handlePreviewChange("detail")}
+            >
+              Detail
+            </button>
+            {attachFile && (
+              <button
+                className={`px-3 py-2 font-medium border-b-2 transition-colors ${
+                  selectedPreview === "dokumen"
+                    ? "border-green-500 text-green-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700"
+                }`}
+                onClick={() => handlePreviewChange("dokumen")}
+              >
+                Dokumen
+              </button>
+            )}
+            {hasAbstrak && (
+              <button
+                className={`px-3 py-2 font-medium border-b-2 transition-colors ${
+                  selectedPreview === "abstrak"
+                    ? "border-green-500 text-green-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700"
+                }`}
+                onClick={() => handlePreviewChange("abstrak")}
+              >
+                Abstrak
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="relative">
+          {selectedPreview === "dokumen" && attachFile ? (
+            <div className="h-80 relative bg-gray-50">
+              {isLoadingAttachment && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
+                </div>
+              )}
+              
+              <iframe
+                src={`https://docs.google.com/gview?url=${encodeURIComponent(attachFile)}&embedded=true`}
+                width="100%"
+                height="100%"
+                title="Document Preview"
+                onLoad={() => setIsLoadingAttachment(false)}
+                className="border-0"
+              />
+              
+              {/* PDF Controls Overlay */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-3 py-1 rounded-full text-xs flex items-center gap-2">
+                <span>Halaman</span>
+                <span className="bg-white bg-opacity-20 px-2 py-1 rounded">1</span>
+                <span>/</span>
+                <span>9</span>
+                <div className="flex items-center gap-1 ml-2">
+                  <button className="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : selectedPreview === "abstrak" && hasAbstrak ? (
+            <div className="p-4 h-80 overflow-y-auto">
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {hasAbstrak}
+              </p>
+            </div>
+          ) : (
+            <div className="p-4 h-80 overflow-y-auto">
+              <div className="space-y-3">
+                {/* Document Info */}
+                <div className="border-b border-gray-100 pb-2">
+                  <dt className="text-xs font-medium text-gray-600 mb-1">
+                    Judul Dokumen
+                  </dt>
+                  <dd className="text-xs text-gray-900 break-words">
+                    {judul}
+                  </dd>
+                </div>
+                
+                <div className="border-b border-gray-100 pb-2">
+                  <dt className="text-xs font-medium text-gray-600 mb-1">
+                    Tanggal
+                  </dt>
+                  <dd className="text-xs text-gray-900">
+                    {topicData?.date || "-"}
+                  </dd>
+                </div>
+                
+                <div className="border-b border-gray-100 pb-2">
+                  <dt className="text-xs font-medium text-gray-600 mb-1">
+                    Jumlah Komentar
+                  </dt>
+                  <dd className="text-xs text-gray-900">
+                    {topicData?.comment_count || 0}
+                  </dd>
+                </div>
+                
+                {/* Custom Fields */}
+                {fields.map((item, index) => (
+                  <div key={index} className="border-b border-gray-100 pb-2">
+                    <dt className="text-xs font-medium text-gray-600 mb-1">
+                      {item.title}
+                    </dt>
+                    <dd className="text-xs text-gray-900 break-words">
+                      {item.details.length > 100 ? `${item.details.substring(0, 100)}...` : item.details}
+                    </dd>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="p-3 bg-gray-50 border-t border-gray-200">
+          <div className="text-xs text-gray-600 leading-tight text-center">
+            JDIH Provinsi Jawa Timur
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
@@ -168,31 +406,48 @@ export default function KomentarPage() {
         {/* Sidebar Dokumen - Tampil di atas pada mobile */}
         <div className="w-full md:hidden mb-8">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div className="w-full h-96 bg-gray-50 flex flex-col">
-              <div className="p-4 border-b border-gray-200 text-center">
-                <div className="w-12 h-12 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
-                  <span className="text-lg">🏛️</span>
+            <div className="w-full h-96 bg-gray-50 flex flex-col relative">
+              {/* PDF Preview */}
+              {attachFile && (
+                <div className="flex-1 relative">
+                  <iframe
+                    src={`https://docs.google.com/gview?url=${encodeURIComponent(attachFile)}&embedded=true`}
+                    width="100%"
+                    height="100%"
+                    title="Document Preview"
+                    className="border-0"
+                  />
+                  {/* Overlay controls */}
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-3 py-1 rounded-full text-xs flex items-center gap-2">
+                    <span>Halaman</span>
+                    <span className="bg-white bg-opacity-20 px-2 py-1 rounded">1</span>
+                    <span>/</span>
+                    <span>9</span>
+                    <div className="flex items-center gap-1 ml-2">
+                      <button className="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30">
+                        <span className="text-xs">+</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-xs text-gray-600 leading-tight">
-                  PEMERINTAH DAERAH
-                  <br />
-                  PROVINSI JAWA TENGAH
+              )}
+              
+              {/* Fallback if no PDF */}
+              {!attachFile && (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 bg-gray-300 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">📄</span>
+                    </div>
+                    <p className="text-sm text-gray-600">Dokumen tidak tersedia</p>
+                  </div>
                 </div>
-              </div>
-              <div className="p-4 flex-1">
-                <div className="space-y-2">
-                  {[...Array(20)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-2 bg-gray-300 rounded"
-                      style={{ width: `${Math.random() * 40 + 60}%` }}
-                    ></div>
-                  ))}
-                </div>
-              </div>
+              )}
             </div>
             <div className="p-3 bg-gray-100 border-t border-gray-200">
-              <p className="text-xs text-gray-600 text-center">{topicTitle}</p>
+              <p className="text-xs text-gray-600 text-center line-clamp-2">
+                {topicTitle}
+              </p>
             </div>
           </div>
         </div>
@@ -311,37 +566,9 @@ export default function KomentarPage() {
             </div>
           </div>
 
+          {/* Desktop Sidebar */}
           <div className="w-full md:w-80 flex-shrink-0 hidden md:block">
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-              <div className="w-full h-96 bg-gray-50 flex flex-col">
-                <div className="p-4 border-b border-gray-200 text-center">
-                  <div className="w-12 h-12 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
-                    <span className="text-lg">🏛️</span>
-                  </div>
-                  <div className="text-xs text-gray-600 leading-tight">
-                    PEMERINTAH DAERAH
-                    <br />
-                    PROVINSI JAWA TENGAH
-                  </div>
-                </div>
-                <div className="p-4 flex-1">
-                  <div className="space-y-2">
-                    {[...Array(20)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-2 bg-gray-300 rounded"
-                        style={{ width: `${Math.random() * 40 + 60}%` }}
-                      ></div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="p-3 bg-gray-100 border-t border-gray-200">
-                <p className="text-xs text-gray-600 text-center">
-                  {topicTitle}
-                </p>
-              </div>
-            </div>
+            <DocumentPreview />
           </div>
         </div>
       </div>
