@@ -66,16 +66,21 @@ const ProductChartJatim = () => {
             </div>
           </div>
           <div>
-            <ResponsiveContainer width="100%" height={370}>
-              <BarChart data={data}>
+            <ResponsiveContainer width="100%" height={420}>
+              {" "}
+              {/* Ditinggikan */}
+              <BarChart
+                data={data}
+                margin={{ top: 10, right: 30, left: 10, bottom: 100 }} // Lebih besar
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   dataKey="name"
-                  angle={-25}
+                  angle={-60}
                   textAnchor="end"
                   interval={0}
-                  height={150}
-                  tick={{ fontSize: 12 }}
+                  height={120}
+                  tick={{ fontSize: 10 }}
                 />
                 <YAxis />
                 <Tooltip />
