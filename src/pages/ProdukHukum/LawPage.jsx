@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Filter } from "lucide-react";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
@@ -11,6 +11,23 @@ import NewOldFilter from "../../components/common/NewOldFilter";
 import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
+
+// Custom hook untuk debouncing
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 const LawPage = ({
   apiUrl,
@@ -37,6 +54,10 @@ const LawPage = ({
 
   const [filters, setFilters] = useState({});
   const [hasInitialSearch, setHasInitialSearch] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  // Debounce filters untuk mengurangi API calls
+  const debouncedFilters = useDebounce(filters, 500);
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
@@ -49,6 +70,7 @@ const LawPage = ({
     "customField_79",
   ];
 
+  // Inisialisasi filter dari URL - hanya sekali
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const initialFilters = {};
@@ -62,37 +84,32 @@ const LawPage = ({
     if (Object.keys(initialFilters).length > 0) {
       setFilters(initialFilters);
       setHasInitialSearch(true);
+      setShouldFetch(true);
       console.log("Initial filters from URL:", initialFilters);
+    } else {
+      // Load initial data tanpa filter
+      setShouldFetch(true);
     }
-  }, [location.search]);
+  }, []); // Hanya dijalankan sekali
 
-  const handleChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
+  const handleChange = useCallback((e) => {
+    setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     setCurrentPage(1);
     setIsInitialLoad(false);
-    fetchLaws();
-  };
+    setShouldFetch(true);
+  }, []);
 
-  const handleSortChange = (order) => {
+  const handleSortChange = useCallback((order) => {
     setSortOrder(order);
     setCurrentPage(1);
     setIsInitialLoad(false);
-  };
+    setShouldFetch(true);
+  }, []);
 
-  useEffect(() => {
-    fetchLaws();
-  }, [currentPage, sortOrder, filters]);
-
-  useEffect(() => {
-    if (hasInitialSearch && Object.keys(filters).length > 0) {
-      fetchLaws();
-    }
-  }, [hasInitialSearch, filters]);
-
-  const fetchLaws = async () => {
+  const fetchLaws = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -103,7 +120,7 @@ const LawPage = ({
       if (
         isInitialLoad &&
         currentPage === 1 &&
-        Object.keys(filters).length === 0
+        Object.keys(debouncedFilters).length === 0
       ) {
         params.append("sort_by", "created_by");
         params.append("sort_order", "desc");
@@ -117,7 +134,7 @@ const LawPage = ({
       }
 
       const filterArray = [];
-      Object.entries(filters).forEach(([key, value]) => {
+      Object.entries(debouncedFilters).forEach(([key, value]) => {
         if (
           value &&
           (typeof value === "string"
@@ -206,7 +223,7 @@ const LawPage = ({
           })
         );
 
-        if (!isInitialLoad || Object.keys(filters).length > 0) {
+        if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
           mappedLaws.sort((a, b) => {
             const numA = cleanNumber(a.number);
             const numB = cleanNumber(b.number);
@@ -238,7 +255,7 @@ const LawPage = ({
           };
         });
 
-        if (!isInitialLoad || Object.keys(filters).length > 0) {
+        if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
           mappedLaws.sort((a, b) => {
             const numA = cleanNumber(a.number);
             const numB = cleanNumber(b.number);
@@ -254,14 +271,35 @@ const LawPage = ({
       setLaws([]);
     } finally {
       setIsLoading(false);
+      setShouldFetch(false); // Reset flag setelah fetch
     }
-  };
+  }, [currentPage, sortOrder, debouncedFilters, apiUrl, sectionId, webmasterSectionId, isInitialLoad]);
 
-  const handlePageChange = (pageNumber) => {
+  // Effect untuk fetch data - hanya ketika shouldFetch true
+  useEffect(() => {
+    if (shouldFetch) {
+      fetchLaws();
+    }
+  }, [shouldFetch, fetchLaws]);
+
+  // Effect untuk auto-search ketika debounced filters berubah
+  useEffect(() => {
+    if (hasInitialSearch || Object.keys(debouncedFilters).length > 0) {
+      setShouldFetch(true);
+    }
+  }, [debouncedFilters, hasInitialSearch]);
+
+  const handlePageChange = useCallback((pageNumber) => {
     setCurrentPage(pageNumber);
     setIsInitialLoad(false);
+    setShouldFetch(true);
     window.scrollTo(0, 0);
-  };
+  }, []);
+
+  // Memoize expensive calculations
+  const totalPages = useMemo(() => {
+    return Math.ceil(totalItems / itemsPerPage);
+  }, [totalItems, itemsPerPage]);
 
   return (
     <div className="px-4 py-16 md:p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
