@@ -5,7 +5,7 @@ import FloatingAccessibilityButton from "../components/common/FloatingAccessibil
 
 const breadcrumbPaths = [
   { label: "Beranda", path: "/" },
-  { label: "Layanan Hukum", path: "/layanan-hukum" },
+  { label: "Layanan Hukum", path: "/masukanku" },
 ];
 
 export default function LayananHukum() {

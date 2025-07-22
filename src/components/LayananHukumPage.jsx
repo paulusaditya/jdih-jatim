@@ -154,7 +154,7 @@ export default function LayananHukumPage() {
                       </div>
 
                       <Link
-                        to={`/layanan-hukum/komentar/${doc.slug}`}
+                        to={`/masukanku/komentar/${doc.slug}`}
                         className="px-6 py-3 text-base font-medium text-green-600 border-2 border-green-600 rounded-lg hover:bg-green-50 transition-colors inline-block"
                       >
                         Berikan Masukan

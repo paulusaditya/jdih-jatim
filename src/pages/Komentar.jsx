@@ -9,8 +9,8 @@ export default function Komentar() {
 
   const breadcrumbPaths = [
     { label: "Beranda", path: "/" },
-    { label: "Layanan Hukum", path: "/layanan-hukum" },
-    { label: "Komentar", path: `/layanan-hukum/komentar/${id}` }, // Sesuai slug/id
+    { label: "Layanan Hukum", path: "/masukanku" },
+    { label: "Komentar", path: `/masukanku/komentar/${id}` }, // Sesuai slug/id
   ];
 
   return (
