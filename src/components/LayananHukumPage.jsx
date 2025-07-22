@@ -149,7 +149,7 @@ export default function LayananHukumPage() {
                           </svg>
                         </div>
                         <span className="text-lg font-medium text-gray-700">
-                          {doc.comments} Komentar
+                          {doc.comments} Masukan
                         </span>
                       </div>
 
@@ -157,7 +157,7 @@ export default function LayananHukumPage() {
                         to={`/layanan-hukum/komentar/${doc.slug}`}
                         className="px-6 py-3 text-base font-medium text-green-600 border-2 border-green-600 rounded-lg hover:bg-green-50 transition-colors inline-block"
                       >
-                        Berikan Komentar
+                        Berikan Masukan
                       </Link>
                     </div>
                   </div>
