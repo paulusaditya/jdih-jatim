@@ -66,7 +66,7 @@ function LawCard({
         <div className="flex gap-2 flex-wrap items-center self-start mt-3 text-center">
           {number && <StatusBadge>{number}</StatusBadge>}
           {year && <StatusBadge>{year}</StatusBadge>}
-          {status && <StatusBadge>{status}</StatusBadge>}
+          {/* {status && <StatusBadge>{status}</StatusBadge>} */}
           {type && <StatusBadge>{type}</StatusBadge>}
         </div>
       </div>
