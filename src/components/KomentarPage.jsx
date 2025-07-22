@@ -77,7 +77,7 @@ export default function KomentarPage() {
 
       sortAndSetComments(comments, sortOrder);
     } catch (err) {
-      console.error("Gagal mengambil komentar:", err);
+      console.error("Gagal mengambil Masukan:", err);
     } finally {
       setLoading(false);
     }
@@ -127,7 +127,7 @@ export default function KomentarPage() {
       setEmail("");
       setCommentText("");
     } catch (error) {
-      console.error("Gagal mengirim komentar:", error);
+      console.error("Gagal mengirim masukan:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -218,7 +218,7 @@ export default function KomentarPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
         <h1 className="text-2xl font-semibold text-green-700 mb-2">
-          Komentar untuk Dokumen: {topicTitle || `ID ${slug}`}
+          Masukan untuk Dokumen: {topicTitle || `ID ${slug}`}
         </h1>
 
         {/* PDF untuk Mobile */}
@@ -229,11 +229,11 @@ export default function KomentarPage() {
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-medium text-gray-800">Komentar</h2>
+              <h2 className="text-lg font-medium text-gray-800">Masukan</h2>
               <NewOldFilter
                 onSortChange={handleSortChange}
-                newestText="Urutkan Berdasarkan Komentar Terbaru"
-                oldestText="Urutkan Berdasarkan Komentar Terlama"
+                newestText="Urutkan Berdasarkan Masukan Terbaru"
+                oldestText="Urutkan Berdasarkan Masukan Terlama"
               />
             </div>
 
@@ -257,7 +257,7 @@ export default function KomentarPage() {
                   ))}
                 </div>
               ) : paginatedComments.length === 0 ? (
-                <p className="text-gray-500">Belum ada komentar.</p>
+                <p className="text-gray-500">Belum ada Masukan.</p>
               ) : (
                 paginatedComments.map((comment, idx) => (
                   <div key={comment.id} className="flex gap-4">
@@ -299,7 +299,7 @@ export default function KomentarPage() {
 
             <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6">
               <h2 className="text-lg font-medium text-gray-800 mb-6">
-                Berikan Komentar
+                Berikan Masukan
               </h2>
               <div className="flex flex-col gap-4">
                 <input
@@ -317,7 +317,7 @@ export default function KomentarPage() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <textarea
-                  placeholder="Tambahkan Komentar"
+                  placeholder="Silahkan Tuliskan Masukan"
                   className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
