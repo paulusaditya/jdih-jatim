@@ -105,7 +105,7 @@ export default function Footer() {
                   <Link to="/news">Berita</Link>
                 </li>
                 <li>
-                  <Link to="https://sukma.jatimprov.go.id/fe/survey">
+                  <Link to="/survey">
                     Survey
                   </Link>
                 </li>
