@@ -145,7 +145,7 @@ export default function SurveyPage() {
                     required
                     maxLength={maxChars}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
-                    placeholder="Tuliskan pesan yang ingin Anda tuliskan"
+                    placeholder="Saran dan Masukan demi terciptanya Layanan JDIH Provinsi Jawa Timur yang lebih baik"
                   />
                   <div className="text-right text-xs text-gray-500 mt-1">
                     {charCount}/{maxChars}
