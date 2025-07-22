@@ -100,12 +100,12 @@ export default function DprdMemberCity() {
     <section className="py-8 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-green-800">
-          {sectionData?.title || "Anggota DPRD Kota/Kabupaten"}
+          {"JDIH Sekretariat DPRD Kabupaten/Kota"}
         </h2>
-        
+{/*         
         {sectionData?.description && (
           <p className="text-gray-600 mt-2 mb-6">{sectionData.description}</p>
-        )}
+        )} */}
 
         {dprdData.length > 6 && (
           <div className="flex justify-end mb-6">
