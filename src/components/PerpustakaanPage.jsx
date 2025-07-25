@@ -2,19 +2,26 @@
 
 import { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
-import baseUrl from "../config/api";
-import LoadingSpinner from "./common/LoadingSpinner";
+import Monographic from "./Home/Monographic";
+
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center p-8">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700"></div>
+  </div>
+);
 
 const PerpustakaanPage = () => {
   const [data, setData] = useState(null);
+  const [photoData, setPhotoData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [photoLoading, setPhotoLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `${baseUrl}/topics/by-slug/perpustakaan-hukum-biro-hukum-sekretariat-daerah-provinsi-jawa-timur`
+          `https://jdih.pisdev.my.id/api/v2/topics/by-slug/perpustakaan-hukum-biro-hukum-sekretariat-daerah-provinsi-jawa-timur`
         );
         if (!res.ok) throw new Error("Failed to fetch library data");
         const result = await res.json();
@@ -27,10 +34,37 @@ const PerpustakaanPage = () => {
       }
     };
 
+    const fetchPhotoData = async () => {
+      try {
+        // Simulate fetching multiple photos - you can modify this to fetch from your actual photo API
+        const photoIds = [52511, 52512, 52513, 52514]; // Add more IDs as needed
+        const photoPromises = photoIds.map(async (id) => {
+          try {
+            const res = await fetch(`https://jdih.pisdev.my.id/api/v2/topics/${id}`);
+            if (res.ok) {
+              const result = await res.json();
+              return result.data;
+            }
+            return null;
+          } catch {
+            return null;
+          }
+        });
+        
+        const photos = await Promise.all(photoPromises);
+        setPhotoData(photos.filter(photo => photo && photo.image));
+      } catch (err) {
+        console.error("Error fetching photos:", err);
+      } finally {
+        setPhotoLoading(false);
+      }
+    };
+
     fetchData();
+    fetchPhotoData();
   }, []);
 
-  if (loading) return <LoadingSpinner/>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
 
   const alamat =
@@ -42,51 +76,94 @@ const PerpustakaanPage = () => {
     "Senin - Jumat (09.00 - 15.00)";
 
   return (
-    <section className="py-10 px-4 md:px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-        {/* MAPS */}
-        <div className="rounded-lg overflow-hidden w-full h-[300px] md:h-[400px]">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1120.7372642867172!2d112.73900700233523!3d-7.245924159933477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7f940401c8755%3A0xe6b91ad0a085eaca!2sKantor%20Gubernur%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1749876888754!5m2!1sid!2sid"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-
-        {/* INFO */}
-        <div className="flex flex-col justify-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-green-800 mb-6">
-            {data?.title ?? "Perpustakaan JDIH"}
-          </h1>
-
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-green-700 mb-1">
-              Lokasi
-            </h2>
-            <p className="text-gray-700">{alamat}</p>
+    <div>
+      <section className="py-10 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+          {/* MAPS */}
+          <div className="rounded-lg overflow-hidden w-full h-[300px] md:h-[400px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1120.7372642867172!2d112.73900700233523!3d-7.245924159933477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7f940401c8755%3A0xe6b91ad0a085eaca!2sKantor%20Gubernur%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1749876888754!5m2!1sid!2sid"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-green-700 mb-1">Buka</h2>
-            <p className="text-gray-700">{buka}</p>
-          </div>
+          {/* INFO */}
+          <div className="flex flex-col justify-center">
+            <h1 className="text-2xl md:text-3xl font-bold text-green-800 mb-6">
+              {data?.title ?? "Perpustakaan JDIH"}
+            </h1>
 
-          <a
-            href="https://maps.google.com/?q=Jl. Pahlawan No. 110 Kota Surabaya"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-green-700 text-green-700 px-4 py-2 rounded-md hover:bg-green-50 transition-colors w-fit"
-          >
-            <MapPin size={18} />
-            Buka Maps
-          </a>
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-green-700 mb-1">
+                Lokasi
+              </h2>
+              <p className="text-gray-700">{alamat}</p>
+            </div>
+
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold text-green-700 mb-1">Buka</h2>
+              <p className="text-gray-700">{buka}</p>
+            </div>
+
+            <a
+              href="https://maps.google.com/?q=Jl. Pahlawan No. 110 Kota Surabaya"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-green-700 text-green-700 px-4 py-2 rounded-md hover:bg-green-50 transition-colors w-fit"
+            >
+              <MapPin size={18} />
+              Buka Maps
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* PHOTO SECTION */}
+      <section className="py-10 px-4 md:px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-xl md:text-2xl font-bold text-green-800 mb-6">
+            Photo Perpustakaan JDIH
+          </h2>
+          
+          {photoLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {photoData.length > 0 ? (
+                photoData.map((photo) => (
+                  <div
+                    key={photo.id}
+                    className="aspect-square bg-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
+                  >
+                    <img
+                      src={photo.image}
+                      alt={photo.title || "Photo Perpustakaan"}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ))
+              ) : (
+                // Placeholder photos when no data available
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center"
+                  >
+                    <div className="text-gray-400 text-2xl">📷</div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+      <Monographic/>
+    </div>
   );
 };
 
