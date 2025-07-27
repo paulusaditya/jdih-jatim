@@ -18,6 +18,7 @@ const InstruksiGubernurPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/instruksi-gubernur"
+    regulationType="Instruksi Gubernur"
   />
 );
 

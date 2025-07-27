@@ -18,6 +18,7 @@ const KeputusanAtasNamaGubernurPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/keputusan-atas-nama-gubernur"
+    regulationType="Keputusan atas nama Gubernur"
   />
 );
 

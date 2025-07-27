@@ -18,6 +18,7 @@ const KeputusanGubernurPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/keputusan-gubernur"
+    regulationType="Keputusan Gubernur"
   />
 );
 

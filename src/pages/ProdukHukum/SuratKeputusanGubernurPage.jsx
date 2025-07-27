@@ -18,6 +18,7 @@ const SuratKeputusanGubernurPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/surat-keputusan-gubernur"
+    regulationType="Surat Keputusan Gubernur"
   />
 );
 

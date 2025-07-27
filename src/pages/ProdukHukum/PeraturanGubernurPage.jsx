@@ -18,6 +18,7 @@ const PeraturanGubernurPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/peraturan-gubernur"
+    regulationType="Peraturan Gubernur" // Jenis peraturan default
   />
 );
 

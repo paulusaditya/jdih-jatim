@@ -18,6 +18,7 @@ const SuratEdaranGubernurPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/surat-edaran-gubernur"
+    regulationType="Surat Edaran Gubernur"
   />
 );
 

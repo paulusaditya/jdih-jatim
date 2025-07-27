@@ -18,6 +18,7 @@ const KeputusanSekretarisDaerahPage = () => (
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/keputusan-sekretaris-daerah"
+    regulationType="Keputusan Sekretaris Daerah"
   />
 );
 

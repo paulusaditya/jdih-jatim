@@ -17,7 +17,10 @@ const PeraturanDaerahJatimPage = () => {
       title="Produk Hukum Jawa Timur"
       breadcrumbPaths={[
         { label: "Beranda", path: "/" },
-        { label: "Produk Hukum Jawa Timur", path: "/peraturan/peraturan-daerah" },
+        {
+          label: "Produk Hukum Jawa Timur",
+          path: "/peraturan/peraturan-daerah",
+        },
       ]}
       sectionId="29"
       years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
@@ -34,6 +37,7 @@ const PeraturanDaerahJatimPage = () => {
       includeCategory={true}
       detailPath="/peraturan/peraturan-daerah"
       typeToSectionId={typeToSectionId}
+      regulationType="Peraturan Daerah"
     />
   );
 };
