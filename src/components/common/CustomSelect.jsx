@@ -11,11 +11,6 @@ const CustomSelect = ({
   placeholder,
   isMultiple = false,
   type = "select",
-  disabled = false, // Prop baru untuk disable state
-  icon = null, // Prop untuk icon
-  style = {}, // Prop untuk custom style
-  id, // Prop untuk id
-  ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -26,8 +21,6 @@ const CustomSelect = ({
   }, [value]);
 
   const handleSelect = (optionValue) => {
-    if (disabled) return; // Prevent selection when disabled
-    
     const newValue = optionValue.value || optionValue;
     onChange({
       target: {
@@ -40,8 +33,6 @@ const CustomSelect = ({
   };
 
   const handleClear = (e) => {
-    if (disabled) return; // Prevent clearing when disabled
-    
     e.stopPropagation();
     setInputValue("");
     onChange({
@@ -54,13 +45,10 @@ const CustomSelect = ({
   };
 
   const handleInputChange = (e) => {
-    if (disabled) return; // Prevent input changes when disabled
     setInputValue(e.target.value);
   };
 
   const handleInputBlur = () => {
-    if (disabled) return; // Prevent blur handling when disabled
-    
     onChange({
       target: {
         name,
@@ -68,11 +56,6 @@ const CustomSelect = ({
         isMultiple,
       },
     });
-  };
-
-  const handleToggle = () => {
-    if (disabled) return; // Prevent toggle when disabled
-    setIsOpen(!isOpen);
   };
 
   useEffect(() => {
@@ -90,76 +73,45 @@ const CustomSelect = ({
 
   const displayValue = value || placeholder;
 
-  // Get classes for disabled state - warna sama seperti normal tapi cursor berbeda
-  const getInputClasses = () => {
-    const baseClasses = "px-4 py-3 w-full bg-white rounded-lg border border-green-300 text-zinc-600";
-    
-    if (disabled) {
-      return `${baseClasses} cursor-not-allowed`;
-    }
-    
-    return baseClasses;
-  };
-
-  const getSelectClasses = () => {
-    const baseClasses = "flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-green-300";
-    
-    if (disabled) {
-      return `${baseClasses} cursor-not-allowed`;
-    }
-    
-    return `${baseClasses} cursor-pointer`;
-  };
-
   if (type === "text" || type === "number") {
     return (
-      <div className="relative w-full" ref={dropdownRef} style={style}>
+      <div className="relative w-full" ref={dropdownRef}>
         <div className="flex items-center relative">
           <input
-            id={id}
             type={type}
             name={name}
             value={inputValue}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             placeholder={placeholder}
-            disabled={disabled}
-            className={`${getInputClasses()} ${icon ? 'pr-10' : 'pr-10'}`}
+            className="px-4 py-3 w-full bg-white rounded-lg border border-green-300 text-zinc-600 pr-10"
             autoComplete="off"
-            {...props}
           />
-          {/* Icon atau Clear Button */}
-          <div className="absolute right-3 flex items-center">
-            {inputValue && !disabled ? (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X size={16} />
-              </button>
-            ) : icon ? (
-              <div className="text-gray-400">
-                {icon}
-              </div>
-            ) : null}
-          </div>
+          {inputValue && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute right-3 text-gray-500 hover:text-gray-700"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full" ref={dropdownRef} style={style}>
+    <div className="relative w-full" ref={dropdownRef}>
       <div
-        className={getSelectClasses()}
-        onClick={handleToggle}
+        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-green-300 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <span className={`${!value && "text-gray-400"} flex-grow text-zinc-600`}>
+        <span className={`text-zinc-600 ${!value && "text-gray-400"} flex-grow`}>
           {displayValue}
         </span>
         <div className="flex items-center">
-          {value && !disabled ? (
+          {value ? (
             <button
               type="button"
               onClick={(e) => {
@@ -171,19 +123,11 @@ const CustomSelect = ({
               <X size={16} />
             </button>
           ) : (
-            <ChevronDown 
-              className="text-zinc-600" 
-              size={16}
-              style={{
-                transform: isOpen && !disabled ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s'
-              }}
-            />
+            <ChevronDown className="text-zinc-600" size={16} />
           )}
         </div>
       </div>
-      
-      {isOpen && !disabled && (
+      {isOpen && (
         <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1 max-h-48 overflow-y-auto custom-scrollbar">
           {options && options.length > 0 ? (
             options.map((option, index) => (
