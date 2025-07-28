@@ -43,6 +43,8 @@ const LawPage = ({
   customSidebar = null,
   typeToSectionId = {},
   webmasterSectionId = "10",
+  regulationType = null, // Prop baru untuk jenis peraturan default
+  regulationTypeFieldName = "customField_19", // Prop untuk field name jenis peraturan
 }) => {
   const [laws, setLaws] = useState([]);
   const [title, setTitle] = useState(pageTitle);
@@ -50,14 +52,9 @@ const LawPage = ({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-
+  
   const [filters, setFilters] = useState({});
-  const [hasInitialSearch, setHasInitialSearch] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState(false);
-
-  // Debounce filters untuk mengurangi API calls
-  const debouncedFilters = useDebounce(filters, 500);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
@@ -70,46 +67,63 @@ const LawPage = ({
     "customField_79",
   ];
 
-  // Inisialisasi filter dari URL - hanya sekali
+  // Inisialisasi filters - hanya sekali
   useEffect(() => {
+    if (isInitialized) return; // Prevent re-initialization
+
     const urlParams = new URLSearchParams(location.search);
     const initialFilters = {};
 
+    // Get filters from URL
     for (const [key, value] of urlParams.entries()) {
       if (key !== "fromSearch" && value.trim() !== "") {
         initialFilters[key] = value;
       }
     }
 
-    if (Object.keys(initialFilters).length > 0) {
-      setFilters(initialFilters);
-      setHasInitialSearch(true);
-      setShouldFetch(true);
-      console.log("Initial filters from URL:", initialFilters);
-    } else {
-      // Load initial data tanpa filter
-      setShouldFetch(true);
+    // Set default regulation type jika ada dan belum ada di URL
+    if (regulationType && !initialFilters[regulationTypeFieldName]) {
+      initialFilters[regulationTypeFieldName] = regulationType;
     }
-  }, []); // Hanya dijalankan sekali
+
+    setFilters(initialFilters);
+    setIsInitialized(true);
+  }, [regulationType, regulationTypeFieldName, location.search, isInitialized]);
+
+  // Debounce filters hanya untuk search input
+  const debouncedFilters = useDebounce(
+    filters.find_q ? { ...filters } : filters, 
+    filters.find_q ? 500 : 0
+  );
 
   const handleChange = useCallback((e) => {
-    setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }, []);
+    const { name, value } = e.target;
+    
+    // Prevent changes to regulation type field if it's supposed to be locked
+    if (name === regulationTypeFieldName && regulationType) {
+      return;
+    }
+
+    setFilters(prev => ({ 
+      ...prev, 
+      [name]: value 
+    }));
+  }, [regulationTypeFieldName, regulationType]);
 
   const handleSearch = useCallback(() => {
     setCurrentPage(1);
-    setIsInitialLoad(false);
-    setShouldFetch(true);
+    // Trigger re-fetch by updating a dummy state or directly call fetchLaws
+    fetchLaws();
   }, []);
 
   const handleSortChange = useCallback((order) => {
     setSortOrder(order);
     setCurrentPage(1);
-    setIsInitialLoad(false);
-    setShouldFetch(true);
   }, []);
 
   const fetchLaws = useCallback(async () => {
+    if (!isInitialized) return; // Don't fetch until initialized
+
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -117,11 +131,12 @@ const LawPage = ({
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
 
-      if (
-        isInitialLoad &&
-        currentPage === 1 &&
-        Object.keys(debouncedFilters).length === 0
-      ) {
+      // Sorting logic
+      const hasFilters = Object.keys(debouncedFilters).some(key => 
+        debouncedFilters[key] && debouncedFilters[key].toString().trim() !== ""
+      );
+
+      if (!hasFilters && currentPage === 1) {
         params.append("sort_by", "created_by");
         params.append("sort_order", "desc");
       } else {
@@ -133,29 +148,14 @@ const LawPage = ({
         params.append("section_id", sectionId);
       }
 
+      // Add filters
       const filterArray = [];
       Object.entries(debouncedFilters).forEach(([key, value]) => {
-        if (
-          value &&
-          (typeof value === "string"
-            ? value.trim() !== ""
-            : Array.isArray(value) && value.length > 0)
-        ) {
-          if (Array.isArray(value)) {
-            value.forEach((val) => {
-              if (val && val.trim() !== "") {
-                filterArray.push({
-                  key: key,
-                  value: val,
-                });
-              }
-            });
-          } else {
-            filterArray.push({
-              key: key,
-              value: value,
-            });
-          }
+        if (value && value.toString().trim() !== "") {
+          filterArray.push({
+            key: key,
+            value: value,
+          });
         }
       });
 
@@ -223,7 +223,7 @@ const LawPage = ({
           })
         );
 
-        if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
+        if (hasFilters) {
           mappedLaws.sort((a, b) => {
             const numA = cleanNumber(a.number);
             const numB = cleanNumber(b.number);
@@ -255,7 +255,7 @@ const LawPage = ({
           };
         });
 
-        if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
+        if (hasFilters) {
           mappedLaws.sort((a, b) => {
             const numA = cleanNumber(a.number);
             const numB = cleanNumber(b.number);
@@ -269,30 +269,21 @@ const LawPage = ({
     } catch (error) {
       console.error("Error fetching law data:", error);
       setLaws([]);
+      setTotalItems(0);
     } finally {
       setIsLoading(false);
-      setShouldFetch(false); // Reset flag setelah fetch
     }
-  }, [currentPage, sortOrder, debouncedFilters, apiUrl, sectionId, webmasterSectionId, isInitialLoad]);
+  }, [currentPage, sortOrder, debouncedFilters, apiUrl, sectionId, webmasterSectionId, isInitialized]);
 
-  // Effect untuk fetch data - hanya ketika shouldFetch true
+  // Fetch data when dependencies change
   useEffect(() => {
-    if (shouldFetch) {
+    if (isInitialized) {
       fetchLaws();
     }
-  }, [shouldFetch, fetchLaws]);
-
-  // Effect untuk auto-search ketika debounced filters berubah
-  useEffect(() => {
-    if (hasInitialSearch || Object.keys(debouncedFilters).length > 0) {
-      setShouldFetch(true);
-    }
-  }, [debouncedFilters, hasInitialSearch]);
+  }, [fetchLaws, isInitialized]);
 
   const handlePageChange = useCallback((pageNumber) => {
     setCurrentPage(pageNumber);
-    setIsInitialLoad(false);
-    setShouldFetch(true);
     window.scrollTo(0, 0);
   }, []);
 
@@ -311,12 +302,10 @@ const LawPage = ({
           filters={filters}
           onChange={handleChange}
           onSearch={handleSearch}
-          allowedFields={[
-            "find_q",
-            "customField_20",
-            "customField_19",
-            "customField_79",
-          ]}
+          allowedFields={allowedFields}
+          defaultRegulationType={regulationType}
+          disableRegulationTypeChange={regulationType ? true : false}
+          regulationTypeFieldName={regulationTypeFieldName}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">

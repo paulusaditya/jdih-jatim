@@ -9,7 +9,10 @@ const SearchFilter = ({
   onChange,
   onSearch,
   webmasterSectionId,
-  allowedFields = null, 
+  allowedFields = null,
+  defaultRegulationType = null, // Prop baru untuk jenis peraturan default
+  disableRegulationTypeChange = false, // Prop untuk disable perubahan jenis peraturan
+  regulationTypeFieldName = "customField_20", // Prop baru untuk menentukan field name jenis peraturan
 }) => {
   const [filterFields, setFilterFields] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +51,6 @@ const SearchFilter = ({
               customField_79: 4,
             };
 
-        
             const aOrder = orderMap[a.name] || 999;
             const bOrder = orderMap[b.name] || 999;
 
@@ -74,6 +76,11 @@ const SearchFilter = ({
   const handleMultipleChange = (e) => {
     const { name, value } = e.target;
 
+    // Jika field adalah jenis peraturan dan disable = true, jangan izinkan perubahan
+    if (name === regulationTypeFieldName && disableRegulationTypeChange) {
+      return;
+    }
+
     onChange({
       target: {
         name,
@@ -81,6 +88,10 @@ const SearchFilter = ({
         isMultiple: true,
       },
     });
+  };
+
+  const isFieldDisabled = (fieldName) => {
+    return fieldName === regulationTypeFieldName && disableRegulationTypeChange;
   };
 
   return (
@@ -122,7 +133,7 @@ const SearchFilter = ({
                   if (field.name === "customField_79") {
                     const currentYear = new Date().getFullYear();
                     const yearOptions = [];
-                    for (let year = 100; year <= currentYear; year++) {
+                    for (let year = 1900; year <= currentYear; year++) {
                       yearOptions.push({
                         value: year.toString(),
                         label: year.toString(),
@@ -147,6 +158,7 @@ const SearchFilter = ({
                           onChange={handleMultipleChange}
                           placeholder={`Pilih ${field.label}`}
                           isMultiple={true}
+                          disabled={isFieldDisabled(field.name)}
                         />
                       </div>
                     );
@@ -169,6 +181,7 @@ const SearchFilter = ({
                         onChange={handleMultipleChange}
                         placeholder={field.label}
                         isMultiple={true}
+                        disabled={isFieldDisabled(field.name)}
                       />
                     </div>
                   );
@@ -197,6 +210,12 @@ const SearchFilter = ({
                         onChange={handleMultipleChange}
                         placeholder={`Pilih ${field.label}`}
                         isMultiple={true}
+                        disabled={isFieldDisabled(field.name)}
+                        style={isFieldDisabled(field.name) ? {
+                          backgroundColor: '#f3f4f6',
+                          cursor: 'not-allowed',
+                          opacity: 0.7
+                        } : {}}
                       />
                     </div>
                   );
