@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, X } from "lucide-react";
 import Monographic from "./Home/Monographic";
 
 const LoadingSpinner = () => (
@@ -16,6 +16,15 @@ const PerpustakaanPage = () => {
   const [loading, setLoading] = useState(true);
   const [photoLoading, setPhotoLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,8 +45,7 @@ const PerpustakaanPage = () => {
 
     const fetchPhotoData = async () => {
       try {
-        // Simulate fetching multiple photos - you can modify this to fetch from your actual photo API
-        const photoIds = [52511, 52512, 52513, 52514]; // Add more IDs as needed
+        const photoIds = [52511, 52512, 52513, 52514];
         const photoPromises = photoIds.map(async (id) => {
           try {
             const res = await fetch(`https://jdih.pisdev.my.id/api/v2/topics/${id}`);
@@ -50,9 +58,9 @@ const PerpustakaanPage = () => {
             return null;
           }
         });
-        
+
         const photos = await Promise.all(photoPromises);
-        setPhotoData(photos.filter(photo => photo && photo.image));
+        setPhotoData(photos.filter((photo) => photo && photo.image));
       } catch (err) {
         console.error("Error fetching photos:", err);
       } finally {
@@ -68,9 +76,8 @@ const PerpustakaanPage = () => {
   if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
 
   const alamat =
-    data?.fields
-      ?.find((f) => f.title === "Alamat")
-      ?.details?.replace(/\r\n/g, " ") ?? "Jl. Pahlawan No.110, Surabaya";
+    data?.fields?.find((f) => f.title === "Alamat")?.details?.replace(/\r\n/g, " ") ??
+    "Jl. Pahlawan No.110, Surabaya";
   const buka =
     data?.fields?.find((f) => f.title === "Buka")?.details ??
     "Senin - Jumat (09.00 - 15.00)";
@@ -99,9 +106,7 @@ const PerpustakaanPage = () => {
             </h1>
 
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-green-700 mb-1">
-                Lokasi
-              </h2>
+              <h2 className="text-lg font-semibold text-green-700 mb-1">Lokasi</h2>
               <p className="text-gray-700">{alamat}</p>
             </div>
 
@@ -129,7 +134,7 @@ const PerpustakaanPage = () => {
           <h2 className="text-xl md:text-2xl font-bold text-green-800 mb-6">
             Photo Perpustakaan JDIH
           </h2>
-          
+
           {photoLoading ? (
             <LoadingSpinner />
           ) : (
@@ -139,6 +144,7 @@ const PerpustakaanPage = () => {
                   <div
                     key={photo.id}
                     className="aspect-square bg-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
+                    onClick={() => handleImageClick(photo.image)}
                   >
                     <img
                       src={photo.image}
@@ -148,7 +154,6 @@ const PerpustakaanPage = () => {
                   </div>
                 ))
               ) : (
-                // Placeholder photos when no data available
                 Array.from({ length: 4 }).map((_, index) => (
                   <div
                     key={index}
@@ -161,8 +166,28 @@ const PerpustakaanPage = () => {
             </div>
           )}
         </div>
+
+        {/* MODAL PREVIEW */}
+        {selectedImage && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center">
+            <div className="relative max-w-3xl w-full px-4">
+              <button
+                className="absolute top-2 right-2 text-white hover:text-red-400"
+                onClick={closeModal}
+              >
+                <X size={28} />
+              </button>
+              <img
+                src={selectedImage}
+                alt="Preview"
+                className="w-full h-auto max-h-[90vh] object-contain rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
+        )}
       </section>
-      <Monographic/>
+
+      <Monographic />
     </div>
   );
 };
