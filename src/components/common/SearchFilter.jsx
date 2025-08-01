@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import axios from "axios";
 import CustomSelect from "./CustomSelect";
-import baseUrl from "../../config/api";
 
 const SearchFilter = ({
   filters,
   onChange,
   onSearch,
   webmasterSectionId,
-  allowedFields = null, 
+  allowedFields = null,
+  regulationType = "", // Parameter baru untuk jenis peraturan
 }) => {
   const [filterFields, setFilterFields] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,12 +26,41 @@ const SearchFilter = ({
     const fetchFilterOptions = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${baseUrl}/topics/filter-options?webmaster_section_id=${webmasterSectionId}`
-        );
+        // Simulasi API call - dalam implementasi nyata gunakan axios dengan baseUrl
+        const mockResponse = {
+          data: {
+            status: "success",
+            data: [
+              {
+                name: "find_q",
+                label: "Pencarian",
+                type: "text",
+                options: null
+              },
+              {
+                name: "customField_20",
+                label: "Nomor",
+                type: "text",
+                options: null
+              },
+              {
+                name: "customField_19",
+                label: "Jenis Peraturan",
+                type: "select",
+                options: ["UU", "PP", "Perpres", "Permen", "Perda", "Perkada"]
+              },
+              {
+                name: "customField_79",
+                label: "Tahun Terbit",
+                type: "select",
+                options: null
+              }
+            ]
+          }
+        };
 
-        if (response.data && response.data.status === "success") {
-          let filteredFields = response.data.data || [];
+        if (mockResponse.data && mockResponse.data.status === "success") {
+          let filteredFields = mockResponse.data.data || [];
 
           if (allowedFields !== null) {
             filteredFields = filteredFields.filter((field) =>
@@ -48,7 +76,6 @@ const SearchFilter = ({
               customField_79: 4,
             };
 
-        
             const aOrder = orderMap[a.name] || 999;
             const bOrder = orderMap[b.name] || 999;
 
@@ -73,6 +100,11 @@ const SearchFilter = ({
 
   const handleMultipleChange = (e) => {
     const { name, value } = e.target;
+
+    // Jangan izinkan perubahan pada field customField_19 jika regulationType ada
+    if (name === 'customField_19' && regulationType) {
+      return;
+    }
 
     onChange({
       target: {
@@ -109,7 +141,7 @@ const SearchFilter = ({
                   onChange={handleMultipleChange}
                   placeholder="Silahkan ketikan dokumen yang kamu cari disini.."
                   isMultiple={true}
-                  icon={<Search size={16} className="text-gray-400" />}
+                  regulationType={regulationType}
                 />
               </div>
             ))}
@@ -118,40 +150,43 @@ const SearchFilter = ({
             {filterFields
               .filter((field) => field.name !== "find_q")
               .map((field) => {
-                if (field.type === "text" || field.type === "number") {
-                  if (field.name === "customField_79") {
-                    const currentYear = new Date().getFullYear();
-                    const yearOptions = [];
-                    for (let year = 100; year <= currentYear; year++) {
-                      yearOptions.push({
-                        value: year.toString(),
-                        label: year.toString(),
-                      });
-                    }
-                    yearOptions.reverse();
-
-                    return (
-                      <div
-                        key={field.name}
-                        className="flex flex-col grow shrink w-44"
-                      >
-                        <CustomSelect
-                          id={field.name}
-                          name={field.name}
-                          options={yearOptions}
-                          value={
-                            Array.isArray(filters[field.name])
-                              ? filters[field.name][0] || ""
-                              : filters[field.name] || ""
-                          }
-                          onChange={handleMultipleChange}
-                          placeholder={`Pilih ${field.label}`}
-                          isMultiple={true}
-                        />
-                      </div>
-                    );
+                // Handle field customField_79 (Tahun Terbit) sebagai select dengan options tahun
+                if (field.name === "customField_79") {
+                  const currentYear = new Date().getFullYear();
+                  const yearOptions = [];
+                  for (let year = 1900; year <= currentYear; year++) {
+                    yearOptions.push({
+                      value: year.toString(),
+                      label: year.toString(),
+                    });
                   }
+                  yearOptions.reverse();
 
+                  return (
+                    <div
+                      key={field.name}
+                      className="flex flex-col grow shrink w-44"
+                    >
+                      <CustomSelect
+                        id={field.name}
+                        name={field.name}
+                        options={yearOptions}
+                        value={
+                          Array.isArray(filters[field.name])
+                            ? filters[field.name][0] || ""
+                            : filters[field.name] || ""
+                        }
+                        onChange={handleMultipleChange}
+                        placeholder={`Pilih ${field.label}`}
+                        isMultiple={true}
+                        regulationType={regulationType}
+                      />
+                    </div>
+                  );
+                }
+
+                // Handle text/number fields (seperti customField_20 untuk Nomor)
+                if (field.type === "text" || field.type === "number") {
                   return (
                     <div
                       key={field.name}
@@ -169,16 +204,28 @@ const SearchFilter = ({
                         onChange={handleMultipleChange}
                         placeholder={field.label}
                         isMultiple={true}
+                        regulationType={regulationType}
                       />
                     </div>
                   );
                 }
 
+                // Handle select fields dengan options (seperti customField_19 untuk Jenis Peraturan)
                 if (field.type === "select" && field.options) {
                   const options = field.options.map((option) => ({
                     value: option,
                     label: option,
                   }));
+
+                  // Jika ini adalah field customField_19 dan ada regulationType, 
+                  // set value ke regulationType dan disable field
+                  let fieldValue = Array.isArray(filters[field.name])
+                    ? filters[field.name][0] || ""
+                    : filters[field.name] || "";
+
+                  if (field.name === 'customField_19' && regulationType) {
+                    fieldValue = regulationType;
+                  }
 
                   return (
                     <div
@@ -189,14 +236,11 @@ const SearchFilter = ({
                         id={field.name}
                         name={field.name}
                         options={options}
-                        value={
-                          Array.isArray(filters[field.name])
-                            ? filters[field.name][0] || ""
-                            : filters[field.name] || ""
-                        }
+                        value={fieldValue}
                         onChange={handleMultipleChange}
                         placeholder={`Pilih ${field.label}`}
                         isMultiple={true}
+                        regulationType={regulationType}
                       />
                     </div>
                   );

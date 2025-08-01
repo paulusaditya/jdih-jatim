@@ -12,20 +12,12 @@ import baseUrl from "../../config/api";
 import WhatsAppButton from "../../components/common/ChatWaButton";
 import FloatingAccessibilityButton from "../../components/common/FloatingAccessibilityButton";
 
-// Custom hook untuk debouncing
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
-
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
   }, [value, delay]);
-
   return debouncedValue;
 };
 
@@ -43,6 +35,7 @@ const LawPage = ({
   customSidebar = null,
   typeToSectionId = {},
   webmasterSectionId = "10",
+  regulationType = "",
 }) => {
   const [laws, setLaws] = useState([]);
   const [title, setTitle] = useState(pageTitle);
@@ -51,50 +44,45 @@ const LawPage = ({
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-
   const [filters, setFilters] = useState({});
   const [hasInitialSearch, setHasInitialSearch] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
 
-  // Debounce filters untuk mengurangi API calls
   const debouncedFilters = useDebounce(filters, 500);
-
   const itemsPerPage = 10;
   const navigate = useNavigate();
   const location = useLocation();
 
-  const allowedFields = [
-    "find_q",
-    "customField_20",
-    "customField_19",
-    "customField_79",
-  ];
-
-  // Inisialisasi filter dari URL - hanya sekali
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const initialFilters = {};
-
     for (const [key, value] of urlParams.entries()) {
       if (key !== "fromSearch" && value.trim() !== "") {
         initialFilters[key] = value;
       }
     }
-
+    if (regulationType) {
+      initialFilters.customField_19 = regulationType;
+    }
     if (Object.keys(initialFilters).length > 0) {
       setFilters(initialFilters);
       setHasInitialSearch(true);
       setShouldFetch(true);
-      console.log("Initial filters from URL:", initialFilters);
     } else {
-      // Load initial data tanpa filter
+      if (regulationType) {
+        setFilters({ customField_19: regulationType });
+      }
       setShouldFetch(true);
     }
-  }, []); // Hanya dijalankan sekali
+  }, [regulationType]);
 
-  const handleChange = useCallback((e) => {
-    setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }, []);
+  const handleChange = useCallback(
+    (e) => {
+      if (e.target.name === "customField_19" && regulationType) return;
+      setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    },
+    [regulationType]
+  );
 
   const handleSearch = useCallback(() => {
     setCurrentPage(1);
@@ -117,11 +105,7 @@ const LawPage = ({
       params.append("page", currentPage);
       params.append("webmaster_section_id", webmasterSectionId);
 
-      if (
-        isInitialLoad &&
-        currentPage === 1 &&
-        Object.keys(debouncedFilters).length === 0
-      ) {
+      if (isInitialLoad && currentPage === 1 && Object.keys(debouncedFilters).length === 0) {
         params.append("sort_by", "created_by");
         params.append("sort_order", "desc");
       } else {
@@ -144,23 +128,17 @@ const LawPage = ({
           if (Array.isArray(value)) {
             value.forEach((val) => {
               if (val && val.trim() !== "") {
-                filterArray.push({
-                  key: key,
-                  value: val,
-                });
+                filterArray.push({ key, value: val });
               }
             });
           } else {
-            filterArray.push({
-              key: key,
-              value: value,
-            });
+            filterArray.push({ key, value });
           }
         }
       });
 
       filterArray.forEach((filter) => {
-        params.append(`filters[]`, JSON.stringify(filter));
+        params.append("filters[]", JSON.stringify(filter));
       });
 
       const fullUrl = `${apiUrl}?${params.toString()}`;
@@ -174,115 +152,84 @@ const LawPage = ({
         throw new Error(`Invalid content type: ${contentType}`);
 
       const result = await response.json();
-      let mappedLaws = [];
+
+      const rawLaws = Array.isArray(result.data)
+        ? result.data
+        : Array.isArray(result.data?.data)
+        ? result.data.data
+        : [];
 
       const cleanNumber = (val) =>
         parseInt(String(val).replace(/[^\d]/g, "")) || 0;
 
-      if (Array.isArray(result.data)) {
-        const rawLaws = result.data;
+      const mappedLaws = await Promise.all(
+        rawLaws.map(async (item) => {
+          try {
+            const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
+            const detailData = await detailRes.json();
+            const fields = {};
+            detailData.data?.fields?.forEach(
+              (f) => (fields[f.title] = f.details)
+            );
 
-        mappedLaws = await Promise.all(
-          rawLaws.map(async (item) => {
-            try {
-              const detailRes = await fetch(`${baseUrl}/topics/${item.id}`);
-              if (!detailRes.ok)
-                throw new Error(`Detail fetch failed: ${detailRes.status}`);
+            return {
+              id: item.id,
+              title: fields["Judul Peraturan"] || item.title || "Unknown",
+              year: fields["Tahun Terbit"] || "Unknown",
+              number: fields["Nomor"] || "Unknown",
+              type: fields["Singkatan Jenis"] || "Unknown",
+              status: fields["Keterangan Status"] || "-",
+              category: fields["Kategori"] || "",
+              image: item.image,
+              slug: detailData.data?.seo_url_slug_id || item.id,
+            };
+          } catch (err) {
+            console.error("Detail fetch failed:", err);
+            return {
+              id: item.id,
+              title: item.title || "Tanpa Judul",
+              year: "-",
+              number: "-",
+              type: "-",
+              status: "-",
+              category: "-",
+              image: item.image,
+              slug: item.id,
+            };
+          }
+        })
+      );
 
-              const detailData = await detailRes.json();
-              const fields = {};
-              detailData.data?.fields?.forEach(
-                (f) => (fields[f.title] = f.details)
-              );
-
-              return {
-                id: item.id,
-                title: fields["Judul Peraturan"] || item.title || "Unknown",
-                year: fields["Tahun Terbit"] || "Unknown",
-                number: fields["Nomor"] || "Unknown",
-                type: fields["Singkatan Jenis"] || "Unknown",
-                status: fields["Keterangan Status"] || "-",
-                category: fields["Kategori"] || "",
-                image: item.image,
-                slug: detailData.data?.seo_url_slug_id || item.id,
-              };
-            } catch (err) {
-              console.error("Detail fetch failed:", err);
-              return {
-                id: item.id,
-                title: item.title || "Tanpa Judul",
-                year: "-",
-                number: "-",
-                type: "-",
-                status: "-",
-                category: "-",
-                image: item.image,
-                slug: item.id,
-              };
-            }
-          })
-        );
-
-        if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
-          mappedLaws.sort((a, b) => {
-            const numA = cleanNumber(a.number);
-            const numB = cleanNumber(b.number);
-            return sortOrder === "asc" ? numA - numB : numB - numA;
-          });
-        }
-
-        setLaws(mappedLaws);
-        setTotalItems(result.pagination?.total || rawLaws.length || 0);
-      } else {
-        const rawLaws = result.data?.data || [];
-
-        mappedLaws = rawLaws.map((item) => {
-          const fields = {};
-          (item.fields || []).forEach((f) => (fields[f.title] = f.details));
-
-          return {
-            id: item.id,
-            title: fields["Judul Peraturan"] || item.title || "Unknown",
-            year: fields["Tahun Terbit"] || fields["Tahun"] || "-",
-            number: fields["Nomor"] || "-",
-            type: fields["Singkatan Jenis"] || "-",
-            status:
-              fields["Keterangan Status"] || fields["Subjek Artikel"] || "-",
-            category:
-              fields["Kategori"] || fields["T.E.U Badan/Pengarang"] || "-",
-            image: item.image,
-            slug: item.seo_url_slug_id || item.id,
-          };
+      if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
+        mappedLaws.sort((a, b) => {
+          const numA = cleanNumber(a.number);
+          const numB = cleanNumber(b.number);
+          return sortOrder === "asc" ? numA - numB : numB - numA;
         });
-
-        if (!isInitialLoad || Object.keys(debouncedFilters).length > 0) {
-          mappedLaws.sort((a, b) => {
-            const numA = cleanNumber(a.number);
-            const numB = cleanNumber(b.number);
-            return sortOrder === "asc" ? numA - numB : numB - numA;
-          });
-        }
-
-        setLaws(mappedLaws);
-        setTotalItems(result.data?.pagination?.total || 0);
       }
+
+      setLaws(mappedLaws);
+      setTotalItems(
+        result.pagination?.total ||
+        result.data?.pagination?.total ||
+        rawLaws.length ||
+        0
+      );
     } catch (error) {
       console.error("Error fetching law data:", error);
       setLaws([]);
     } finally {
       setIsLoading(false);
-      setShouldFetch(false); // Reset flag setelah fetch
+      setShouldFetch(false);
     }
   }, [currentPage, sortOrder, debouncedFilters, apiUrl, sectionId, webmasterSectionId, isInitialLoad]);
 
-  // Effect untuk fetch data - hanya ketika shouldFetch true
   useEffect(() => {
     if (shouldFetch) {
       fetchLaws();
     }
   }, [shouldFetch, fetchLaws]);
 
-  // Effect untuk auto-search ketika debounced filters berubah
   useEffect(() => {
     if (hasInitialSearch || Object.keys(debouncedFilters).length > 0) {
       setShouldFetch(true);
@@ -296,7 +243,6 @@ const LawPage = ({
     window.scrollTo(0, 0);
   }, []);
 
-  // Memoize expensive calculations
   const totalPages = useMemo(() => {
     return Math.ceil(totalItems / itemsPerPage);
   }, [totalItems, itemsPerPage]);
@@ -304,8 +250,6 @@ const LawPage = ({
   return (
     <div className="px-4 py-16 md:p-16 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2">
-        {/* {breadcrumbPaths && <Breadcrumbs paths={breadcrumbPaths} />} */}
-
         <SearchFilter
           webmasterSectionId={webmasterSectionId}
           filters={filters}
@@ -317,6 +261,7 @@ const LawPage = ({
             "customField_19",
             "customField_79",
           ]}
+          regulationType={regulationType}
         />
 
         <div className="flex flex-wrap gap-10 justify-between items-center mt-5 w-full max-md:max-w-full">
@@ -378,6 +323,7 @@ const LawPage = ({
           </div>
         )}
       </div>
+
       <WhatsAppButton />
       <FloatingAccessibilityButton />
     </div>

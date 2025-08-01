@@ -11,6 +11,7 @@ const CustomSelect = ({
   placeholder,
   isMultiple = false,
   type = "select",
+  regulationType = null, // Tambahan untuk handle regulation type
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -34,6 +35,11 @@ const CustomSelect = ({
 
   const handleClear = (e) => {
     e.stopPropagation();
+    // Jangan clear jika ini adalah field customField_19 dan ada regulationType
+    if (name === 'customField_19' && regulationType) {
+      return;
+    }
+    
     setInputValue("");
     onChange({
       target: {
@@ -71,6 +77,8 @@ const CustomSelect = ({
     };
   }, []);
 
+  // Disable interaction jika ini adalah field customField_19 dan ada regulationType
+  const isDisabled = name === 'customField_19' && regulationType;
   const displayValue = value || placeholder;
 
   if (type === "text" || type === "number") {
@@ -84,10 +92,13 @@ const CustomSelect = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             placeholder={placeholder}
-            className="px-4 py-3 w-full bg-white rounded-lg border border-green-300 text-zinc-600 pr-10"
+            disabled={isDisabled}
+            className={`px-4 py-3 w-full bg-white rounded-lg border border-green-300 text-zinc-600 pr-10 ${
+              isDisabled ? 'bg-gray-100 cursor-not-allowed' : ''
+            }`}
             autoComplete="off"
           />
-          {inputValue && (
+          {inputValue && !isDisabled && (
             <button
               type="button"
               onClick={handleClear}
@@ -104,14 +115,16 @@ const CustomSelect = ({
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <div
-        className="flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-green-300 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center justify-between px-4 py-3 mt-1.5 w-full bg-white rounded-lg border border-green-300 ${
+          isDisabled ? 'bg-gray-100 cursor-not-allowed' : 'cursor-pointer'
+        }`}
+        onClick={() => !isDisabled && setIsOpen(!isOpen)}
       >
         <span className={`text-zinc-600 ${!value && "text-gray-400"} flex-grow`}>
           {displayValue}
         </span>
         <div className="flex items-center">
-          {value ? (
+          {value && !isDisabled ? (
             <button
               type="button"
               onClick={(e) => {
@@ -127,7 +140,7 @@ const CustomSelect = ({
           )}
         </div>
       </div>
-      {isOpen && (
+      {isOpen && !isDisabled && (
         <div className="absolute z-10 w-full bg-green-50 border text-green-800 border-green-300 rounded-lg mt-1 max-h-48 overflow-y-auto custom-scrollbar">
           {options && options.length > 0 ? (
             options.map((option, index) => (
