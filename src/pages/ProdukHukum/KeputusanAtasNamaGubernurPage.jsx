@@ -14,7 +14,8 @@ const KeputusanAtasNamaGubernurPage = () => (
     ]}
     sectionId="41"
     years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
-    documentTypes={[""]}
+    documentTypes={["", "Keputusan Atas Nama Gubernur"]}
+    allowedDocumentTypes={["Keputusan Bersama Gubernur"]}
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/keputusan-atas-nama-gubernur"

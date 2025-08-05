@@ -14,7 +14,8 @@ const SuratEdaranGubernurPage = () => (
     ]}
     sectionId="49"
     years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
-    documentTypes={[""]}
+    documentTypes={["", "Surat Edaran Gubernur"]}
+    allowedDocumentTypes={["Surat Edaran Gubernur"]}
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/surat-edaran-gubernur"

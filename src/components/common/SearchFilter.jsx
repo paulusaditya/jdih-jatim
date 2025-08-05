@@ -9,7 +9,8 @@ const SearchFilter = ({
   onChange,
   onSearch,
   webmasterSectionId,
-  allowedFields = null, 
+  allowedFields = null,
+  allowedDocumentTypes = null, 
 }) => {
   const [filterFields, setFilterFields] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,25 @@ const SearchFilter = ({
             );
           }
 
+          
+          filteredFields = filteredFields.map((field) => {
+            if (field.name === "customField_19" && allowedDocumentTypes && field.options) {
+             
+              const processedOptions = field.options.map((option) => ({
+                value: option,
+                label: option,
+                isDisabled: !allowedDocumentTypes.includes(option), // Disable jika ga di-allow
+              }));
+              
+              return {
+                ...field,
+                options: processedOptions,
+                hasRestricted: processedOptions.some(opt => opt.isDisabled), // Ada yang disabled
+              };
+            }
+            return field;
+          });
+
           const sortedFields = filteredFields.sort((a, b) => {
             const orderMap = {
               find_q: 1,
@@ -48,7 +68,6 @@ const SearchFilter = ({
               customField_79: 4,
             };
 
-        
             const aOrder = orderMap[a.name] || 999;
             const bOrder = orderMap[b.name] || 999;
 
@@ -69,7 +88,7 @@ const SearchFilter = ({
     };
 
     fetchFilterOptions();
-  }, [webmasterSectionId, allowedFields]);
+  }, [webmasterSectionId, allowedFields, allowedDocumentTypes]);
 
   const handleMultipleChange = (e) => {
     const { name, value } = e.target;
@@ -175,9 +194,10 @@ const SearchFilter = ({
                 }
 
                 if (field.type === "select" && field.options) {
-                  const options = field.options.map((option) => ({
+                  const options = field.options.map ? field.options : field.options.map((option) => ({
                     value: option,
                     label: option,
+                    isDisabled: false,
                   }));
 
                   return (
@@ -197,6 +217,7 @@ const SearchFilter = ({
                         onChange={handleMultipleChange}
                         placeholder={`Pilih ${field.label}`}
                         isMultiple={true}
+                        hasRestrictedOptions={field.hasRestricted} 
                       />
                     </div>
                   );

@@ -14,11 +14,12 @@ const PeraturanGubernurPage = () => (
     ]}
     sectionId="30"
     years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
-    documentTypes={[""]}
+    documentTypes={["", "Peraturan Gubernur"]}
+    allowedDocumentTypes={["Peraturan Gubernur"]}
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/peraturan-gubernur"
-    regulationType="Peraturan Gubernur" // Jenis peraturan default
+    regulationType="Peraturan Gubernur"
   />
 );
 

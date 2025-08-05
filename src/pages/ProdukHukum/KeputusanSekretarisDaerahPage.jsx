@@ -14,7 +14,8 @@ const KeputusanSekretarisDaerahPage = () => (
     ]}
     sectionId="50"
     years={["", "2025", "2024", "2023", "2022", "2021", "2020", "2019"]}
-    documentTypes={[""]}
+    documentTypes={["", "Keputusan Sekretaris Daerah"]}
+    allowedDocumentTypes={["Keputusan Sekretaris Daerah"]}
     includeStatus={true}
     includeCategory={true}
     detailPath="/peraturan/keputusan-sekretaris-daerah"
