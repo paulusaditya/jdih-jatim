@@ -36,20 +36,15 @@ function DetailLawCard({ lawId }) {
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
-    setShowPdf(button === "Dokumen Lampiran");
+    setShowPdf(button === "Dokumen Lampiran" || button === "Lampiran Abstrak");
 
-    if (button === "Dokumen Lampiran") {
+    if (button === "Dokumen Lampiran" || button === "Lampiran Abstrak") {
       setIsLoadingAttachment(true);
     }
   };
 
-  const handleDownload = () => {
-    const lampiranField = data?.fields?.find((field) =>
-      field.title?.toLowerCase().includes("lampiran")
-    );
-    const url = lampiranField?.details;
+  const handleDownload = (url) => {
     if (!url) return;
-
     const decodedFilename = decodeURIComponent(url.split("/").pop());
     const link = document.createElement("a");
     link.href = url;
@@ -62,13 +57,8 @@ function DetailLawCard({ lawId }) {
   if (loading) {
     return (
       <div className="self-center p-6 h-auto rounded-xl border border-solid border-stone-300 w-[760px] max-md:w-full max-sm:p-4">
-        {/* Title skeleton */}
         <div className="h-8 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
-        
-        {/* Date skeleton */}
         <div className="h-4 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
-        
-        {/* Stats section skeleton */}
         <div className="flex justify-between items-center px-4 py-3 mb-5 rounded-lg bg-gray-100 max-sm:flex-col max-sm:gap-3">
           <div className="w-full flex justify-between items-center max-sm:flex">
             <div className="flex gap-2 items-center">
@@ -81,17 +71,12 @@ function DetailLawCard({ lawId }) {
             </div>
           </div>
         </div>
-        
-        {/* Buttons skeleton */}
         <div className="flex gap-3 mb-5 max-sm:flex-wrap">
           <div className="h-8 bg-gray-200 rounded-full w-16 animate-pulse"></div>
           <div className="h-8 bg-gray-200 rounded-full w-32 animate-pulse"></div>
           <div className="h-8 bg-gray-200 rounded-full w-28 animate-pulse"></div>
         </div>
-        
-        {/* Detail items skeleton */}
         <div className="space-y-0">
-          {/* First static item (Tipe Dokumen) */}
           <div className="flex px-0 py-3 border-b border-solid border-b-zinc-100 items-start">
             <div className="w-[175px] shrink-0">
               <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
@@ -100,10 +85,11 @@ function DetailLawCard({ lawId }) {
               <div className="h-4 bg-gray-200 rounded w-48 animate-pulse"></div>
             </div>
           </div>
-          
-          {/* Dynamic detail items skeleton */}
           {Array.from({ length: 12 }).map((_, index) => (
-            <div key={index} className="flex px-0 py-3 border-b border-solid border-b-zinc-100 items-start">
+            <div
+              key={index}
+              className="flex px-0 py-3 border-b border-solid border-b-zinc-100 items-start"
+            >
               <div className="w-[175px] shrink-0">
                 <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
               </div>
@@ -126,12 +112,19 @@ function DetailLawCard({ lawId }) {
   const judul = judulField?.details || "Judul Tidak Tersedia";
 
   const lampiranField = fields.find((f) =>
-    f.title?.toLowerCase().includes("lampiran")
+    f.title?.toLowerCase().includes("lampiran") &&
+    !f.title?.toLowerCase().includes("abstrak")
   );
   const lampiranUrl = lampiranField?.details || "";
 
+  const lampiranAbstrakField = fields.find((f) =>
+    f.title?.toLowerCase().includes("lampiran abstrak")
+  );
+  const lampiranAbstrakUrl = lampiranAbstrakField?.details || "";
+
   const abstrakField = fields.find((f) =>
-    f.title?.toLowerCase().includes("abstrak")
+    f.title?.toLowerCase().includes("abstrak") &&
+    !f.title?.toLowerCase().includes("lampiran")
   );
   const hasAbstrak = abstrakField?.details?.trim();
 
@@ -154,10 +147,16 @@ function DetailLawCard({ lawId }) {
             <Eye size={24} />
             <div>Visits : {visits}</div>
           </div>
-          {lampiranField && (
+          {(lampiranField || lampiranAbstrakField) && (
             <div className="flex gap-2 items-center text-sm font-semibold text-zinc-800">
               <a
-                onClick={handleDownload}
+                onClick={() =>
+                  handleDownload(
+                    selectedButton === "Lampiran Abstrak"
+                      ? lampiranAbstrakUrl
+                      : lampiranUrl
+                  )
+                }
                 className="flex items-center cursor-pointer hover:text-green-600 transition-colors"
               >
                 <div className="mr-2">Download</div>
@@ -189,7 +188,19 @@ function DetailLawCard({ lawId }) {
             Dokumen Lampiran
           </button>
         )}
-        {hasAbstrak && (
+        {lampiranAbstrakField && (
+          <button
+            className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 hover:border-red-400 ${
+              selectedButton === "Lampiran Abstrak"
+                ? "bg-red-500 text-white"
+                : ""
+            }`}
+            onClick={() => handleButtonClick("Lampiran Abstrak")}
+          >
+            Lampiran Abstrak
+          </button>
+        )}
+        {/* {hasAbstrak && (
           <button
             className={`px-4 py-1 text-base rounded-[999px] border border-zinc-300 transition-colors duration-200 hover:border-red-400 ${
               selectedButton === "Abstrak Lampiran"
@@ -200,37 +211,14 @@ function DetailLawCard({ lawId }) {
           >
             Abstrak Lampiran
           </button>
-        )}
+        )} */}
       </div>
 
+      {/* Konten sesuai tombol */}
       {selectedButton === "Dokumen Lampiran" && lampiranUrl ? (
-        <div className="mt-4 relative">
-          {isLoadingAttachment && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-            </div>
-          )}
-
-          {/\.(jpg|jpeg|png)$/i.test(lampiranUrl) ? (
-            <img
-              src={lampiranUrl}
-              alt="Lampiran"
-              onLoad={() => setIsLoadingAttachment(false)}
-              className="max-w-full max-h-[500px] mx-auto rounded-lg shadow relative z-0"
-            />
-          ) : (
-            <iframe
-              src={`https://docs.google.com/gview?url=${encodeURIComponent(
-                lampiranUrl
-              )}&embedded=true`}
-              width="100%"
-              height="500px"
-              title="Dokumen Lampiran"
-              onLoad={() => setIsLoadingAttachment(false)}
-              className="relative z-0 rounded-lg"
-            />
-          )}
-        </div>
+        <DocumentViewer url={lampiranUrl} setIsLoading={setIsLoadingAttachment} isLoading={isLoadingAttachment} />
+      ) : selectedButton === "Lampiran Abstrak" && lampiranAbstrakUrl ? (
+        <DocumentViewer url={lampiranAbstrakUrl} setIsLoading={setIsLoadingAttachment} isLoading={isLoadingAttachment} />
       ) : selectedButton === "Abstrak Lampiran" && hasAbstrak ? (
         <div className="text-base text-gray-700">
           <DetailItem label="Abstrak Lampiran" value={hasAbstrak} />
@@ -239,6 +227,38 @@ function DetailLawCard({ lawId }) {
         <div className="flex flex-col">
           <DetailItem fields={fields} />
         </div>
+      )}
+    </div>
+  );
+}
+
+// Komponen reusable untuk menampilkan dokumen
+function DocumentViewer({ url, isLoading, setIsLoading }) {
+  return (
+    <div className="mt-4 relative">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+        </div>
+      )}
+      {/\.(jpg|jpeg|png)$/i.test(url) ? (
+        <img
+          src={url}
+          alt="Lampiran"
+          onLoad={() => setIsLoading(false)}
+          className="max-w-full max-h-[500px] mx-auto rounded-lg shadow relative z-0"
+        />
+      ) : (
+        <iframe
+          src={`https://docs.google.com/gview?url=${encodeURIComponent(
+            url
+          )}&embedded=true`}
+          width="100%"
+          height="500px"
+          title="Dokumen Lampiran"
+          onLoad={() => setIsLoading(false)}
+          className="relative z-0 rounded-lg"
+        />
       )}
     </div>
   );
