@@ -58,6 +58,7 @@ import KeputusanSekretarisDaerahPage from "./pages/ProdukHukum/KeputusanSekretar
 import KeputusanAtasNamaGubernurPage from "./pages/ProdukHukum/KeputusanAtasNamaGubernurPage";
 import NaskahAkademikPage from "./pages/DokumenHukum/NaskahAkademikPage";
 import ProgramPembentukanPerdaPage from "./pages/DokumenHukum/ProgramPembentukanPerdaPage";
+import KebijakanPrivasi from "./pages/KebijakanPrivasi";
 
 
 function TitleUpdater({ menuData }) {
@@ -157,6 +158,7 @@ function App() {
               <Route path="/masukanku" element={<LayananHukum />} />
               <Route path="/masukanku/komentar/:id" element={<Komentar />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
               {menuData.map((menu) => (
                 <React.Fragment key={menu.id}>
                   <Route
